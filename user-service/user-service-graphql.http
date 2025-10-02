@@ -1,0 +1,439 @@
+### User Service GraphQL API Tests
+### Run these requests directly in IntelliJ IDEA
+
+### Variables
+@baseUrl = http://localhost:8081
+@graphqlEndpoint = {{baseUrl}}/graphql
+@contentType = application/json
+
+### ============================================
+### QUERIES - GET ALL USERS
+### ============================================
+
+### Get all users with full details
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { users { id username email firstName lastName phone active createdAt updatedAt } }"
+}
+
+### Get all users with minimal fields
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { users { id username email } }"
+}
+
+### ============================================
+### QUERIES - GET USER BY ID
+### ============================================
+
+### Get user by ID - Success (ID: 1)
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { user(id: 1) { id username email firstName lastName phone active createdAt updatedAt } }"
+}
+
+### Get user by ID using variables
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query GetUser($userId: ID!) { user(id: $userId) { id username email firstName lastName phone active } }",
+  "variables": {
+    "userId": 2
+  }
+}
+
+### Get user by ID - Not Found (ID: 999)
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { user(id: 999) { id username email } }"
+}
+
+### ============================================
+### QUERIES - GET USER BY USERNAME
+### ============================================
+
+### Get user by username - Success
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { userByUsername(username: \"john_doe\") { id username email firstName lastName phone active } }"
+}
+
+### Get user by username using variables
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query GetUserByUsername($username: String!) { userByUsername(username: $username) { id username email firstName lastName phone active createdAt } }",
+  "variables": {
+    "username": "jane_smith"
+  }
+}
+
+### Get user by username - Not Found
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { userByUsername(username: \"nonexistent_user\") { id username email } }"
+}
+
+### ============================================
+### MUTATIONS - CREATE USER
+### ============================================
+
+### Create new user - Success
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation { createUser(input: { username: \"graphql_user_001\" email: \"graphqluser001@example.com\" password: \"password123\" firstName: \"GraphQL\" lastName: \"User\" phone: \"+1-555-8001\" }) { id username email firstName lastName phone active createdAt } }"
+}
+
+### Create new user with variables
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation CreateUser($input: CreateUserInput!) { createUser(input: $input) { id username email firstName lastName phone active createdAt updatedAt } }",
+  "variables": {
+    "input": {
+      "username": "graphql_user_002",
+      "email": "graphqluser002@example.com",
+      "password": "securePassword123",
+      "firstName": "GraphQL",
+      "lastName": "Test",
+      "phone": "+1-555-8002"
+    }
+  }
+}
+
+### Create user with minimal data
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation { createUser(input: { username: \"minimal_graphql\" email: \"minimal@example.com\" password: \"password123\" }) { id username email active } }"
+}
+
+### Create user - Duplicate Username (should fail)
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation { createUser(input: { username: \"john_doe\" email: \"duplicate@example.com\" password: \"password123\" }) { id username email } }"
+}
+
+### Create user - Duplicate Email (should fail)
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation { createUser(input: { username: \"unique_user\" email: \"john.doe@example.com\" password: \"password123\" }) { id username email } }"
+}
+
+### Create user - Invalid Email Format (should fail)
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation { createUser(input: { username: \"invalid_email\" email: \"not-an-email\" password: \"password123\" }) { id username email } }"
+}
+
+### ============================================
+### MUTATIONS - UPDATE USER
+### ============================================
+
+### Update user - Success
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation { updateUser(id: 1, input: { email: \"john.updated@example.com\" firstName: \"Johnny\" lastName: \"Doe Jr.\" phone: \"+1-555-0199\" }) { id username email firstName lastName phone updatedAt } }"
+}
+
+### Update user with variables
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation UpdateUser($id: ID!, $input: UpdateUserInput!) { updateUser(id: $id, input: $input) { id username email firstName lastName phone updatedAt } }",
+  "variables": {
+    "id": 2,
+    "input": {
+      "email": "jane.updated@example.com",
+      "firstName": "Janet",
+      "phone": "+1-555-9999"
+    }
+  }
+}
+
+### Update user - Partial update (only email)
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation { updateUser(id: 3, input: { email: \"bob.newemail@example.com\" }) { id username email updatedAt } }"
+}
+
+### Update user - Not Found (should fail)
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation { updateUser(id: 999, input: { email: \"notfound@example.com\" }) { id username email } }"
+}
+
+### ============================================
+### MUTATIONS - DELETE USER
+### ============================================
+
+### Delete user - Success
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation { deleteUser(id: 10) }"
+}
+
+### Delete user with variables
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation DeleteUser($id: ID!) { deleteUser(id: $id) }",
+  "variables": {
+    "id": 9
+  }
+}
+
+### Delete user - Not Found (should fail)
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation { deleteUser(id: 999) }"
+}
+
+### ============================================
+### COMPLEX QUERIES WITH FRAGMENTS
+### ============================================
+
+### Query using fragments
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "fragment UserBasicInfo on User { id username email active } fragment UserFullInfo on User { ...UserBasicInfo firstName lastName phone createdAt updatedAt } query { users { ...UserFullInfo } }"
+}
+
+### Multiple operations in one request
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { user1: user(id: 1) { id username email } user2: user(id: 2) { id username email } allUsers: users { id username } }"
+}
+
+### Nested query with aliases
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { activeUser: user(id: 1) { userId: id userName: username userEmail: email isActive: active } inactiveUser: userByUsername(username: \"hannah_montana\") { userId: id userName: username userEmail: email isActive: active } }"
+}
+
+### ============================================
+### INTROSPECTION QUERIES
+### ============================================
+
+### Get schema type information
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { __schema { types { name kind description } } }"
+}
+
+### Get User type details
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { __type(name: \"User\") { name kind description fields { name type { name kind } description } } }"
+}
+
+### Get all queries
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { __schema { queryType { fields { name description args { name type { name kind } } } } } }"
+}
+
+### Get all mutations
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { __schema { mutationType { fields { name description args { name type { name kind } } } } } }"
+}
+
+### ============================================
+### CRUD SEQUENCE WITH VARIABLES
+### ============================================
+
+### Step 1: Create user
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation CreateUser($input: CreateUserInput!) { createUser(input: $input) { id username email firstName lastName phone active createdAt } }",
+  "variables": {
+    "input": {
+      "username": "crud_graphql_test",
+      "email": "crudgraphql@example.com",
+      "password": "password123",
+      "firstName": "CRUD",
+      "lastName": "GraphQL",
+      "phone": "+1-555-CRUD"
+    }
+  }
+}
+
+> {%
+    client.test("User created via GraphQL", function() {
+        client.assert(response.body.data.createUser.username === "crud_graphql_test", "Username mismatch");
+        client.global.set("graphqlUserId", response.body.data.createUser.id);
+    });
+%}
+
+###
+
+### Step 2: Query the created user
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query GetUser($userId: ID!) { user(id: $userId) { id username email firstName lastName phone active } }",
+  "variables": {
+    "userId": "{{graphqlUserId}}"
+  }
+}
+
+###
+
+### Step 3: Update the user
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation UpdateUser($id: ID!, $input: UpdateUserInput!) { updateUser(id: $id, input: $input) { id username email firstName lastName phone updatedAt } }",
+  "variables": {
+    "id": "{{graphqlUserId}}",
+    "input": {
+      "email": "crudgraphql.updated@example.com",
+      "firstName": "CRUD Updated"
+    }
+  }
+}
+
+###
+
+### Step 4: Delete the user
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation DeleteUser($id: ID!) { deleteUser(id: $id) }",
+  "variables": {
+    "id": "{{graphqlUserId}}"
+  }
+}
+
+###
+
+### Step 5: Verify deletion
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query GetUser($userId: ID!) { user(id: $userId) { id username email } }",
+  "variables": {
+    "userId": "{{graphqlUserId}}"
+  }
+}
+
+### ============================================
+### BATCH OPERATIONS
+### ============================================
+
+### Create multiple users in one request
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "mutation { user1: createUser(input: { username: \"batch_user_1\" email: \"batch1@example.com\" password: \"password123\" firstName: \"Batch\" lastName: \"One\" }) { id username email } user2: createUser(input: { username: \"batch_user_2\" email: \"batch2@example.com\" password: \"password123\" firstName: \"Batch\" lastName: \"Two\" }) { id username email } user3: createUser(input: { username: \"batch_user_3\" email: \"batch3@example.com\" password: \"password123\" firstName: \"Batch\" lastName: \"Three\" }) { id username email } }"
+}
+
+### Query multiple users by different criteria
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { byId: user(id: 1) { id username email } byUsername: userByUsername(username: \"jane_smith\") { id username email } allUsers: users { id username } }"
+}
+
+### ============================================
+### ERROR HANDLING
+### ============================================
+
+### Invalid GraphQL syntax
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { user(id: 1) { invalid_field } }"
+}
+
+### Missing required argument
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { user { id username email } }"
+}
+
+### Wrong argument type
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { user(id: \"not_a_number\") { id username email } }"
+}
+
+### Empty query
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": ""
+}
+
+### Malformed JSON
+POST {{graphqlEndpoint}}
+Content-Type: {{contentType}}
+
+{
+  "query": "query { users { id username email } }"
+  // missing comma

@@ -1,0 +1,72 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: jdbc:h2:mem:userdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+      continue-on-error: false
+      encoding: UTF-8
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  graphql:
+    # GraphQL endpoint path (default: /graphql)
+    graphiql:
+      enabled: true
+      path: /graphiql
+
+    # Schema location (default: classpath:graphql/**/*.graphqls)
+    schema:
+      locations: classpath:graphql/
+      file-extensions: .graphqls
+    # Enable introspection in development (disable in production)
+      introspection:
+        enabled: true
+
+    # CORS configuration for GraphQL endpoint
+    cors:
+      allowed-origins: "*"
+      allowed-methods: "*"
+    http:
+      path: /graphql
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com.microservices.userservice: DEBUG
+    org.springframework.graphql: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

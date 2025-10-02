@@ -1,0 +1,338 @@
+### User Service REST API Tests
+### Run these requests directly in IntelliJ IDEA
+
+### Variables
+@baseUrl = http://localhost:8081
+@contentType = application/json
+
+### ============================================
+### HEALTH CHECK
+### ============================================
+
+### Check application health
+GET {{baseUrl}}/actuator/health
+Accept: application/json
+
+### ============================================
+### GET ALL USERS
+### ============================================
+
+### Get all users
+GET {{baseUrl}}/api/users
+Accept: {{contentType}}
+
+### ============================================
+### GET USER BY ID
+### ============================================
+
+### Get user by ID - Success (ID: 1)
+GET {{baseUrl}}/api/users/1
+Accept: {{contentType}}
+
+### Get user by ID - Success (ID: 2)
+GET {{baseUrl}}/api/users/2
+Accept: {{contentType}}
+
+### Get user by ID - Not Found (ID: 999)
+GET {{baseUrl}}/api/users/999
+Accept: {{contentType}}
+
+### ============================================
+### GET USER BY USERNAME
+### ============================================
+
+### Get user by username - Success
+GET {{baseUrl}}/api/users/username/john_doe
+Accept: {{contentType}}
+
+### Get user by username - Success
+GET {{baseUrl}}/api/users/username/jane_smith
+Accept: {{contentType}}
+
+### Get user by username - Not Found
+GET {{baseUrl}}/api/users/username/nonexistent_user
+Accept: {{contentType}}
+
+### ============================================
+### CREATE USER
+### ============================================
+
+### Create new user - Success
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "username": "test_user_001",
+  "email": "testuser001@example.com",
+  "password": "securePassword123",
+  "firstName": "Test",
+  "lastName": "User",
+  "phone": "+1-555-9001"
+}
+
+### Create new user with minimal data
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "username": "minimal_user",
+  "email": "minimal@example.com",
+  "password": "password123"
+}
+
+### Create user - Duplicate Username (should fail)
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "username": "john_doe",
+  "email": "another.email@example.com",
+  "password": "password123",
+  "firstName": "Another",
+  "lastName": "User"
+}
+
+### Create user - Duplicate Email (should fail)
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "username": "unique_username",
+  "email": "john.doe@example.com",
+  "password": "password123",
+  "firstName": "Duplicate",
+  "lastName": "Email"
+}
+
+### Create user - Invalid Email Format (should fail)
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "username": "invalid_email_user",
+  "email": "not-an-email",
+  "password": "password123",
+  "firstName": "Invalid",
+  "lastName": "Email"
+}
+
+### Create user - Missing Required Fields (should fail)
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "firstName": "Missing",
+  "lastName": "Required"
+}
+
+### Create user - Password Too Short (should fail)
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "username": "short_pass_user",
+  "email": "shortpass@example.com",
+  "password": "12345",
+  "firstName": "Short",
+  "lastName": "Password"
+}
+
+### ============================================
+### UPDATE USER
+### ============================================
+
+### Update user - Success (update email and name)
+PUT {{baseUrl}}/api/users/1
+Content-Type: {{contentType}}
+
+{
+  "email": "john.doe.updated@example.com",
+  "firstName": "Johnny",
+  "lastName": "Doe Jr.",
+  "phone": "+1-555-0199"
+}
+
+### Update user - Partial update (only email)
+PUT {{baseUrl}}/api/users/2
+Content-Type: {{contentType}}
+
+{
+  "email": "jane.smith.new@example.com"
+}
+
+### Update user - Partial update (only phone)
+PUT {{baseUrl}}/api/users/3
+Content-Type: {{contentType}}
+
+{
+  "phone": "+1-555-7777"
+}
+
+### Update user - Not Found (should fail)
+PUT {{baseUrl}}/api/users/999
+Content-Type: {{contentType}}
+
+{
+  "email": "notfound@example.com",
+  "firstName": "Not",
+  "lastName": "Found"
+}
+
+### Update user - Duplicate Email (should fail)
+PUT {{baseUrl}}/api/users/1
+Content-Type: {{contentType}}
+
+{
+  "email": "jane.smith@example.com"
+}
+
+### Update user - Invalid Email Format (should fail)
+PUT {{baseUrl}}/api/users/1
+Content-Type: {{contentType}}
+
+{
+  "email": "invalid-email-format"
+}
+
+### ============================================
+### DELETE USER
+### ============================================
+
+### Delete user - Success
+DELETE {{baseUrl}}/api/users/10
+Accept: {{contentType}}
+
+### Delete user - Not Found (should fail)
+DELETE {{baseUrl}}/api/users/999
+Accept: {{contentType}}
+
+### ============================================
+### COMPLEX SCENARIOS
+### ============================================
+
+### Create, Retrieve, Update, Delete sequence
+### Step 1: Create a new user
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "username": "crud_test_user",
+  "email": "crudtest@example.com",
+  "password": "password123",
+  "firstName": "CRUD",
+  "lastName": "Test",
+  "phone": "+1-555-CRUD"
+}
+
+> {%
+    client.test("User created successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+        client.assert(response.body.username === "crud_test_user", "Username mismatch");
+        client.global.set("createdUserId", response.body.id);
+    });
+%}
+
+###
+
+### Step 2: Retrieve the created user (use the ID from Step 1)
+GET {{baseUrl}}/api/users/{{createdUserId}}
+Accept: {{contentType}}
+
+> {%
+    client.test("User retrieved successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.username === "crud_test_user", "Username mismatch");
+    });
+%}
+
+###
+
+### Step 3: Update the user
+PUT {{baseUrl}}/api/users/{{createdUserId}}
+Content-Type: {{contentType}}
+
+{
+  "email": "crudtest.updated@example.com",
+  "firstName": "CRUD Updated",
+  "phone": "+1-555-9999"
+}
+
+> {%
+    client.test("User updated successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.email === "crudtest.updated@example.com", "Email not updated");
+    });
+%}
+
+###
+
+### Step 4: Delete the user
+DELETE {{baseUrl}}/api/users/{{createdUserId}}
+
+> {%
+    client.test("User deleted successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+    });
+%}
+
+###
+
+### Step 5: Verify deletion (should return 404)
+GET {{baseUrl}}/api/users/{{createdUserId}}
+Accept: {{contentType}}
+
+> {%
+    client.test("User not found after deletion", function() {
+        client.assert(response.status === 404, "Response status is not 404");
+    });
+%}
+
+### ============================================
+### PERFORMANCE TESTING
+### ============================================
+
+### Bulk retrieve - Get all users multiple times
+GET {{baseUrl}}/api/users
+Accept: {{contentType}}
+
+###
+
+GET {{baseUrl}}/api/users
+Accept: {{contentType}}
+
+###
+
+GET {{baseUrl}}/api/users
+Accept: {{contentType}}
+
+### ============================================
+### ERROR HANDLING TESTS
+### ============================================
+
+### Invalid endpoint
+GET {{baseUrl}}/api/invalid-endpoint
+Accept: {{contentType}}
+
+### Invalid HTTP method
+PATCH {{baseUrl}}/api/users/1
+Content-Type: {{contentType}}
+
+{
+  "email": "test@example.com"
+}
+
+### Malformed JSON
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "username": "test",
+  "email": "test@example.com",
+  "password": "password123"
+  // missing comma here
+
+### Empty body
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{}
