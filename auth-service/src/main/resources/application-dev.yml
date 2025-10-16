@@ -1,0 +1,224 @@
+# Development Environment Configuration for Auth Service
+spring:
+  # Database Configuration - H2 for development
+  datasource:
+    url: jdbc:h2:mem:authdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 1200000
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+        jdbc:
+          time_zone: UTC
+
+  # H2 Console for development
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+  # Redis Configuration - Docker Redis
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+
+  # Kafka Configuration - Docker Kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:29092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 1
+    consumer:
+      group-id: auth-service-dev
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+
+  # Mail Configuration - Disabled for development
+  mail:
+    host: localhost
+    port: 587
+    username: test
+    password: test
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+            required: false
+    default-encoding: UTF-8
+    test-connection: false # Disable mail connection test in dev
+
+# JWT Configuration - Development Secret
+jwt:
+  secret: ${JWT_SECRET:dev_secret_key_XK7fJ3mP9vN2wQ8rT5yU6iO1pA4sD7fG9hJ2kL5nM8qR3tY6uI9oP2aS5dF8gH1jK4lZ7xC0vB3nM6qW9eR2tY5uI8oP1aS4dF7gH0jK3lZ6xC9vB2nM5qW8eR1tY4u==}
+  access-token-expiration: 900000 # 15 minutes
+  refresh-token-expiration: 604800000 # 7 days
+
+# Security Configuration - Relaxed for development
+app:
+  security:
+    max-failed-attempts: 10 # More lenient for development
+    lockout-duration-minutes: 5 # Shorter lockout for development
+    password-reset-token-expiration-minutes: 60
+    password-min-length: 6 # Relaxed password requirements
+    password-require-uppercase: false
+    password-require-lowercase: false
+    password-require-numbers: false
+    password-require-special-chars: false
+
+  cors:
+    allowed-origins: http://localhost:3000,http://localhost:5173,http://localhost:8080,http://localhost:8081,http://localhost:8082
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS,PATCH
+    allowed-headers: "*"
+    allow-credentials: true
+
+# Resilience4j Configuration - Relaxed for development
+resilience4j:
+  circuitbreaker:
+    instances:
+      emailService:
+        failure-rate-threshold: 70 # More lenient
+        wait-duration-in-open-state: 10s # Shorter wait
+        sliding-window-size: 5
+        minimum-number-of-calls: 3
+        permitted-number-of-calls-in-half-open-state: 2
+      kafkaService:
+        failure-rate-threshold: 60
+        wait-duration-in-open-state: 10s
+        sliding-window-size: 5
+        minimum-number-of-calls: 3
+        permitted-number-of-calls-in-half-open-state: 2
+      redisService:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+        sliding-window-size: 5
+        minimum-number-of-calls: 3
+        permitted-number-of-calls-in-half-open-state: 2
+  retry:
+    instances:
+      emailService:
+        max-attempts: 2 # Fewer retries for development
+        wait-duration: 1s
+      kafkaService:
+        max-attempts: 2
+        wait-duration: 500ms
+      redisService:
+        max-attempts: 2
+        wait-duration: 200ms
+  bulkhead:
+    instances:
+      authService:
+        max-concurrent-calls: 50 # More lenient
+        max-wait-duration: 2s
+      emailService:
+        max-concurrent-calls: 20
+        max-wait-duration: 2s
+  ratelimiter:
+    instances:
+      loginService:
+        limit-for-period: 50 # More lenient
+        limit-refresh-period: 1m
+        timeout-duration: 2s
+      registrationService:
+        limit-for-period: 20
+        limit-refresh-period: 1m
+        timeout-duration: 2s
+      passwordResetService:
+        limit-for-period: 10
+        limit-refresh-period: 5m
+        timeout-duration: 2s
+
+# Management Configuration - Full exposure for development
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # Expose all endpoints for development
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
+
+# OpenAPI Configuration - Full access for development
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    try-it-out-enabled: true
+
+# Logging Configuration - Verbose for development
+logging:
+  level:
+    root: INFO
+    com.microservices.auth: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.kafka: DEBUG
+    org.apache.kafka: INFO
+    io.github.resilience4j: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
+  file:
+    name: logs/auth-service-dev.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7 # Keep fewer logs in development
+
+# Kafka Topics Configuration
+kafka:
+  topics:
+    user-events: user-events-dev
+    user-events-dlq: user-events-dlq-dev
+
+# Outbox Pattern Configuration - Relaxed for development
+outbox:
+  scheduler:
+    enabled: true
+    fixed-delay: 2000 # Faster processing for development
+    batch-size: 50

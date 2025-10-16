@@ -1,46 +1,69 @@
 package com.microservices.auth.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservices.auth.dto.*;
+import com.microservices.auth.entity.OutboxEvent;
+import com.microservices.auth.entity.RefreshToken;
 import com.microservices.auth.entity.User;
+import com.microservices.auth.entity.UserSession;
 import com.microservices.auth.exception.AccountLockedException;
 import com.microservices.auth.exception.AuthenticationException;
 import com.microservices.auth.exception.UserAlreadyExistsException;
+import com.microservices.auth.repository.OutboxEventRepository;
 import com.microservices.auth.repository.UserRepository;
+import com.microservices.auth.util.InputSanitizer;
 import com.microservices.auth.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final RefreshTokenService refreshTokenService;
+    private final SessionService sessionService;
+    private final EmailService emailService;
+    private final OutboxEventRepository outboxEventRepository;
+    private final ObjectMapper objectMapper;
 
-    @Value("${app.security.max-failed-attempts:3}")
+    @Value("${app.security.max-failed-attempts:5}")
     private int maxFailedAttempts;
 
     @Value("${app.security.lockout-duration-minutes:30}")
     private long lockoutDurationMinutes;
 
+    @Value("${jwt.access-token-expiration}")
+    private Long accessTokenExpiration;
+
     @Transactional
-    public AuthResponse register(RegisterRequest request, String ipAddress) {
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new UserAlreadyExistsException("Username already exists");
+    public AuthResponse register(RegisterRequest request, String ipAddress, DeviceInfo deviceInfo) {
+        // Sanitize inputs
+        String sanitizedUsername = InputSanitizer.sanitizeUsername(request.getUsername());
+        String sanitizedEmail = InputSanitizer.sanitizeEmail(request.getEmail());
+
+        if (userRepository.existsByUsername(sanitizedUsername)) {
+            throw new UserAlreadyExistsException("User already exists");
         }
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new UserAlreadyExistsException("Email already exists");
+        if (userRepository.existsByEmail(sanitizedEmail)) {
+            throw new UserAlreadyExistsException("User already exists");
         }
 
+        // Create user
         User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
+        user.setUsername(sanitizedUsername);
+        user.setEmail(sanitizedEmail);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole("USER");
         user.setEnabled(true);
@@ -49,20 +72,54 @@ public class AuthService {
         user.setFailedLoginAttempts(0);
         user.setAccountLocked(false);
 
-        userRepository.save(user);
+        user = userRepository.save(user);
 
-        String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
-        return new AuthResponse(token, "Bearer", user.getUsername(), user.getEmail(), user.getRole());
+        // Create session
+        UserSession session = sessionService.createSession(
+                user,
+                deviceInfo.getDeviceId(),
+                deviceInfo.getDeviceName(),
+                deviceInfo.getDeviceType(),
+                ipAddress,
+                deviceInfo.getUserAgent()
+        );
+
+        // Create refresh token
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(
+                user,
+                deviceInfo.getDeviceId(),
+                deviceInfo.getDeviceName(),
+                ipAddress,
+                deviceInfo.getUserAgent()
+        );
+
+        // Publish event to outbox (will be processed by scheduler)
+        publishUserCreatedEvent(user, request.getFirstName(), request.getLastName());
+
+        // Generate access token
+        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getRole());
+
+        log.info("User registered successfully: {} from IP: {}", sanitizedUsername, ipAddress);
+
+        return new AuthResponse(
+                accessToken,
+                refreshToken.getToken(),
+                "Bearer",
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole()
+        );
     }
 
     @Transactional
-    public AuthResponse login(LoginRequest request, String ipAddress) {
-        User user = userRepository.findByUsername(request.getUsername())
+    public AuthResponse login(LoginRequest request, String ipAddress, DeviceInfo deviceInfo) {
+        String sanitizedUsername = InputSanitizer.sanitizeUsername(request.getUsername());
+
+        User user = userRepository.findByUsername(sanitizedUsername)
                 .orElseThrow(() -> new AuthenticationException("Invalid credentials"));
 
         // Check if account is locked
         if (user.getAccountLocked()) {
-            // Check if lockout period has expired
             if (isLockoutExpired(user)) {
                 unlockAccount(user);
             } else {
@@ -87,8 +144,71 @@ public class AuthService {
         // Successful login - reset failed attempts and update login info
         handleSuccessfulLogin(user, ipAddress);
 
-        String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
-        return new AuthResponse(token, "Bearer", user.getUsername(), user.getEmail(), user.getRole());
+        // Create session
+        UserSession session = sessionService.createSession(
+                user,
+                deviceInfo.getDeviceId(),
+                deviceInfo.getDeviceName(),
+                deviceInfo.getDeviceType(),
+                ipAddress,
+                deviceInfo.getUserAgent()
+        );
+
+        // Create refresh token
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(
+                user,
+                deviceInfo.getDeviceId(),
+                deviceInfo.getDeviceName(),
+                ipAddress,
+                deviceInfo.getUserAgent()
+        );
+
+        // Generate access token
+        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getRole());
+
+        log.info("User logged in successfully: {} from IP: {}", sanitizedUsername, ipAddress);
+
+        return new AuthResponse(
+                accessToken,
+                refreshToken.getToken(),
+                "Bearer",
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole()
+        );
+    }
+
+    @Transactional
+    public RefreshTokenResponse refreshAccessToken(RefreshTokenRequest request) {
+        RefreshToken refreshToken = refreshTokenService.findByToken(request.getRefreshToken());
+        refreshTokenService.verifyExpiration(refreshToken);
+
+        User user = refreshToken.getUser();
+
+        // Generate new access token
+        String newAccessToken = jwtUtil.generateToken(user.getUsername(), user.getRole());
+
+        // Optionally rotate refresh token for better security
+        String newRefreshToken = refreshToken.getToken();
+        // Uncomment below to enable refresh token rotation
+        // refreshTokenService.revokeToken(refreshToken.getToken());
+        // RefreshToken newRefreshTokenEntity = refreshTokenService.createRefreshToken(
+        //         user,
+        //         refreshToken.getDeviceId(),
+        //         refreshToken.getDeviceName(),
+        //         refreshToken.getIpAddress(),
+        //         refreshToken.getUserAgent()
+        // );
+        // newRefreshToken = newRefreshTokenEntity.getToken();
+
+        log.info("Access token refreshed for user: {}", user.getUsername());
+
+        return new RefreshTokenResponse(
+                newAccessToken,
+                newRefreshToken,
+                "Bearer",
+                accessTokenExpiration / 1000  // Convert to seconds
+        );
     }
 
     public ValidateTokenResponse validateToken(String token) {
@@ -99,9 +219,19 @@ public class AuthService {
                 return new ValidateTokenResponse(true, username, role);
             }
         } catch (Exception e) {
-            // Token is invalid
+            log.debug("Token validation failed: {}", e.getMessage());
         }
         return new ValidateTokenResponse(false, null, null);
+    }
+
+    @Transactional
+    public void logout(String refreshToken) {
+        try {
+            refreshTokenService.revokeToken(refreshToken);
+            log.info("User logged out successfully");
+        } catch (Exception e) {
+            log.error("Error during logout: {}", e.getMessage());
+        }
     }
 
     private void handleFailedLogin(User user, String ipAddress) {
@@ -112,6 +242,12 @@ public class AuthService {
         if (attempts >= maxFailedAttempts) {
             user.setAccountLocked(true);
             user.setAccountLockedAt(LocalDateTime.now());
+
+            // Send email notification
+            emailService.sendAccountLockedEmail(user.getEmail(), user.getUsername());
+
+            log.warn("Account locked for user: {} after {} failed attempts from IP: {}",
+                    user.getUsername(), attempts, ipAddress);
         }
 
         userRepository.save(user);
@@ -143,5 +279,30 @@ public class AuthService {
         user.setFailedLoginAttempts(0);
         user.setLastFailedLoginAt(null);
         userRepository.save(user);
+    }
+
+    private void publishUserCreatedEvent(User user, String firstName, String lastName) {
+        try {
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("username", user.getUsername());
+            payload.put("email", user.getEmail());
+            payload.put("firstName", firstName);
+            payload.put("lastName", lastName);
+            payload.put("eventType", "USER_CREATED");
+            payload.put("timestamp", System.currentTimeMillis());
+
+            OutboxEvent outboxEvent = new OutboxEvent();
+            outboxEvent.setAggregateType("USER");
+            outboxEvent.setAggregateId(user.getId().toString());
+            outboxEvent.setEventType("USER_CREATED");
+            outboxEvent.setPayload(objectMapper.writeValueAsString(payload));
+            outboxEvent.setCorrelationId(MDC.get("correlationId"));
+
+            outboxEventRepository.save(outboxEvent);
+
+            log.info("User created event published to outbox for user: {}", user.getUsername());
+        } catch (Exception e) {
+            log.error("Failed to publish user created event to outbox: {}", e.getMessage(), e);
+        }
     }
 }

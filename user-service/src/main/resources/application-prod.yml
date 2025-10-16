@@ -1,0 +1,252 @@
+# Production Environment Configuration for User Service
+spring:
+  profiles:
+    active: prod
+
+  # Database Configuration - PostgreSQL for production
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://user-db:5432/userdb}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME:useruser}
+    password: ${DB_PASSWORD:}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
+      validation-timeout: 5000
+      connection-test-query: SELECT 1
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
+        connection:
+          provider_disables_autocommit: true
+        order_inserts: true
+        order_updates: true
+        batch_size: 25
+        batch_versioned_data: true
+
+  # SQL Initialization disabled in production
+  sql:
+    init:
+      mode: never
+
+  # H2 Console disabled in production
+  h2:
+    console:
+      enabled: false
+
+  # GraphQL Configuration - Restricted for production
+  graphql:
+    graphiql:
+      enabled: false # Disabled in production
+    schema:
+      locations: classpath:graphql/
+      file-extensions: .graphqls
+      introspection:
+        enabled: false # Disabled in production
+    cors:
+      allowed-origins: ${CORS_ALLOWED_ORIGINS:https://yourdomain.com}
+      allowed-methods: POST,OPTIONS
+    http:
+      path: /graphql
+
+  # Redis Configuration - Production Redis Cluster
+  data:
+    redis:
+      host: ${REDIS_HOST:redis-cluster}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 5000ms
+      lettuce:
+        pool:
+          max-active: 20
+          max-idle: 10
+          min-idle: 5
+          max-wait: 5000ms
+        cluster:
+          refresh:
+            adaptive: true
+            period: 30s
+
+  # Kafka Configuration - Production Kafka Cluster
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka-cluster:9092}
+    consumer:
+      group-id: user-service-prod
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: false
+      max-poll-records: 500
+      session-timeout-ms: 30000
+      heartbeat-interval-ms: 10000
+      properties:
+        isolation.level: read_committed
+
+# Auth Service Configuration - Production
+auth:
+  service:
+    url: ${AUTH_SERVICE_URL:http://auth-service:8082}
+    validate-endpoint: /api/auth/validate
+
+# JWT Configuration - Production Secret (MUST be set via environment)
+jwt:
+  secret: ${JWT_SECRET} # REQUIRED - Must be set in production
+
+# Security Configuration - Strict for production
+app:
+  security:
+    internal-api-key: ${INTERNAL_API_KEY} # REQUIRED - Must be set in production
+    max-requests-per-minute: 100
+    max-graphql-depth: 10
+    max-graphql-complexity: 1000
+
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:https://yourdomain.com}
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+    allowed-headers: Authorization,Content-Type,X-Requested-With
+    allow-credentials: true
+
+# Resilience4j Configuration - Strict for production
+resilience4j:
+  circuitbreaker:
+    instances:
+      authService:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+      kafkaService:
+        failure-rate-threshold: 40
+        wait-duration-in-open-state: 20s
+        sliding-window-size: 15
+        minimum-number-of-calls: 8
+        permitted-number-of-calls-in-half-open-state: 5
+      redisService:
+        failure-rate-threshold: 30
+        wait-duration-in-open-state: 15s
+        sliding-window-size: 20
+        minimum-number-of-calls: 10
+        permitted-number-of-calls-in-half-open-state: 5
+  retry:
+    instances:
+      authService:
+        max-attempts: 3
+        wait-duration: 2s
+        retry-exceptions:
+          - java.lang.Exception
+      kafkaService:
+        max-attempts: 2
+        wait-duration: 1s
+        retry-exceptions:
+          - java.lang.Exception
+      redisService:
+        max-attempts: 2
+        wait-duration: 500ms
+        retry-exceptions:
+          - java.lang.Exception
+  bulkhead:
+    instances:
+      userOperations:
+        max-concurrent-calls: 30
+        max-wait-duration: 5s
+      graphqlOperations:
+        max-concurrent-calls: 20
+        max-wait-duration: 5s
+  ratelimiter:
+    instances:
+      userCreation:
+        limit-for-period: 20
+        limit-refresh-period: 1m
+        timeout-duration: 5s
+      userUpdate:
+        limit-for-period: 50
+        limit-refresh-period: 1m
+        timeout-duration: 5s
+      graphqlQuery:
+        limit-for-period: 100
+        limit-refresh-period: 1m
+        timeout-duration: 5s
+
+# Management Configuration - Restricted for production
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,circuitbreakers,retries,bulkheads,ratelimiters
+  endpoint:
+    health:
+      show-details: when-authorized
+      show-components: when-authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
+      slo:
+        http.server.requests: 50ms, 100ms, 200ms, 500ms
+
+# OpenAPI Configuration - Restricted for production
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    try-it-out-enabled: false # Disabled in production
+
+# Logging Configuration - Optimized for production
+logging:
+  level:
+    root: WARN
+    com.microservices.userservice: INFO
+    org.springframework.security: WARN
+    org.springframework.kafka: WARN
+    org.springframework.graphql: WARN
+    org.apache.kafka: ERROR
+    io.github.resilience4j: INFO
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
+  file:
+    name: logs/user-service-prod.log
+  logback:
+    rollingpolicy:
+      max-file-size: 100MB
+      max-history: 30
+      total-size-cap: 10GB
+
+# Server Configuration
+server:
+  port: 8081
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  tomcat:
+    max-threads: 200
+    min-spare-threads: 10
+    connection-timeout: 20000
+    max-connections: 8192
+    accept-count: 100

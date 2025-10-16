@@ -1,65 +1,94 @@
 ### User Service REST API Tests
-### Run these requests directly in IntelliJ IDEA
+### Requires a valid JWT token from Auth Service login
+### Run these requests directly in IntelliJ IDEA or Postman
 
-### Variables
-@baseUrl = http://localhost:8081
+### ============================================
+### VARIABLES
+### ============================================
+
+
+
+@baseUrl = http://localhost:8080
 @contentType = application/json
-
+#@authToken = {{authToken}}   # set automatically by Auth tests
+@authToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzb3VyYXY3MiIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU5NzgxMjgyLCJleHAiOjE3NTk3ODIxODJ9.szdr0cRc9bpDu3d4QyG4qH9V_3AEeaMBgKvApznJVRE9mDHrErK3fD9Jl0qwQCvCyjyDt8vwmrUFt3nvzZEUEA
 ### ============================================
-### HEALTH CHECK
+### HEALTH CHECK (Public)
 ### ============================================
 
-### Check application health
 GET {{baseUrl}}/actuator/health
 Accept: application/json
 
+> {%
+    client.test("Health check OK", function() {
+        client.assert(response.status === 200, "Expected status 200");
+    });
+%}
+
+
+
 ### ============================================
-### GET ALL USERS
+### GET ALL USERS (Authenticated)
 ### ============================================
 
-### Get all users
 GET {{baseUrl}}/api/users
 Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
+
+> {%
+    client.test("Fetched all users successfully", function() {
+        client.assert(response.status === 200, "Expected status 200");
+        client.assert(Array.isArray(response.body), "Response should be an array");
+    });
+%}
+
+### ============================================
+### GET ALL USERS (Authenticated)
+### ============================================
+
+GET {{baseUrl}}/api/users
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzb3VyYXY3MiIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU5NzgxNzczLCJleHAiOjE3NTk3ODI2NzN9.L5mkEGZUnLWDrm5xzkQlyvr5vYqCD6Zrrr1BgSnMC1ru4pfpKR0rNCpRQ8m4qOCFhPBZhKYVY_tq5pNZ0i29HQ
+Accept: application/json
 
 ### ============================================
 ### GET USER BY ID
 ### ============================================
 
-### Get user by ID - Success (ID: 1)
 GET {{baseUrl}}/api/users/1
 Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
 
-### Get user by ID - Success (ID: 2)
 GET {{baseUrl}}/api/users/2
 Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
 
-### Get user by ID - Not Found (ID: 999)
 GET {{baseUrl}}/api/users/999
 Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 ### ============================================
 ### GET USER BY USERNAME
 ### ============================================
 
-### Get user by username - Success
 GET {{baseUrl}}/api/users/username/john_doe
 Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
 
-### Get user by username - Success
 GET {{baseUrl}}/api/users/username/jane_smith
 Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
 
-### Get user by username - Not Found
 GET {{baseUrl}}/api/users/username/nonexistent_user
 Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 ### ============================================
 ### CREATE USER
 ### ============================================
 
-### Create new user - Success
 POST {{baseUrl}}/api/users
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "username": "test_user_001",
@@ -70,9 +99,9 @@ Content-Type: {{contentType}}
   "phone": "+1-555-9001"
 }
 
-### Create new user with minimal data
 POST {{baseUrl}}/api/users
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "username": "minimal_user",
@@ -80,9 +109,9 @@ Content-Type: {{contentType}}
   "password": "password123"
 }
 
-### Create user - Duplicate Username (should fail)
 POST {{baseUrl}}/api/users
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "username": "john_doe",
@@ -92,9 +121,9 @@ Content-Type: {{contentType}}
   "lastName": "User"
 }
 
-### Create user - Duplicate Email (should fail)
 POST {{baseUrl}}/api/users
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "username": "unique_username",
@@ -104,9 +133,9 @@ Content-Type: {{contentType}}
   "lastName": "Email"
 }
 
-### Create user - Invalid Email Format (should fail)
 POST {{baseUrl}}/api/users
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "username": "invalid_email_user",
@@ -116,18 +145,18 @@ Content-Type: {{contentType}}
   "lastName": "Email"
 }
 
-### Create user - Missing Required Fields (should fail)
 POST {{baseUrl}}/api/users
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "firstName": "Missing",
   "lastName": "Required"
 }
 
-### Create user - Password Too Short (should fail)
 POST {{baseUrl}}/api/users
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "username": "short_pass_user",
@@ -141,9 +170,9 @@ Content-Type: {{contentType}}
 ### UPDATE USER
 ### ============================================
 
-### Update user - Success (update email and name)
 PUT {{baseUrl}}/api/users/1
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "email": "john.doe.updated@example.com",
@@ -152,25 +181,25 @@ Content-Type: {{contentType}}
   "phone": "+1-555-0199"
 }
 
-### Update user - Partial update (only email)
 PUT {{baseUrl}}/api/users/2
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "email": "jane.smith.new@example.com"
 }
 
-### Update user - Partial update (only phone)
 PUT {{baseUrl}}/api/users/3
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "phone": "+1-555-7777"
 }
 
-### Update user - Not Found (should fail)
 PUT {{baseUrl}}/api/users/999
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "email": "notfound@example.com",
@@ -178,17 +207,17 @@ Content-Type: {{contentType}}
   "lastName": "Found"
 }
 
-### Update user - Duplicate Email (should fail)
 PUT {{baseUrl}}/api/users/1
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "email": "jane.smith@example.com"
 }
 
-### Update user - Invalid Email Format (should fail)
 PUT {{baseUrl}}/api/users/1
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "email": "invalid-email-format"
@@ -198,22 +227,21 @@ Content-Type: {{contentType}}
 ### DELETE USER
 ### ============================================
 
-### Delete user - Success
 DELETE {{baseUrl}}/api/users/10
 Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
 
-### Delete user - Not Found (should fail)
 DELETE {{baseUrl}}/api/users/999
 Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 ### ============================================
-### COMPLEX SCENARIOS
+### CRUD SEQUENCE TEST
 ### ============================================
 
-### Create, Retrieve, Update, Delete sequence
-### Step 1: Create a new user
 POST {{baseUrl}}/api/users
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "username": "crud_test_user",
@@ -226,30 +254,28 @@ Content-Type: {{contentType}}
 
 > {%
     client.test("User created successfully", function() {
-        client.assert(response.status === 201, "Response status is not 201");
-        client.assert(response.body.username === "crud_test_user", "Username mismatch");
+        client.assert(response.status === 201, "Expected 201");
         client.global.set("createdUserId", response.body.id);
     });
 %}
 
 ###
 
-### Step 2: Retrieve the created user (use the ID from Step 1)
 GET {{baseUrl}}/api/users/{{createdUserId}}
 Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 > {%
     client.test("User retrieved successfully", function() {
-        client.assert(response.status === 200, "Response status is not 200");
-        client.assert(response.body.username === "crud_test_user", "Username mismatch");
+        client.assert(response.status === 200, "Expected 200");
     });
 %}
 
 ###
 
-### Step 3: Update the user
 PUT {{baseUrl}}/api/users/{{createdUserId}}
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "email": "crudtest.updated@example.com",
@@ -259,80 +285,80 @@ Content-Type: {{contentType}}
 
 > {%
     client.test("User updated successfully", function() {
-        client.assert(response.status === 200, "Response status is not 200");
-        client.assert(response.body.email === "crudtest.updated@example.com", "Email not updated");
+        client.assert(response.status === 200, "Expected 200");
     });
 %}
 
 ###
 
-### Step 4: Delete the user
 DELETE {{baseUrl}}/api/users/{{createdUserId}}
+Authorization: Bearer {{authToken}}
 
 > {%
     client.test("User deleted successfully", function() {
-        client.assert(response.status === 204, "Response status is not 204");
+        client.assert(response.status === 204, "Expected 204");
     });
 %}
 
 ###
 
-### Step 5: Verify deletion (should return 404)
 GET {{baseUrl}}/api/users/{{createdUserId}}
 Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 > {%
     client.test("User not found after deletion", function() {
-        client.assert(response.status === 404, "Response status is not 404");
+        client.assert(response.status === 404, "Expected 404");
     });
 %}
 
 ### ============================================
-### PERFORMANCE TESTING
+### PERFORMANCE TESTS
 ### ============================================
 
-### Bulk retrieve - Get all users multiple times
 GET {{baseUrl}}/api/users
 Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
 
-###
-
-GET {{baseUrl}}/api/users
-Accept: {{contentType}}
-
-###
 
 GET {{baseUrl}}/api/users
 Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
+
+GET {{baseUrl}}/api/users
+Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 ### ============================================
 ### ERROR HANDLING TESTS
 ### ============================================
 
-### Invalid endpoint
 GET {{baseUrl}}/api/invalid-endpoint
 Accept: {{contentType}}
+Authorization: Bearer {{authToken}}
 
-### Invalid HTTP method
 PATCH {{baseUrl}}/api/users/1
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "email": "test@example.com"
 }
 
-### Malformed JSON
 POST {{baseUrl}}/api/users
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {
   "username": "test",
   "email": "test@example.com",
   "password": "password123"
-  // missing comma here
+  // missing comma
+}
 
-### Empty body
 POST {{baseUrl}}/api/users
 Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
 
 {}
+

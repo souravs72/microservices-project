@@ -1,0 +1,125 @@
+spring:
+  application:
+    name: notification-service-test
+
+  # Test Database Configuration
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+  # Test Redis Configuration (using embedded Redis would be better)
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 1000
+
+  # Test Kafka Configuration
+  kafka:
+    bootstrap-servers: ${spring.embedded.kafka.brokers}
+    consumer:
+      group-id: test-notification-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  # Test Mail Configuration
+  mail:
+    host: localhost
+    port: 587
+    username: test@example.com
+    password: testpassword
+
+# Test Kafka Topics
+kafka:
+  topics:
+    user-events: user-events
+    user-events-dlq: user-events-dlq
+    order-notifications: order-notifications
+    order-notifications-dlq: order-notifications-dlq
+
+# Test Resilience4j Configuration (more lenient for testing)
+resilience4j:
+  circuitbreaker:
+    instances:
+      emailService:
+        failure-rate-threshold: 80
+        wait-duration-in-open-state: 5s
+        sliding-window-size: 5
+        minimum-number-of-calls: 2
+        permitted-number-of-calls-in-half-open-state: 2
+      redisService:
+        failure-rate-threshold: 80
+        wait-duration-in-open-state: 5s
+        sliding-window-size: 5
+        minimum-number-of-calls: 2
+        permitted-number-of-calls-in-half-open-state: 2
+  retry:
+    instances:
+      emailService:
+        max-attempts: 2
+        wait-duration: 100ms
+      redisService:
+        max-attempts: 1
+        wait-duration: 50ms
+  bulkhead:
+    instances:
+      emailService:
+        max-concurrent-calls: 5
+        max-wait-duration: 1s
+  ratelimiter:
+    instances:
+      emailService:
+        limit-for-period: 1000
+        limit-refresh-period: 1m
+        timeout-duration: 1s
+
+# Test Idempotency Configuration
+idempotency:
+  ttl-hours: 1
+  enabled: true
+
+# Test Retry Configuration
+retry:
+  max-attempts: 2
+  backoff-ms: 100
+
+# Test Security
+security:
+  admin:
+    username: testadmin
+    password: testpassword
+
+# Test Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,circuitbreakers,retries,bulkheads,ratelimiters
+  endpoint:
+    health:
+      show-details: always
+
+# Test Logging
+logging:
+  level:
+    root: WARN
+    com.microservices.notificationservice: DEBUG
+    org.springframework.kafka: WARN
+    org.apache.kafka: WARN
+    io.github.resilience4j: WARN

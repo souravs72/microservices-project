@@ -2,13 +2,25 @@ package com.microservices.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 public class AuthResponse {
-    private String token;
+    private String accessToken;
+    private String refreshToken;
     private String type = "Bearer";
     private String username;
     private String email;
     private String role;
+
+    public AuthResponse(String accessToken, String refreshToken, String type,
+                        String username, String email, String role) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+        this.type = type;
+        this.username = username;
+        this.email = email;
+        this.role = role;
+    }
 }

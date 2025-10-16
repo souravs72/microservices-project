@@ -1,0 +1,433 @@
+2025-10-16 22:42:52 [main] INFO  c.m.apigateway.ApiGatewayApplication - Starting ApiGatewayApplication using Java 21.0.8 with PID 98728 (/home/clapgrow/Desktop/spring/microservices-parent/api-gateway/target/classes started by clapgrow in /home/clapgrow/Desktop/spring/microservices-parent)
+2025-10-16 22:42:52 [main] DEBUG c.m.apigateway.ApiGatewayApplication - Running with Spring Boot v3.5.6, Spring v6.2.11
+2025-10-16 22:42:52 [main] INFO  c.m.apigateway.ApiGatewayApplication - No active profile set, falling back to 1 default profile: "default"
+2025-10-16 22:42:52 [main] INFO  c.m.apigateway.ApiGatewayApplication - Starting ApiGatewayApplication using Java 21.0.8 with PID 98918 (/home/clapgrow/Desktop/spring/microservices-parent/api-gateway/target/classes started by clapgrow in /home/clapgrow/Desktop/spring/microservices-parent)
+2025-10-16 22:42:52 [main] DEBUG c.m.apigateway.ApiGatewayApplication - Running with Spring Boot v3.5.6, Spring v6.2.11
+2025-10-16 22:42:52 [main] INFO  c.m.apigateway.ApiGatewayApplication - No active profile set, falling back to 1 default profile: "default"
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:42:54 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-10-16 22:42:54 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-10-16 22:42:54 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 22 ms. Found 0 Redis repository interfaces.
+2025-10-16 22:42:54 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-10-16 22:42:55 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-10-16 22:42:55 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 37 ms. Found 0 Redis repository interfaces.
+2025-10-16 22:42:55 [main] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=137a0066-534b-3d46-89d3-cdc52dd559ed
+2025-10-16 22:42:55 [main] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=137a0066-534b-3d46-89d3-cdc52dd559ed
+2025-10-16 22:42:57 [main] WARN  o.s.c.g.c.GatewayClassPathWarningAutoConfiguration - 
+
+**********************************************************
+
+The artifact spring-cloud-gateway-server is deprecated. It will be removed in the next major release. Please add spring-cloud-gateway-server-webflux dependency.
+
+**********************************************************
+
+
+2025-10-16 22:42:57 [main] WARN  o.s.c.g.c.GatewayClassPathWarningAutoConfiguration - 
+
+**********************************************************
+
+The artifact spring-cloud-gateway-server is deprecated. It will be removed in the next major release. Please add spring-cloud-gateway-server-webflux dependency.
+
+**********************************************************
+
+
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [After]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Before]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Between]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Cookie]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Header]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Host]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Method]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Path]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Query]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [ReadBody]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [RemoteAddr]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Weight]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-10-16 22:42:57 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.authFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/auth"}, produces={}, value={"/auth"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/auth"}, produces={}, value={"/auth"})]
+2025-10-16 22:42:57 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.usersFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/users"}, produces={}, value={"/users"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/users"}, produces={}, value={"/users"})]
+2025-10-16 22:42:57 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.graphqlFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/graphql"}, produces={}, value={"/graphql"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/graphql"}, produces={}, value={"/graphql"})]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [After]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Before]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Between]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Cookie]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Header]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Host]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Method]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Path]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Query]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [ReadBody]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [RemoteAddr]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Weight]
+2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-10-16 22:42:57 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.authFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/auth"}, produces={}, value={"/auth"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/auth"}, produces={}, value={"/auth"})]
+2025-10-16 22:42:57 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.usersFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/users"}, produces={}, value={"/users"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/users"}, produces={}, value={"/users"})]
+2025-10-16 22:42:57 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.graphqlFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/graphql"}, produces={}, value={"/graphql"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/graphql"}, produces={}, value={"/graphql"})]
+2025-10-16 22:42:58 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-10-16 22:42:58 [main] WARN  o.s.c.g.s.w.s.StarterDeprecatedAutoConfiguration - 
+
+**********************************************************
+
+spring-cloud-starter-gateway is deprecated. It will be removed in the next major release. Please use spring-cloud-starter-gateway-server-webflux instead.
+
+**********************************************************
+
+
+2025-10-16 22:42:58 [main] INFO  o.s.b.w.e.netty.NettyWebServer - Netty started on port 8080 (http)
+2025-10-16 22:42:58 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-10-16 22:42:58 [main] WARN  o.s.c.g.s.w.s.StarterDeprecatedAutoConfiguration - 
+
+**********************************************************
+
+spring-cloud-starter-gateway is deprecated. It will be removed in the next major release. Please use spring-cloud-starter-gateway-server-webflux instead.
+
+**********************************************************
+
+
+2025-10-16 22:42:58 [main] DEBUG o.s.c.g.filter.GatewayMetricsFilter - New routes count: 0
+2025-10-16 22:42:58 [main] INFO  c.m.apigateway.ApiGatewayApplication - Started ApiGatewayApplication in 7.495 seconds (process running for 8.265)
+2025-10-16 22:42:58 [main] WARN  o.s.b.c.p.m.PropertiesMigrationListener - 
+The use of configuration keys that have been renamed was found in the environment:
+
+Property source 'Config resource 'class path resource [application.yml]' via location 'optional:classpath:/'':
+	Key: logging.file.max-history
+		Line: 158
+		Replacement: logging.logback.rollingpolicy.max-history
+	Key: logging.file.max-size
+		Line: 157
+		Replacement: logging.logback.rollingpolicy.max-file-size
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[0]
+		Line: 30
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[0]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[1]
+		Line: 31
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[1]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[2]
+		Line: 32
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[2]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[0]
+		Line: 34
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[0]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[1]
+		Line: 35
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[1]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[2]
+		Line: 36
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[2]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[3]
+		Line: 37
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[3]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[4]
+		Line: 38
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[4]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[5]
+		Line: 39
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[5]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedheaders
+		Line: 40
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedheaders
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].exposedheaders[0]
+		Line: 42
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].exposedheaders[0]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].exposedheaders[1]
+		Line: 43
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].exposedheaders[1]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowcredentials
+		Line: 44
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowcredentials
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].maxage
+		Line: 45
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].maxage
+	Key: spring.cloud.gateway.httpclient.connect-timeout
+		Line: 18
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.connect-timeout
+	Key: spring.cloud.gateway.httpclient.pool.max-connections
+		Line: 22
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.max-connections
+	Key: spring.cloud.gateway.httpclient.pool.max-idle-time
+		Line: 23
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.max-idle-time
+	Key: spring.cloud.gateway.httpclient.pool.type
+		Line: 21
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.type
+	Key: spring.cloud.gateway.httpclient.response-timeout
+		Line: 19
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.response-timeout
+
+
+Each configuration key has been temporarily mapped to its replacement for your convenience. To silence this warning, please update your configuration to use the new keys.
+
+2025-10-16 22:43:00 [main] WARN  o.s.b.w.r.c.AnnotationConfigReactiveWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-10-16 22:43:00 [main] WARN  o.s.b.c.p.m.PropertiesMigrationListener - 
+The use of configuration keys that have been renamed was found in the environment:
+
+Property source 'Config resource 'class path resource [application.yml]' via location 'optional:classpath:/'':
+	Key: logging.file.max-history
+		Line: 158
+		Replacement: logging.logback.rollingpolicy.max-history
+	Key: logging.file.max-size
+		Line: 157
+		Replacement: logging.logback.rollingpolicy.max-file-size
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[0]
+		Line: 30
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[0]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[1]
+		Line: 31
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[1]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[2]
+		Line: 32
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[2]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[0]
+		Line: 34
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[0]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[1]
+		Line: 35
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[1]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[2]
+		Line: 36
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[2]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[3]
+		Line: 37
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[3]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[4]
+		Line: 38
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[4]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[5]
+		Line: 39
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[5]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedheaders
+		Line: 40
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedheaders
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].exposedheaders[0]
+		Line: 42
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].exposedheaders[0]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].exposedheaders[1]
+		Line: 43
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].exposedheaders[1]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowcredentials
+		Line: 44
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowcredentials
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].maxage
+		Line: 45
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].maxage
+	Key: spring.cloud.gateway.httpclient.connect-timeout
+		Line: 18
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.connect-timeout
+	Key: spring.cloud.gateway.httpclient.pool.max-connections
+		Line: 22
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.max-connections
+	Key: spring.cloud.gateway.httpclient.pool.max-idle-time
+		Line: 23
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.max-idle-time
+	Key: spring.cloud.gateway.httpclient.pool.type
+		Line: 21
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.type
+	Key: spring.cloud.gateway.httpclient.response-timeout
+		Line: 19
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.response-timeout
+
+
+Each configuration key has been temporarily mapped to its replacement for your convenience. To silence this warning, please update your configuration to use the new keys.
+
+2025-10-16 22:43:00 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-10-16 22:43:00 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2025-10-16 22:43:12 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.netty.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-16 22:43:12 [netty-shutdown] INFO  o.s.b.w.e.netty.GracefulShutdown - Graceful shutdown complete
+2025-10-16 22:44:32 [main] INFO  c.m.apigateway.ApiGatewayApplication - Starting ApiGatewayApplication using Java 21.0.8 with PID 101459 (/home/clapgrow/Desktop/spring/microservices-parent/api-gateway/target/classes started by clapgrow in /home/clapgrow/Desktop/spring/microservices-parent)
+2025-10-16 22:44:32 [main] DEBUG c.m.apigateway.ApiGatewayApplication - Running with Spring Boot v3.5.6, Spring v6.2.11
+2025-10-16 22:44:32 [main] INFO  c.m.apigateway.ApiGatewayApplication - No active profile set, falling back to 1 default profile: "default"
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-16 22:44:33 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-10-16 22:44:33 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-10-16 22:44:33 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 13 ms. Found 0 Redis repository interfaces.
+2025-10-16 22:44:33 [main] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=137a0066-534b-3d46-89d3-cdc52dd559ed
+2025-10-16 22:44:34 [main] WARN  o.s.c.g.c.GatewayClassPathWarningAutoConfiguration - 
+
+**********************************************************
+
+The artifact spring-cloud-gateway-server is deprecated. It will be removed in the next major release. Please add spring-cloud-gateway-server-webflux dependency.
+
+**********************************************************
+
+
+2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [After]
+2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Before]
+2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Between]
+2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Cookie]
+2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Header]
+2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Host]
+2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Method]
+2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Path]
+2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Query]
+2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [ReadBody]
+2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [RemoteAddr]
+2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Weight]
+2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-10-16 22:44:35 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.authFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/auth"}, produces={}, value={"/auth"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/auth"}, produces={}, value={"/auth"})]
+2025-10-16 22:44:35 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.usersFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/users"}, produces={}, value={"/users"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/users"}, produces={}, value={"/users"})]
+2025-10-16 22:44:35 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.graphqlFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/graphql"}, produces={}, value={"/graphql"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/graphql"}, produces={}, value={"/graphql"})]
+2025-10-16 22:44:35 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-10-16 22:44:35 [main] WARN  o.s.c.g.s.w.s.StarterDeprecatedAutoConfiguration - 
+
+**********************************************************
+
+spring-cloud-starter-gateway is deprecated. It will be removed in the next major release. Please use spring-cloud-starter-gateway-server-webflux instead.
+
+**********************************************************
+
+
+2025-10-16 22:44:35 [main] INFO  o.s.b.w.e.netty.NettyWebServer - Netty started on port 8080 (http)
+2025-10-16 22:44:36 [main] DEBUG o.s.c.g.filter.GatewayMetricsFilter - New routes count: 0
+2025-10-16 22:44:36 [main] INFO  c.m.apigateway.ApiGatewayApplication - Started ApiGatewayApplication in 3.944 seconds (process running for 4.321)
+2025-10-16 22:44:36 [main] WARN  o.s.b.c.p.m.PropertiesMigrationListener - 
+The use of configuration keys that have been renamed was found in the environment:
+
+Property source 'Config resource 'class path resource [application.yml]' via location 'optional:classpath:/'':
+	Key: logging.file.max-history
+		Line: 158
+		Replacement: logging.logback.rollingpolicy.max-history
+	Key: logging.file.max-size
+		Line: 157
+		Replacement: logging.logback.rollingpolicy.max-file-size
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[0]
+		Line: 30
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[0]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[1]
+		Line: 31
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[1]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[2]
+		Line: 32
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[2]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[0]
+		Line: 34
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[0]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[1]
+		Line: 35
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[1]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[2]
+		Line: 36
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[2]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[3]
+		Line: 37
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[3]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[4]
+		Line: 38
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[4]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[5]
+		Line: 39
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[5]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedheaders
+		Line: 40
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedheaders
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].exposedheaders[0]
+		Line: 42
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].exposedheaders[0]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].exposedheaders[1]
+		Line: 43
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].exposedheaders[1]
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowcredentials
+		Line: 44
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowcredentials
+	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].maxage
+		Line: 45
+		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].maxage
+	Key: spring.cloud.gateway.httpclient.connect-timeout
+		Line: 18
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.connect-timeout
+	Key: spring.cloud.gateway.httpclient.pool.max-connections
+		Line: 22
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.max-connections
+	Key: spring.cloud.gateway.httpclient.pool.max-idle-time
+		Line: 23
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.max-idle-time
+	Key: spring.cloud.gateway.httpclient.pool.type
+		Line: 21
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.type
+	Key: spring.cloud.gateway.httpclient.response-timeout
+		Line: 19
+		Replacement: spring.cloud.gateway.server.webflux.httpclient.response-timeout
+
+
+Each configuration key has been temporarily mapped to its replacement for your convenience. To silence this warning, please update your configuration to use the new keys.
+
+2025-10-16 22:45:01 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.netty.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-16 22:45:01 [netty-shutdown] INFO  o.s.b.w.e.netty.GracefulShutdown - Graceful shutdown complete

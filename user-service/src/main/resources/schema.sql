@@ -10,7 +10,11 @@ CREATE TABLE users (
                        phone VARCHAR(20),
                        active BOOLEAN NOT NULL DEFAULT TRUE,
                        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                       updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                       updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                       created_by VARCHAR(100),
+                       modified_by VARCHAR(100),
+                       created_from_ip VARCHAR(45),
+                       modified_from_ip VARCHAR(45)
 );
 
 CREATE INDEX idx_username ON users(username);

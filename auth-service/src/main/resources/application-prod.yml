@@ -1,0 +1,270 @@
+# Production Environment Configuration for Auth Service
+spring:
+  profiles:
+    active: prod
+
+  # Database Configuration - PostgreSQL for production
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://auth-db:5432/authdb}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME:authuser}
+    password: ${DB_PASSWORD:}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
+      validation-timeout: 5000
+      connection-test-query: SELECT 1
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
+        connection:
+          provider_disables_autocommit: true
+        order_inserts: true
+        order_updates: true
+        batch_size: 25
+        batch_versioned_data: true
+
+  # H2 Console disabled in production
+  h2:
+    console:
+      enabled: false
+
+  # Redis Configuration - Production Redis Cluster
+  data:
+    redis:
+      host: ${REDIS_HOST:redis-cluster}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 5000ms
+      lettuce:
+        pool:
+          max-active: 20
+          max-idle: 10
+          min-idle: 5
+          max-wait: 5000ms
+        cluster:
+          refresh:
+            adaptive: true
+            period: 30s
+
+  # Kafka Configuration - Production Kafka Cluster
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka-cluster:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      retries: 5
+      batch-size: 16384
+      linger-ms: 5
+      buffer-memory: 33554432
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 1
+        compression.type: snappy
+    consumer:
+      group-id: auth-service-prod
+      auto-offset-reset: latest
+      enable-auto-commit: false
+      max-poll-records: 500
+      session-timeout-ms: 30000
+      heartbeat-interval-ms: 10000
+
+  # Mail Configuration - Production SMTP
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 10000
+          timeout: 10000
+          writetimeout: 10000
+    default-encoding: UTF-8
+
+# JWT Configuration - Production Secret (MUST be set via environment)
+jwt:
+  secret: ${JWT_SECRET} # REQUIRED - Must be set in production
+  access-token-expiration: 900000 # 15 minutes
+  refresh-token-expiration: 604800000 # 7 days
+
+# Security Configuration - Strict for production
+app:
+  security:
+    max-failed-attempts: 5
+    lockout-duration-minutes: 30
+    password-reset-token-expiration-minutes: 60
+    password-min-length: 8
+    password-require-uppercase: true
+    password-require-lowercase: true
+    password-require-numbers: true
+    password-require-special-chars: true
+
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:https://yourdomain.com}
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+    allowed-headers: Authorization,Content-Type,X-Requested-With
+    allow-credentials: true
+
+# Resilience4j Configuration - Strict for production
+resilience4j:
+  circuitbreaker:
+    instances:
+      emailService:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+      kafkaService:
+        failure-rate-threshold: 40
+        wait-duration-in-open-state: 20s
+        sliding-window-size: 15
+        minimum-number-of-calls: 8
+        permitted-number-of-calls-in-half-open-state: 5
+      redisService:
+        failure-rate-threshold: 30
+        wait-duration-in-open-state: 15s
+        sliding-window-size: 20
+        minimum-number-of-calls: 10
+        permitted-number-of-calls-in-half-open-state: 5
+  retry:
+    instances:
+      emailService:
+        max-attempts: 3
+        wait-duration: 2s
+        retry-exceptions:
+          - java.lang.Exception
+      kafkaService:
+        max-attempts: 2
+        wait-duration: 1s
+        retry-exceptions:
+          - java.lang.Exception
+      redisService:
+        max-attempts: 2
+        wait-duration: 500ms
+        retry-exceptions:
+          - java.lang.Exception
+  bulkhead:
+    instances:
+      authService:
+        max-concurrent-calls: 20
+        max-wait-duration: 5s
+      emailService:
+        max-concurrent-calls: 10
+        max-wait-duration: 5s
+  ratelimiter:
+    instances:
+      loginService:
+        limit-for-period: 10
+        limit-refresh-period: 1m
+        timeout-duration: 5s
+      registrationService:
+        limit-for-period: 5
+        limit-refresh-period: 1m
+        timeout-duration: 5s
+      passwordResetService:
+        limit-for-period: 3
+        limit-refresh-period: 5m
+        timeout-duration: 5s
+
+# Management Configuration - Restricted for production
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,circuitbreakers,retries,bulkheads,ratelimiters
+  endpoint:
+    health:
+      show-details: when-authorized
+      show-components: when-authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
+      slo:
+        http.server.requests: 50ms, 100ms, 200ms, 500ms
+
+# OpenAPI Configuration - Restricted for production
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    try-it-out-enabled: false # Disabled in production
+
+# Logging Configuration - Optimized for production
+logging:
+  level:
+    root: WARN
+    com.microservices.auth: INFO
+    org.springframework.security: WARN
+    org.springframework.kafka: WARN
+    org.apache.kafka: ERROR
+    io.github.resilience4j: INFO
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
+  file:
+    name: logs/auth-service-prod.log
+  logback:
+    rollingpolicy:
+      max-file-size: 100MB
+      max-history: 30
+      total-size-cap: 10GB
+
+# Kafka Topics Configuration
+kafka:
+  topics:
+    user-events: user-events-prod
+    user-events-dlq: user-events-dlq-prod
+
+# Outbox Pattern Configuration - Optimized for production
+outbox:
+  scheduler:
+    enabled: true
+    fixed-delay: 5000 # Standard processing interval
+    batch-size: 100
+
+# Server Configuration
+server:
+  port: 8082
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  tomcat:
+    max-threads: 200
+    min-spare-threads: 10
+    connection-timeout: 20000
+    max-connections: 8192
+    accept-count: 100

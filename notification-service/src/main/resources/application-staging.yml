@@ -1,0 +1,249 @@
+# Staging Environment Configuration for Notification Service
+spring:
+  profiles:
+    active: staging
+
+  # Database Configuration - PostgreSQL for staging
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://notification-db-staging:5432/notificationdb}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME:notificationuser}
+    password: ${DB_PASSWORD:}
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 3
+      connection-timeout: 25000
+      idle-timeout: 450000
+      max-lifetime: 1500000
+      leak-detection-threshold: 60000
+      validation-timeout: 5000
+      connection-test-query: SELECT 1
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update # Allow schema updates in staging
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
+        connection:
+          provider_disables_autocommit: true
+        order_inserts: true
+        order_updates: true
+        batch_size: 20
+        batch_versioned_data: true
+
+  # H2 Console disabled in staging
+  h2:
+    console:
+      enabled: false
+
+  # Redis Configuration - Staging Redis
+  data:
+    redis:
+      host: ${REDIS_HOST:redis-staging}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 15
+          max-idle: 8
+          min-idle: 3
+          max-wait: 3000ms
+
+  # Kafka Configuration - Staging Kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka-staging:9092}
+    consumer:
+      group-id: notification-service-staging
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: false
+      max-poll-records: 500
+      session-timeout-ms: 30000
+      heartbeat-interval-ms: 10000
+      properties:
+        isolation.level: read_committed
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      retries: 3
+      batch-size: 16384
+      linger-ms: 5
+      buffer-memory: 33554432
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 1
+
+  # Mail Configuration - Staging SMTP (test emails)
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 10000
+          timeout: 10000
+          writetimeout: 10000
+    default-encoding: UTF-8
+
+  # Security Configuration - Moderate for staging
+  security:
+    user:
+      name: ${ADMIN_USERNAME:admin}
+      password: ${ADMIN_PASSWORD:staging-admin-password}
+      roles: ADMIN
+
+  # Async Task Configuration - Moderate for staging
+  task:
+    execution:
+      pool:
+        core-size: 8
+        max-size: 30
+        queue-capacity: 150
+        keep-alive: 60s
+        thread-name-prefix: notification-async-
+
+# Resilience4j Configuration - Balanced for staging
+resilience4j:
+  circuitbreaker:
+    instances:
+      emailService:
+        failure-rate-threshold: 60 # Moderate threshold
+        wait-duration-in-open-state: 20s
+        sliding-window-size: 8
+        minimum-number-of-calls: 4
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+      redisService:
+        failure-rate-threshold: 35
+        wait-duration-in-open-state: 10s
+        sliding-window-size: 15
+        minimum-number-of-calls: 8
+        permitted-number-of-calls-in-half-open-state: 4
+  retry:
+    instances:
+      emailService:
+        max-attempts: 3
+        wait-duration: 1s
+        retry-exceptions:
+          - java.lang.Exception
+      redisService:
+        max-attempts: 2
+        wait-duration: 300ms
+        retry-exceptions:
+          - java.lang.Exception
+  bulkhead:
+    instances:
+      emailService:
+        max-concurrent-calls: 15 # Moderate concurrency
+        max-wait-duration: 3s
+      redisService:
+        max-concurrent-calls: 20
+        max-wait-duration: 3s
+  ratelimiter:
+    instances:
+      emailService:
+        limit-for-period: 25 # Moderate limits
+        limit-refresh-period: 1m
+        timeout-duration: 3s
+      redisService:
+        limit-for-period: 40
+        limit-refresh-period: 1m
+        timeout-duration: 3s
+
+# Management Configuration - Moderate exposure for staging
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,circuitbreakers,retries,bulkheads,ratelimiters,beans,env
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
+      slo:
+        http.server.requests: 50ms, 100ms, 200ms, 500ms
+
+# OpenAPI Configuration - Moderate access for staging
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    try-it-out-enabled: true # Enabled for testing
+
+# Logging Configuration - Moderate verbosity for staging
+logging:
+  level:
+    root: INFO
+    com.microservices.notificationservice: DEBUG
+    org.springframework.kafka: INFO
+    org.apache.kafka: WARN
+    io.github.resilience4j: INFO
+    org.hibernate.SQL: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
+  file:
+    name: logs/notification-service-staging.log
+  logback:
+    rollingpolicy:
+      max-file-size: 50MB
+      max-history: 14 # Keep logs for 2 weeks
+      total-size-cap: 5GB
+
+# Kafka Topics Configuration
+kafka:
+  topics:
+    user-events: user-events-staging
+    order-events: order-events-staging
+    order-notifications: order-events-staging
+    user-events-dlq: user-events-dlq-staging
+    order-events-dlq: order-events-dlq-staging
+    order-notifications-dlq: order-events-dlq-staging
+
+# Idempotency Configuration - Moderate for staging
+idempotency:
+  redis:
+    key-prefix: "notification:staging:"
+    ttl-seconds: 5400 # 1.5 hours
+
+# Server Configuration
+server:
+  port: 8085
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  tomcat:
+    max-threads: 150
+    min-spare-threads: 8
+    connection-timeout: 20000
+    max-connections: 6144
+    accept-count: 100

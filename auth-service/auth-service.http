@@ -1,0 +1,373 @@
+### Auth Service API Tests
+### Base URL
+@baseUrl = http://localhost:8080/
+@contentType = application/json
+
+### Variables (will be set from responses)
+@authToken =
+@testUsername = testuser_{{$timestamp}}
+@adminToken =
+
+###############################################
+### 1. Health Check
+###############################################
+
+### Check if Auth Service is running
+GET {{baseUrl}}/api/auth/health
+
+###############################################
+### 2. User Registration
+###############################################
+
+### Register a new user
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "sourav72",
+  "email": "sourav@clapgrow.com",
+  "password": "password123"
+}
+
+> {%
+    client.test("Registration successful", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+        client.assert(response.body.token !== null, "Token not received");
+        client.global.set("authToken", response.body.token);
+        client.global.set("testUsername", response.body.username);
+    });
+%}
+
+###
+
+### Register with validation error (short password)
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "sourav72",
+  "email": "singh.sourav2609@gmail.com",
+  "password": "root@1234"
+}
+
+###
+
+### Register with invalid email
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "bob_wilson",
+  "email": "invalid-email",
+  "password": "password123"
+}
+
+###
+
+### Register duplicate username (should fail)
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "john_doe",
+  "email": "different@example.com",
+  "password": "password123"
+}
+
+###############################################
+### 3. User Login
+###############################################
+
+### Login with valid credentials
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "sourav72",
+  "password": "password123"
+}
+
+> {%
+    client.test("Login successful", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.token !== null, "Token not received");
+        client.global.set("authToken", response.body.token);
+    });
+%}
+
+###
+
+### Login with admin credentials (create admin first using DataInitializer)
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+> {%
+    client.test("Admin login successful", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.global.set("adminToken", response.body.token);
+    });
+%}
+
+###
+
+### Login with invalid password (attempt 1)
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "john_doe",
+  "password": "wrongpassword"
+}
+
+###
+
+### Login with invalid password (attempt 2)
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "john_doe",
+  "password": "wrongpassword"
+}
+
+###
+
+### Login with invalid password (attempt 3 - will lock account)
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "john_doe",
+  "password": "wrongpassword"
+}
+
+###
+
+### Try to login with locked account
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "john_doe",
+  "password": "password123"
+}
+
+###
+
+### Login with non-existent user
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "nonexistent",
+  "password": "password123"
+}
+
+###############################################
+### 4. Token Validation
+###############################################
+
+### Validate a valid token
+POST {{baseUrl}}/api/auth/validate
+Content-Type: {{contentType}}
+
+{
+  "token": "{{authToken}}"
+}
+
+###
+
+### Validate an invalid token
+POST {{baseUrl}}/api/auth/validate
+Content-Type: {{contentType}}
+
+{
+  "token": "invalid.token.here"
+}
+
+###
+
+### Validate an expired token (use an old token)
+POST {{baseUrl}}/api/auth/validate
+Content-Type: {{contentType}}
+
+{
+  "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huX2RvZSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNjAwMDAwMDAwLCJleHAiOjE2MDAwMDEwMDB9.fake"
+}
+
+###############################################
+### 5. Admin Operations
+###############################################
+
+### Get account security status (admin only)
+GET {{baseUrl}}/api/admin/account-status/john_doe
+
+###
+
+### Unlock a locked account (admin only)
+POST {{baseUrl}}/api/admin/unlock-account/john_doe
+
+###
+
+### Get status of non-existent user
+GET {{baseUrl}}/api/admin/account-status/nonexistent_user
+
+###
+
+### Unlock non-locked account
+POST {{baseUrl}}/api/admin/unlock-account/admin
+
+###############################################
+### 6. H2 Console Access (Development Only)
+###############################################
+
+### Access H2 Console
+GET {{baseUrl}}/h2-console
+
+###############################################
+### 7. Actuator Endpoints
+###############################################
+
+### Health endpoint
+GET {{baseUrl}}/actuator/health
+
+###
+
+### Info endpoint
+GET {{baseUrl}}/actuator/info
+
+###
+
+### Metrics endpoint
+GET {{baseUrl}}/actuator/metrics
+
+###############################################
+### 8. Complete User Flow Test
+###############################################
+
+### Step 1: Register a new test user
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "flow_test_user",
+  "email": "flowtest@example.com",
+  "password": "SecurePass123"
+}
+
+> {%
+    client.global.set("flowToken", response.body.token);
+    client.global.set("flowUsername", response.body.username);
+%}
+
+###
+
+### Step 2: Validate the received token
+POST {{baseUrl}}/api/auth/validate
+Content-Type: {{contentType}}
+
+{
+  "token": "{{flowToken}}"
+}
+
+###
+
+### Step 3: Login again with same credentials
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "flow_test_user",
+  "password": "SecurePass123"
+}
+
+###
+
+### Step 4: Check account status
+GET {{baseUrl}}/api/admin/account-status/flow_test_user
+
+###############################################
+### 9. Account Lockout Testing
+###############################################
+
+### Create user for lockout test
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "lockout_test",
+  "email": "lockout@example.com",
+  "password": "TestPass123"
+}
+
+###
+
+### Failed attempt 1
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "lockout_test",
+  "password": "WrongPassword1"
+}
+
+###
+
+### Failed attempt 2
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "lockout_test",
+  "password": "WrongPassword2"
+}
+
+###
+
+### Failed attempt 3 (triggers lockout)
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "lockout_test",
+  "password": "WrongPassword3"
+}
+
+###
+
+### Try with correct password (should fail - account locked)
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "lockout_test",
+  "password": "TestPass123"
+}
+
+###
+
+### Check locked account status
+GET {{baseUrl}}/api/admin/account-status/lockout_test
+
+###
+
+### Unlock the account (admin)
+POST {{baseUrl}}/api/admin/unlock-account/lockout_test
+
+###
+
+### Login again after unlock (should succeed)
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "lockout_test",
+  "password": "TestPass123"
+}
+
+###

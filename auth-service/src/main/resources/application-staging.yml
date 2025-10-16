@@ -1,0 +1,265 @@
+# Staging Environment Configuration for Auth Service
+spring:
+  profiles:
+    active: staging
+
+  # Database Configuration - PostgreSQL for staging
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://auth-db-staging:5432/authdb}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME:authuser}
+    password: ${DB_PASSWORD:}
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 3
+      connection-timeout: 25000
+      idle-timeout: 450000
+      max-lifetime: 1500000
+      leak-detection-threshold: 60000
+      validation-timeout: 5000
+      connection-test-query: SELECT 1
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update # Allow schema updates in staging
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
+        connection:
+          provider_disables_autocommit: true
+        order_inserts: true
+        order_updates: true
+        batch_size: 20
+        batch_versioned_data: true
+
+  # H2 Console disabled in staging
+  h2:
+    console:
+      enabled: false
+
+  # Redis Configuration - Staging Redis
+  data:
+    redis:
+      host: ${REDIS_HOST:redis-staging}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 15
+          max-idle: 8
+          min-idle: 3
+          max-wait: 3000ms
+
+  # Kafka Configuration - Staging Kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka-staging:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      retries: 3
+      batch-size: 16384
+      linger-ms: 5
+      buffer-memory: 33554432
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 1
+    consumer:
+      group-id: auth-service-staging
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      max-poll-records: 500
+      session-timeout-ms: 30000
+      heartbeat-interval-ms: 10000
+
+  # Mail Configuration - Staging SMTP (test emails)
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 10000
+          timeout: 10000
+          writetimeout: 10000
+    default-encoding: UTF-8
+
+# JWT Configuration - Staging Secret
+jwt:
+  secret: ${JWT_SECRET:staging_secret_key_XK7fJ3mP9vN2wQ8rT5yU6iO1pA4sD7fG9hJ2kL5nM8qR3tY6uI9oP2aS5dF8gH1jK4lZ7xC0vB3nM6qW9eR2tY5uI8oP1aS4dF7gH0jK3lZ6xC9vB2nM5qW8eR1tY4u==}
+  access-token-expiration: 900000 # 15 minutes
+  refresh-token-expiration: 604800000 # 7 days
+
+# Security Configuration - Balanced for staging
+app:
+  security:
+    max-failed-attempts: 7 # Moderate security
+    lockout-duration-minutes: 15 # Moderate lockout
+    password-reset-token-expiration-minutes: 60
+    password-min-length: 8
+    password-require-uppercase: true
+    password-require-lowercase: true
+    password-require-numbers: true
+    password-require-special-chars: true
+
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:https://staging.yourdomain.com,http://localhost:3000,http://localhost:5173}
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS,PATCH
+    allowed-headers: Authorization,Content-Type,X-Requested-With
+    allow-credentials: true
+
+# Resilience4j Configuration - Balanced for staging
+resilience4j:
+  circuitbreaker:
+    instances:
+      emailService:
+        failure-rate-threshold: 60 # Moderate threshold
+        wait-duration-in-open-state: 20s
+        sliding-window-size: 8
+        minimum-number-of-calls: 4
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+      kafkaService:
+        failure-rate-threshold: 45
+        wait-duration-in-open-state: 15s
+        sliding-window-size: 12
+        minimum-number-of-calls: 6
+        permitted-number-of-calls-in-half-open-state: 4
+      redisService:
+        failure-rate-threshold: 35
+        wait-duration-in-open-state: 10s
+        sliding-window-size: 15
+        minimum-number-of-calls: 8
+        permitted-number-of-calls-in-half-open-state: 4
+  retry:
+    instances:
+      emailService:
+        max-attempts: 3
+        wait-duration: 1s
+        retry-exceptions:
+          - java.lang.Exception
+      kafkaService:
+        max-attempts: 2
+        wait-duration: 750ms
+        retry-exceptions:
+          - java.lang.Exception
+      redisService:
+        max-attempts: 2
+        wait-duration: 300ms
+        retry-exceptions:
+          - java.lang.Exception
+  bulkhead:
+    instances:
+      authService:
+        max-concurrent-calls: 30 # Moderate concurrency
+        max-wait-duration: 3s
+      emailService:
+        max-concurrent-calls: 15
+        max-wait-duration: 3s
+  ratelimiter:
+    instances:
+      loginService:
+        limit-for-period: 20 # Moderate limits
+        limit-refresh-period: 1m
+        timeout-duration: 3s
+      registrationService:
+        limit-for-period: 10
+        limit-refresh-period: 1m
+        timeout-duration: 3s
+      passwordResetService:
+        limit-for-period: 5
+        limit-refresh-period: 5m
+        timeout-duration: 3s
+
+# Management Configuration - Moderate exposure for staging
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,circuitbreakers,retries,bulkheads,ratelimiters,beans,env
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
+      slo:
+        http.server.requests: 50ms, 100ms, 200ms, 500ms
+
+# OpenAPI Configuration - Moderate access for staging
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    try-it-out-enabled: true # Enabled for testing
+
+# Logging Configuration - Moderate verbosity for staging
+logging:
+  level:
+    root: INFO
+    com.microservices.auth: DEBUG
+    org.springframework.security: INFO
+    org.springframework.kafka: INFO
+    org.apache.kafka: WARN
+    io.github.resilience4j: INFO
+    org.hibernate.SQL: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
+  file:
+    name: logs/auth-service-staging.log
+  logback:
+    rollingpolicy:
+      max-file-size: 50MB
+      max-history: 14 # Keep logs for 2 weeks
+      total-size-cap: 5GB
+
+# Kafka Topics Configuration
+kafka:
+  topics:
+    user-events: user-events-staging
+    user-events-dlq: user-events-dlq-staging
+
+# Outbox Pattern Configuration - Moderate for staging
+outbox:
+  scheduler:
+    enabled: true
+    fixed-delay: 3000 # Moderate processing interval
+    batch-size: 75
+
+# Server Configuration
+server:
+  port: 8082
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  tomcat:
+    max-threads: 150
+    min-spare-threads: 8
+    connection-timeout: 20000
+    max-connections: 6144
+    accept-count: 100
