@@ -28,6 +28,8 @@ cp env.dev.example .env
 nano .env
 ```
 
+**🔒 Security**: See [GITHUB_SECRETS.md](GITHUB_SECRETS.md) for secure credential management.
+
 **Required Environment Variables:**
 
 ```bash

@@ -26,6 +26,8 @@ curl http://localhost:8085/actuator/health  # Notification Service
 
 For detailed setup instructions, see [DOCKER_STARTUP.md](DOCKER_STARTUP.md).
 
+**🔒 Security**: See [GITHUB_SECRETS.md](GITHUB_SECRETS.md) for secure credential management.
+
 ## 🏗️ System Architecture
 
 ### Core Services
