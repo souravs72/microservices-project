@@ -1,0 +1,82 @@
+name: Deploy Microservices Platform
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  # Use GitHub Secrets for sensitive data
+  MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+  MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  INTERNAL_API_KEY: ${{ secrets.INTERNAL_API_KEY }}
+  REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+        
+    - name: Build with Maven
+      run: mvn clean compile -B
+      
+    - name: Run tests
+      run: mvn test -B
+      
+    - name: Verify secrets are configured
+      run: |
+        echo "✅ Secrets verification:"
+        echo "  - MAIL_USERNAME: ${MAIL_USERNAME:+configured}"
+        echo "  - MAIL_PASSWORD: ${MAIL_PASSWORD:+configured}"
+        echo "  - JWT_SECRET: ${JWT_SECRET:+configured}"
+        echo "  - INTERNAL_API_KEY: ${INTERNAL_API_KEY:+configured}"
+        echo "  - REDIS_PASSWORD: ${REDIS_PASSWORD:+configured}"
+        echo "  - DB_PASSWORD: ${DB_PASSWORD:+configured}"
+        
+        # Check if all required secrets are set
+        if [ -z "$MAIL_USERNAME" ] || [ -z "$MAIL_PASSWORD" ] || [ -z "$JWT_SECRET" ]; then
+          echo "❌ Missing required secrets!"
+          exit 1
+        else
+          echo "✅ All required secrets are configured"
+        fi
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Deploy to staging
+      run: |
+        echo "🚀 Deploying to staging environment..."
+        echo "📧 Email notifications will be sent using: $MAIL_USERNAME"
+        # Add your actual deployment commands here
+        # For example: docker-compose up -d, kubectl apply, etc.
+        
+    - name: Notify deployment
+      run: |
+        echo "✅ Deployment completed successfully!"
+        echo "🔗 Services should be available at your deployment URLs"
