@@ -46,63 +46,63 @@ jobs:
         run: |
           echo "🔍 Checking GitHub Secrets configuration..."
           echo ""
-          
+
           # Check each secret individually
           if [ -n "$MAIL_USERNAME" ]; then
             echo "✅ MAIL_USERNAME: configured"
           else
             echo "❌ MAIL_USERNAME: missing"
           fi
-          
+
           if [ -n "$MAIL_PASSWORD" ]; then
             echo "✅ MAIL_PASSWORD: configured"
           else
             echo "❌ MAIL_PASSWORD: missing"
           fi
-          
+
           if [ -n "$JWT_SECRET" ]; then
             echo "✅ JWT_SECRET: configured"
           else
             echo "❌ JWT_SECRET: missing"
           fi
-          
+
           if [ -n "$INTERNAL_API_KEY" ]; then
             echo "✅ INTERNAL_API_KEY: configured"
           else
             echo "❌ INTERNAL_API_KEY: missing"
           fi
-          
+
           if [ -n "$REDIS_PASSWORD" ]; then
             echo "✅ REDIS_PASSWORD: configured"
           else
             echo "❌ REDIS_PASSWORD: missing"
           fi
-          
+
           if [ -n "$DB_PASSWORD" ]; then
             echo "✅ DB_PASSWORD: configured"
           else
             echo "❌ DB_PASSWORD: missing"
           fi
-          
+
           echo ""
           echo "📋 Summary:"
           missing_secrets=0
-          
+
           if [ -z "$MAIL_USERNAME" ]; then
             echo "  - Missing MAIL_USERNAME"
             missing_secrets=$((missing_secrets + 1))
           fi
-          
+
           if [ -z "$MAIL_PASSWORD" ]; then
             echo "  - Missing MAIL_PASSWORD"
             missing_secrets=$((missing_secrets + 1))
           fi
-          
+
           if [ -z "$JWT_SECRET" ]; then
             echo "  - Missing JWT_SECRET"
             missing_secrets=$((missing_secrets + 1))
           fi
-          
+
           if [ $missing_secrets -eq 0 ]; then
             echo "✅ All required secrets are configured!"
           else
