@@ -62,11 +62,8 @@ spring:
 
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-        - name: RequestRateLimiter
-          args:
-            redis-rate-limiter.replenishRate: 10
-            redis-rate-limiter.burstCapacity: 20
-            redis-rate-limiter.requestedTokens: 1
+        # Note: RequestRateLimiter removed from default-filters to allow Swagger endpoints
+        # Rate limiting is applied individually to routes that need it
 
 # JWT Configuration
 jwt:
@@ -157,6 +154,16 @@ resilience4j:
         timeoutDuration: 10s
       userServiceGraphQLCircuitBreaker:
         timeoutDuration: 15s
+
+# OpenAPI/Swagger Configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    try-it-out-enabled: true
 
 # Logging Configuration
 logging:

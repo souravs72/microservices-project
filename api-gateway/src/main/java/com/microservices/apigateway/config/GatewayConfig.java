@@ -27,6 +27,9 @@ public class GatewayConfig {
     @Value("${user-service.url:http://user-service:8081}")
     private String userServiceUrl;
 
+    @Value("${notification-service.url:http://notification-service:8085}")
+    private String notificationServiceUrl;
+
     /**
      * Defines all routes for API Gateway
      */
@@ -40,6 +43,36 @@ public class GatewayConfig {
                         .path("/health", "/actuator/health")
                         .filters(f -> f.setStatus(HttpStatus.OK))
                         .uri("no://op"))
+
+                // ==========================
+                // User Service Swagger (no auth)
+                // ==========================
+                .route("user-service-swagger", r -> r
+                        .path("/user-swagger/**", "/user-api-docs/**")
+                        .filters(f -> f
+                                .rewritePath("/user-swagger/(?<path>.*)", "/swagger-ui/${path}")
+                                .rewritePath("/user-api-docs/(?<path>.*)", "/api-docs/${path}"))
+                        .uri(userServiceUrl))
+
+                // ==========================
+                // Auth Service Swagger (no auth)
+                // ==========================
+                .route("auth-service-swagger", r -> r
+                        .path("/auth-swagger/**", "/auth-api-docs/**")
+                        .filters(f -> f
+                                .rewritePath("/auth-swagger/(?<path>.*)", "/swagger-ui/${path}")
+                                .rewritePath("/auth-api-docs/(?<path>.*)", "/api-docs/${path}"))
+                        .uri(authServiceUrl))
+
+                // ==========================
+                // Notification Service Swagger (no auth)
+                // ==========================
+                .route("notification-service-swagger", r -> r
+                        .path("/notification-swagger/**", "/notification-api-docs/**")
+                        .filters(f -> f
+                                .rewritePath("/notification-swagger/(?<path>.*)", "/swagger-ui/${path}")
+                                .rewritePath("/notification-api-docs/(?<path>.*)", "/api-docs/${path}"))
+                        .uri(notificationServiceUrl))
 
                 // ==========================
                 // Auth Service (no auth)

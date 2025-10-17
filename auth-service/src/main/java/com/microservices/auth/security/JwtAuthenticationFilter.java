@@ -30,6 +30,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
+        // Skip authentication for Swagger endpoints
+        String requestPath = request.getRequestURI();
+        if (requestPath.startsWith("/swagger-ui") || 
+            requestPath.startsWith("/v3/api-docs") || 
+            requestPath.startsWith("/api-docs") ||
+            requestPath.equals("/swagger-ui.html")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
             String jwt = extractJwtFromRequest(request);
 

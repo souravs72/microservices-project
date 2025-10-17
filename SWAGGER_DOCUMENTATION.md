@@ -5,6 +5,7 @@ This guide shows you how to access and explore all the API documentation for you
 ## 🌐 Swagger UI Endpoints
 
 ### 1. **Notification Service** (Port 8085) ✅ **WORKING**
+
 - **Swagger UI**: http://localhost:8085/swagger-ui/index.html
 - **OpenAPI JSON**: http://localhost:8085/v3/api-docs
 - **Authentication**: Basic Auth (admin:admin123)
@@ -15,6 +16,7 @@ This guide shows you how to access and explore all the API documentation for you
   - Statistics and monitoring
 
 ### 2. **User Service** (Port 8081) 🔐 **AUTHENTICATION REQUIRED**
+
 - **Swagger UI**: http://localhost:8081/swagger-ui/index.html
 - **OpenAPI JSON**: http://localhost:8081/v3/api-docs
 - **Authentication**: JWT Token required
@@ -25,6 +27,7 @@ This guide shows you how to access and explore all the API documentation for you
   - Internal API endpoints
 
 ### 3. **Auth Service** (Port 8082) ⚠️ **LIMITED ACCESS**
+
 - **Swagger UI**: Not fully configured
 - **Health Check**: http://localhost:8082/actuator/health
 - **Features**:
@@ -34,6 +37,7 @@ This guide shows you how to access and explore all the API documentation for you
   - User session management
 
 ### 4. **API Gateway** (Port 8080) ⚠️ **LIMITED ACCESS**
+
 - **Swagger UI**: Not fully configured
 - **Health Check**: http://localhost:8080/actuator/health
 - **Features**:
@@ -46,22 +50,25 @@ This guide shows you how to access and explore all the API documentation for you
 Some services require authentication to access Swagger UI:
 
 ### User Service & Notification Service
+
 - **Username**: `admin`
 - **Password**: `admin123`
 - Or use the "Authorize" button in Swagger UI with JWT token
 
 ### Auth Service
+
 - No authentication required for Swagger UI
 - Use "Try it out" to test authentication endpoints
 
 ## 🚀 Quick Access Links
 
 ### Local Development URLs
+
 ```bash
 # User Service
 open http://localhost:8081/swagger-ui.html
 
-# Auth Service  
+# Auth Service
 open http://localhost:8082/swagger-ui.html
 
 # Notification Service
@@ -72,6 +79,7 @@ open http://localhost:8080/swagger-ui.html
 ```
 
 ### Using curl to check endpoints
+
 ```bash
 # Check if Swagger is available
 curl -s http://localhost:8081/swagger-ui.html | head -5
@@ -83,22 +91,26 @@ curl -s http://localhost:8080/swagger-ui.html | head -5
 ## 📖 How to Use Swagger UI
 
 ### 1. **Explore Endpoints**
+
 - Click on any endpoint to expand it
 - See request/response schemas
 - View example requests and responses
 
 ### 2. **Try API Calls**
+
 - Click "Try it out" button
 - Fill in required parameters
 - Click "Execute" to make the API call
 - See the actual response
 
 ### 3. **Authentication**
+
 - Click "Authorize" button (🔒 icon)
 - Enter credentials or JWT token
 - All subsequent requests will include authentication
 
 ### 4. **Download OpenAPI Spec**
+
 - Click the JSON/YAML download links
 - Use the spec for code generation
 - Import into API testing tools like Postman
@@ -106,6 +118,7 @@ curl -s http://localhost:8080/swagger-ui.html | head -5
 ## 🧪 Testing Common Endpoints
 
 ### Auth Service - Register a User
+
 ```bash
 POST http://localhost:8082/api/auth/register
 {
@@ -118,6 +131,7 @@ POST http://localhost:8082/api/auth/register
 ```
 
 ### Auth Service - Login
+
 ```bash
 POST http://localhost:8082/api/auth/login
 {
@@ -127,12 +141,14 @@ POST http://localhost:8082/api/auth/login
 ```
 
 ### User Service - Get User Profile
+
 ```bash
 GET http://localhost:8081/api/users/profile
 Authorization: Bearer <JWT_TOKEN>
 ```
 
 ### Notification Service - Test Email
+
 ```bash
 POST http://localhost:8085/api/notifications/test-email
 Authorization: Basic admin:admin123
@@ -147,7 +163,9 @@ Authorization: Basic admin:admin123
 ## 🔍 Troubleshooting
 
 ### If Swagger UI doesn't load:
+
 1. **Check service status**:
+
    ```bash
    curl http://localhost:8081/actuator/health
    curl http://localhost:8082/actuator/health
@@ -155,6 +173,7 @@ Authorization: Basic admin:admin123
    ```
 
 2. **Check if OpenAPI is enabled**:
+
    ```bash
    curl http://localhost:8081/v3/api-docs
    curl http://localhost:8082/v3/api-docs
@@ -167,6 +186,7 @@ Authorization: Basic admin:admin123
    ```
 
 ### Common Issues:
+
 - **404 Error**: Service might not be running or OpenAPI is disabled
 - **Authentication Required**: Use the provided credentials
 - **CORS Issues**: Should work in development mode
@@ -176,24 +196,28 @@ Authorization: Basic admin:admin123
 ### What you'll find in each service:
 
 #### **User Service**
+
 - REST API endpoints for user management
 - GraphQL schema documentation
 - Request/response models
 - Validation rules
 
 #### **Auth Service**
+
 - Authentication flows
 - Token management
 - Password policies
 - Session handling
 
 #### **Notification Service**
+
 - Email sending endpoints
 - Notification history
 - Statistics and monitoring
 - Test functionality
 
 #### **API Gateway**
+
 - Route configurations
 - Gateway filters
 - Fallback mechanisms

@@ -72,8 +72,16 @@ public class SecurityConfig {
                                 "/api/auth/actuator/health"
                         ).permitAll()
 
-                        // H2 Console (dev only)
+                        // H2 Console and Swagger UI (dev only)
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**", 
+                                "/swagger-ui.html", 
+                                "/v3/api-docs/**", 
+                                "/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
 
                         // Admin endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

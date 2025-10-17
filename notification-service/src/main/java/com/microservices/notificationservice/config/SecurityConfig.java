@@ -2,10 +2,8 @@ package com.microservices.notificationservice.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -34,6 +32,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health", "/actuator/info", "/health").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**", 
+                                "/swagger-ui.html", 
+                                "/v3/api-docs/**", 
+                                "/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
                         .requestMatchers("/actuator/**").hasRole("ADMIN")
                         .requestMatchers("/api/notifications/**").hasRole("ADMIN")
                         .anyRequest().permitAll()

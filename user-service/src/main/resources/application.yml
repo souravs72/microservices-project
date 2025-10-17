@@ -26,3 +26,19 @@ server:
 auth:
   service:
     validate-endpoint: /api/auth/validate
+
+# SpringDoc OpenAPI Configuration - Common settings
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operationsSorter: method
+    tagsSorter: alpha
+    try-it-out-enabled: true
+    filter: true
+  show-actuator: false
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json

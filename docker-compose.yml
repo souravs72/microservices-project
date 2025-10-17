@@ -66,7 +66,7 @@ services:
   redis:
     image: redis:7-alpine
     container_name: redis
-    command: redis-server --requirepass ${REDIS_PASSWORD:-redispassword123}
+    command: redis-server --requirepass ${REDIS_PASSWORD:-devredis123}
     ports:
       - "6379:6379"
     volumes:
@@ -130,7 +130,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=dev
       - AUTH_SERVICE_URL=http://auth-service:8082
       - USER_SERVICE_URL=http://user-service:8081
       - NOTIFICATION_SERVICE_URL=http://notification-service:8085
@@ -155,14 +155,16 @@ services:
     ports:
       - "8082:8082"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=dev
       - DB_URL=jdbc:postgresql://postgres-auth:5432/authdb
       - DB_USERNAME=authuser
       - DB_PASSWORD=${DB_PASSWORD:-authpassword123}
       - REDIS_HOST=redis
-      - REDIS_PASSWORD=${REDIS_PASSWORD:-redispassword123}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-devredis123}
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
       - JWT_SECRET=${JWT_SECRET}
+      - MAIL_HOST=${MAIL_HOST:-smtp.gmail.com}
+      - MAIL_PORT=${MAIL_PORT:-587}
       - MAIL_USERNAME=${MAIL_USERNAME}
       - MAIL_PASSWORD=${MAIL_PASSWORD}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173}
@@ -190,12 +192,12 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=dev
       - DB_URL=jdbc:postgresql://postgres-user:5432/userdb
       - DB_USERNAME=useruser
       - DB_PASSWORD=${DB_PASSWORD:-userpassword123}
       - REDIS_HOST=redis
-      - REDIS_PASSWORD=${REDIS_PASSWORD:-redispassword123}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-devredis123}
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
       - AUTH_SERVICE_URL=http://auth-service:8082
       - INTERNAL_API_KEY=${INTERNAL_API_KEY}
@@ -227,17 +229,17 @@ services:
     ports:
       - "8085:8085"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=dev
       - DB_URL=jdbc:postgresql://postgres-notification:5432/notificationdb
       - DB_USERNAME=notificationuser
       - DB_PASSWORD=${DB_PASSWORD:-notificationpassword123}
       - REDIS_HOST=redis
-      - REDIS_PASSWORD=${REDIS_PASSWORD:-redispassword123}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-devredis123}
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
       - MAIL_USERNAME=${MAIL_USERNAME}
       - MAIL_PASSWORD=${MAIL_PASSWORD}
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
     depends_on:
       postgres-notification:
         condition: service_healthy

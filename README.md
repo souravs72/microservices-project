@@ -46,12 +46,13 @@ For detailed setup instructions, see [DOCKER_STARTUP.md](DOCKER_STARTUP.md).
 #### **Auth Service** (Port 8082)
 
 - **Purpose**: Authentication and authorization management
-- **Technology**: Spring Security + JWT
+- **Technology**: Spring Security + JWT + SMTP
 - **Features**:
   - User registration and login
   - JWT token generation and validation
   - Password policies and account lockout
-  - Password reset functionality
+  - Password reset functionality with email notifications
+  - Account locked notifications via email
   - Role-based access control
   - Resilience patterns (Circuit Breaker, Retry, Rate Limiter)
   - Kafka event publishing for user events

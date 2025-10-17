@@ -14,7 +14,7 @@ public class ActuatorSecurityConfig {
     @Order(1)
     public SecurityFilterChain actuatorSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher(EndpointRequest.toAnyEndpoint())
+                .securityMatcher("/actuator/**")
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         // Allow all actuator health and info endpoints

@@ -204,26 +204,34 @@ management:
       slo:
         http.server.requests: 50ms, 100ms, 200ms, 500ms
 
-# OpenAPI Configuration - Restricted for production
+# SpringDoc OpenAPI Configuration - Disabled for production security
 springdoc:
   api-docs:
     path: /api-docs
+    enabled: false # DISABLED in production for security
   swagger-ui:
     path: /swagger-ui.html
+    enabled: false # DISABLED in production for security
     operations-sorter: method
-    try-it-out-enabled: false # Disabled in production
+    try-it-out-enabled: false
+  show-actuator: false
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
 
 # Logging Configuration - Optimized for production
 logging:
   level:
     root: WARN
     com.microservices.userservice: INFO
+    com.microservices.userservice.security: INFO
     org.springframework.security: WARN
     org.springframework.kafka: WARN
     org.springframework.graphql: WARN
     org.apache.kafka: ERROR
     io.github.resilience4j: INFO
     org.hibernate.SQL: WARN
+    org.springdoc: WARN
+    org.springframework.web: WARN
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
