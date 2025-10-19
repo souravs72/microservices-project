@@ -1,0 +1,199 @@
+# Development Environment Configuration for Inventory Service
+spring:
+  # Database Configuration - H2 for development
+  datasource:
+    url: jdbc:h2:mem:inventorydb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 1200000
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+        jdbc:
+          time_zone: UTC
+
+  # H2 Console for development
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+  # Redis Configuration - Docker Redis
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+
+  # Kafka Configuration - Docker Kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:29092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 1
+    consumer:
+      group-id: inventory-service-dev
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: false
+      properties:
+        isolation.level: read_committed
+
+# Security Configuration - Relaxed for development
+app:
+  security:
+    internal-api-key: ${INTERNAL_API_KEY:prod_7yXJ2mQ9rT5vL8cN1pB4sD7fG0hK3lZ6xC9vB2nM5qW8eR1tY4u}
+    max-requests-per-minute: 200 # More lenient
+
+  cors:
+    allowed-origins: http://localhost:3000,http://localhost:5173,http://localhost:8080,http://localhost:8081,http://localhost:8082,http://localhost:8083,http://localhost:8084
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS,PATCH
+    allowed-headers: "*"
+    allow-credentials: true
+
+# Resilience4j Configuration - Relaxed for development
+resilience4j:
+  circuitbreaker:
+    instances:
+      inventoryService:
+        failure-rate-threshold: 70 # More lenient
+        wait-duration-in-open-state: 10s
+        sliding-window-size: 5
+        minimum-number-of-calls: 3
+        permitted-number-of-calls-in-half-open-state: 2
+      kafkaService:
+        failure-rate-threshold: 60
+        wait-duration-in-open-state: 10s
+        sliding-window-size: 5
+        minimum-number-of-calls: 3
+        permitted-number-of-calls-in-half-open-state: 2
+      redisService:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+        sliding-window-size: 5
+        minimum-number-of-calls: 3
+        permitted-number-of-calls-in-half-open-state: 2
+  retry:
+    instances:
+      inventoryService:
+        max-attempts: 2 # Fewer retries
+        wait-duration: 1s
+      kafkaService:
+        max-attempts: 2
+        wait-duration: 500ms
+      redisService:
+        max-attempts: 2
+        wait-duration: 200ms
+  bulkhead:
+    instances:
+      inventoryOperations:
+        max-concurrent-calls: 50 # More lenient
+        max-wait-duration: 2s
+      externalServiceCalls:
+        max-concurrent-calls: 30
+        max-wait-duration: 2s
+  ratelimiter:
+    instances:
+      inventoryUpdate:
+        limit-for-period: 50 # More lenient
+        limit-refresh-period: 1m
+        timeout-duration: 2s
+      inventoryQuery:
+        limit-for-period: 100
+        limit-refresh-period: 1m
+        timeout-duration: 2s
+
+# Management Configuration - Full exposure for development
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # Expose all endpoints
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
+
+# SpringDoc OpenAPI Configuration - Full access for development
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+    try-it-out-enabled: true
+    filter: true
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+
+# Logging Configuration - Verbose for development
+logging:
+  level:
+    root: INFO
+    com.microservices.inventoryservice: DEBUG
+    com.microservices.inventoryservice.security: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.kafka: DEBUG
+    org.apache.kafka: INFO
+    io.github.resilience4j: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springdoc: DEBUG
+    org.springframework.web: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
+  file:
+    name: logs/inventory-service-dev.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7 # Keep fewer logs in development
+
+# Kafka Topics Configuration
+kafka:
+  topics:
+    inventory-events: inventory-events-dev
+    inventory-events-dlq: inventory-events-dlq-dev
+
