@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # Database Services
   postgres-auth:
@@ -58,6 +56,46 @@ services:
       - microservices-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U notificationuser -d notificationdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-order:
+    image: postgres:15-alpine
+    container_name: postgres-order
+    environment:
+      POSTGRES_DB: orderdb
+      POSTGRES_USER: orderuser
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-orderpassword123}
+    volumes:
+      - order_db_data:/var/lib/postgresql/data
+      - ./init-scripts/order-db-init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5436:5432"
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orderuser -d orderdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-inventory:
+    image: postgres:15-alpine
+    container_name: postgres-inventory
+    environment:
+      POSTGRES_DB: inventorydb
+      POSTGRES_USER: inventoryuser
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-inventorypassword123}
+    volumes:
+      - inventory_db_data:/var/lib/postgresql/data
+      - ./init-scripts/inventory-db-init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5437:5432"
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U inventoryuser -d inventorydb"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -124,8 +162,8 @@ services:
   # API Gateway
   api-gateway:
     build:
-      context: ./api-gateway
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: api-gateway/Dockerfile
     container_name: api-gateway
     ports:
       - "8080:8080"
@@ -133,10 +171,14 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
       - AUTH_SERVICE_URL=http://auth-service:8082
       - USER_SERVICE_URL=http://user-service:8081
+      - ORDER_SERVICE_URL=http://order-service:8083
+      - INVENTORY_SERVICE_URL=http://inventory-service:8084
       - NOTIFICATION_SERVICE_URL=http://notification-service:8085
     depends_on:
       - auth-service
       - user-service
+      - order-service
+      - inventory-service
       - notification-service
     networks:
       - microservices-network
@@ -163,11 +205,16 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD:-devredis123}
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
       - JWT_SECRET=${JWT_SECRET}
+      - JWT_ACCESS_TOKEN_EXPIRATION=7200000
       - MAIL_HOST=${MAIL_HOST:-smtp.gmail.com}
       - MAIL_PORT=${MAIL_PORT:-587}
-      - MAIL_USERNAME=${MAIL_USERNAME}
-      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_USERNAME=${MAIL_USERNAME:-souravsingh2609@gmail.com}
+      - MAIL_PASSWORD=${MAIL_PASSWORD:-bhooqxmxjnwkccgb}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@example.com}
+      - ADMIN_ENABLED=${ADMIN_ENABLED:-true}
     depends_on:
       postgres-auth:
         condition: service_healthy
@@ -203,6 +250,11 @@ services:
       - INTERNAL_API_KEY=${INTERNAL_API_KEY}
       - JWT_SECRET=${JWT_SECRET}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@example.com}
+      - ADMIN_FIRST_NAME=${ADMIN_FIRST_NAME:-Admin}
+      - ADMIN_LAST_NAME=${ADMIN_LAST_NAME:-User}
+      - ADMIN_ENABLED=${ADMIN_ENABLED:-true}
     depends_on:
       postgres-user:
         condition: service_healthy
@@ -216,6 +268,82 @@ services:
       - microservices-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Order Service
+  order-service:
+    build:
+      context: .
+      dockerfile: order-service/Dockerfile
+    container_name: order-service
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DB_URL=jdbc:postgresql://postgres-order:5432/orderdb
+      - DB_USERNAME=orderuser
+      - DB_PASSWORD=${DB_PASSWORD:-orderpassword123}
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-devredis123}
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - AUTH_SERVICE_URL=http://auth-service:8082
+      - USER_SERVICE_URL=http://user-service:8081
+      - INVENTORY_SERVICE_URL=http://inventory-service:8084
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173,http://localhost:8080,http://localhost:8081,http://localhost:8082,http://localhost:8083}
+    depends_on:
+      postgres-order:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      user-service:
+        condition: service_healthy
+      inventory-service:
+        condition: service_healthy
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Inventory Service
+  inventory-service:
+    build:
+      context: .
+      dockerfile: inventory-service/Dockerfile
+    container_name: inventory-service
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DB_URL=jdbc:postgresql://postgres-inventory:5432/inventorydb
+      - DB_USERNAME=inventoryuser
+      - DB_PASSWORD=${DB_PASSWORD:-inventorypassword123}
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-devredis123}
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173,http://localhost:8080,http://localhost:8081,http://localhost:8082,http://localhost:8083,http://localhost:8084}
+    depends_on:
+      postgres-inventory:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8084/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -236,6 +364,7 @@ services:
       - REDIS_HOST=redis
       - REDIS_PASSWORD=${REDIS_PASSWORD:-devredis123}
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - JWT_SECRET=${JWT_SECRET}
       - MAIL_USERNAME=${MAIL_USERNAME}
       - MAIL_PASSWORD=${MAIL_PASSWORD}
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
@@ -274,11 +403,26 @@ services:
     networks:
       - microservices-network
 
+  # Frontend Application
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080
+    depends_on:
+      - api-gateway
+    networks:
+      - microservices-network
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin123}
     volumes:
@@ -292,6 +436,8 @@ volumes:
   auth_db_data:
   user_db_data:
   notification_db_data:
+  order_db_data:
+  inventory_db_data:
   redis_data:
   kafka_data:
   prometheus_data:
