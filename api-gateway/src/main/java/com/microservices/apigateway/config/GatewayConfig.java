@@ -30,6 +30,12 @@ public class GatewayConfig {
     @Value("${notification-service.url:http://notification-service:8085}")
     private String notificationServiceUrl;
 
+    @Value("${order-service.url:http://order-service:8083}")
+    private String orderServiceUrl;
+
+    @Value("${inventory-service.url:http://inventory-service:8084}")
+    private String inventoryServiceUrl;
+
     /**
      * Defines all routes for API Gateway
      */
@@ -120,6 +126,53 @@ public class GatewayConfig {
                                         .setFallbackUri("forward:/fallback/graphql"))
                                 .addRequestHeader("X-Gateway-Service", "api-gateway"))
                         .uri(userServiceUrl))
+
+                // ==========================
+                // Order Service (requires auth)
+                // ==========================
+                .route("order-service", r -> r
+                        .path("/api/orders/**")
+                        .filters(f -> f
+                                .filter(authenticationFilter.apply(new AuthenticationFilter.Config()))
+                                .retry(config -> config
+                                        .setRetries(2)
+                                        .setBackoff(Duration.ofMillis(100), Duration.ofMillis(500), 2, true))
+                                .circuitBreaker(config -> config
+                                        .setName("orderServiceCircuitBreaker")
+                                        .setFallbackUri("forward:/fallback/orders"))
+                                .addRequestHeader("X-Gateway-Service", "api-gateway"))
+                        .uri(orderServiceUrl))
+
+                // ==========================
+                // Inventory Service (requires auth)
+                // ==========================
+                .route("inventory-service", r -> r
+                        .path("/api/inventory/**", "/api/products/**")
+                        .filters(f -> f
+                                .filter(authenticationFilter.apply(new AuthenticationFilter.Config()))
+                                .retry(config -> config
+                                        .setRetries(2)
+                                        .setBackoff(Duration.ofMillis(100), Duration.ofMillis(500), 2, true))
+                                .circuitBreaker(config -> config
+                                        .setName("inventoryServiceCircuitBreaker")
+                                        .setFallbackUri("forward:/fallback/inventory"))
+                                .addRequestHeader("X-Gateway-Service", "api-gateway"))
+                        .uri(inventoryServiceUrl))
+
+                // ==========================
+                // Notification Service (uses HTTP Basic Auth)
+                // ==========================
+                .route("notification-service", r -> r
+                        .path("/api/notifications/**")
+                        .filters(f -> f
+                                .retry(config -> config
+                                        .setRetries(2)
+                                        .setBackoff(Duration.ofMillis(100), Duration.ofMillis(500), 2, true))
+                                .circuitBreaker(config -> config
+                                        .setName("notificationServiceCircuitBreaker")
+                                        .setFallbackUri("forward:/fallback/notifications"))
+                                .addRequestHeader("X-Gateway-Service", "api-gateway"))
+                        .uri(notificationServiceUrl))
 
                 .build();
     }
