@@ -3,6 +3,9 @@ package com.microservices.auth.event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,6 +22,9 @@ public class UserCreatedEventPublisher {
     @Value("${user.service.url:http://localhost:8081}")
     private String userServiceUrl;
 
+    @Value("${app.security.internal-api-key:change-me}")
+    private String internalApiKey;
+
     public void publishUserCreated(String username, String email, String firstName, String lastName) {
         try {
             Map<String, Object> userData = new HashMap<>();
@@ -30,7 +36,13 @@ public class UserCreatedEventPublisher {
 
             // Fixed: Changed from /internal/sync to /sync
             String url = userServiceUrl + "/api/users/sync";
-            restTemplate.postForObject(url, userData, Void.class);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("X-Internal-API-Key", internalApiKey);
+
+            HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(userData, headers);
+            restTemplate.postForEntity(url, requestEntity, Void.class);
 
             log.info("User profile synced to User Service: {}", username);
         } catch (Exception e) {

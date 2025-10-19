@@ -27,6 +27,15 @@ auth:
   service:
     validate-endpoint: /api/auth/validate
 
+# Admin User Configuration (for profile sync)
+app:
+  admin:
+    username: ${ADMIN_USERNAME:admin}
+    email: ${ADMIN_EMAIL:admin@example.com}
+    firstName: ${ADMIN_FIRST_NAME:Admin}
+    lastName: ${ADMIN_LAST_NAME:User}
+    enabled: ${ADMIN_ENABLED:true}
+
 # SpringDoc OpenAPI Configuration - Common settings
 springdoc:
   api-docs:

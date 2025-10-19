@@ -41,27 +41,31 @@ spring:
           globalcors:
             cors-configurations:
               "[/**]":
-                # Replace with your actual frontend URLs
-                allowedorigins:
-                  - "http://localhost:3000"
+                # Frontend URLs
+                allowedOrigins:
                   - "http://localhost:5173"
-                  - "https://yourdomain.com"
-                allowedmethods:
+                  - "http://127.0.0.1:5173"
+                  - "http://localhost:3000"
+                  - "http://127.0.0.1:3000"
+                allowedOriginPatterns:
+                  - "http://localhost:*"
+                  - "http://127.0.0.1:*"
+                allowedMethods:
                   - GET
                   - POST
                   - PUT
                   - DELETE
                   - PATCH
                   - OPTIONS
-                allowedheaders: "*"
-                exposedheaders:
+                allowedHeaders: "*"
+                exposedHeaders:
                   - Authorization
                   - Content-Type
-                allowcredentials: true
-                maxage: 3600
+                allowCredentials: true
+                maxAge: 3600
 
       default-filters:
-        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_FIRST
         # Note: RequestRateLimiter removed from default-filters to allow Swagger endpoints
         # Rate limiting is applied individually to routes that need it
 
@@ -69,7 +73,7 @@ spring:
 jwt:
   # IMPORTANT: Use environment variable in production
   # Generate with: openssl rand -base64 64
-  secret: ${JWT_SECRET:mySecretKeyForJWTTokenGenerationThatIsLongEnoughForHS512Algorithm}
+  secret: ${JWT_SECRET:dev_secret_key_XK7fJ3mP9vN2wQ8rT5yU6iO1pA4sD7fG9hJ2kL5nM8qR3tY6uI9oP2aS5dF8gH1jK4lZ7xC0vB3nM6qW9eR2tY5uI8oP1aS4dF7gH0jK3lZ6xC9vB2nM5qW8eR1tY4u==}
   expiration: ${JWT_EXPIRATION:3600000} # 1 hour in milliseconds
 
 # CORS Configuration
@@ -89,6 +93,15 @@ auth-service:
 
 user-service:
   url: ${USER_SERVICE_URL:http://user-service:8081}
+
+order-service:
+  url: ${ORDER_SERVICE_URL:http://order-service:8083}
+
+inventory-service:
+  url: ${INVENTORY_SERVICE_URL:http://inventory-service:8084}
+
+notification-service:
+  url: ${NOTIFICATION_SERVICE_URL:http://notification-service:8085}
 
 # Actuator Configuration
 management:
@@ -145,6 +158,24 @@ resilience4j:
         waitDurationInOpenState: 30s
         failureRateThreshold: 50
         eventConsumerBufferSize: 10
+      orderServiceCircuitBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 30s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+      inventoryServiceCircuitBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 30s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
 
   timelimiter:
     instances:
@@ -154,6 +185,10 @@ resilience4j:
         timeoutDuration: 10s
       userServiceGraphQLCircuitBreaker:
         timeoutDuration: 15s
+      orderServiceCircuitBreaker:
+        timeoutDuration: 10s
+      inventoryServiceCircuitBreaker:
+        timeoutDuration: 10s
 
 # OpenAPI/Swagger Configuration
 springdoc:

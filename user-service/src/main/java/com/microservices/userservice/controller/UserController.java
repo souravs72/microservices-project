@@ -27,7 +27,6 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody CreateUserRequest request) {
         log.debug("REST API: Creating user with username {}", request.getUsername());
         UserDTO user = userService.createUser(request);

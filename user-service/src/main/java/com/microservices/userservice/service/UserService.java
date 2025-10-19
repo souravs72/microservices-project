@@ -10,7 +10,6 @@ import com.microservices.userservice.repository.UserRepository;
 import com.microservices.userservice.util.InputSanitizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public UserDTO createUser(CreateUserRequest request) {
@@ -40,7 +38,6 @@ public class UserService {
         User user = new User();
         user.setUsername(sanitizedUsername);
         user.setEmail(sanitizedEmail);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setFirstName(request.getFirstName() != null ?
                 InputSanitizer.sanitizeText(request.getFirstName()) : null);
         user.setLastName(request.getLastName() != null ?
@@ -75,8 +72,6 @@ public class UserService {
         User user = new User();
         user.setUsername(sanitizedUsername);
         user.setEmail(sanitizedEmail);
-        // Password comes pre-hashed from Auth Service
-        user.setPassword(request.getPassword());
         user.setFirstName(request.getFirstName() != null ?
                 InputSanitizer.sanitizeText(request.getFirstName()) : null);
         user.setLastName(request.getLastName() != null ?

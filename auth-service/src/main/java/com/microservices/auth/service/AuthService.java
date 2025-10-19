@@ -11,6 +11,8 @@ import com.microservices.auth.exception.AuthenticationException;
 import com.microservices.auth.exception.UserAlreadyExistsException;
 import com.microservices.auth.repository.OutboxEventRepository;
 import com.microservices.auth.repository.UserRepository;
+import com.microservices.auth.client.UserServiceClient;
+import com.microservices.auth.dto.CreateUserProfileRequest;
 import com.microservices.auth.util.InputSanitizer;
 import com.microservices.auth.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,7 @@ public class AuthService {
     private final SessionService sessionService;
     private final EmailService emailService;
     private final OutboxEventRepository outboxEventRepository;
+    private final UserServiceClient userServiceClient;
     private final ObjectMapper objectMapper;
 
     @Value("${app.security.max-failed-attempts:5}")
@@ -46,6 +49,9 @@ public class AuthService {
 
     @Value("${jwt.access-token-expiration}")
     private Long accessTokenExpiration;
+    
+    @Value("${internal.api.key}")
+    private String internalApiKey;
 
     @Transactional
     public AuthResponse register(RegisterRequest request, String ipAddress, DeviceInfo deviceInfo) {
@@ -95,6 +101,23 @@ public class AuthService {
 
         // Publish event to outbox (will be processed by scheduler)
         publishUserCreatedEvent(user, request.getFirstName(), request.getLastName());
+        
+        // Create user profile in User Service
+        try {
+            CreateUserProfileRequest profileRequest = new CreateUserProfileRequest(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                request.getPassword(),
+                request.getFirstName(),
+                request.getLastName()
+            );
+            userServiceClient.createUserProfile(profileRequest, internalApiKey);
+            log.info("User profile created in User Service for user: {}", sanitizedUsername);
+        } catch (Exception e) {
+            log.error("Failed to create user profile in User Service for user: {}", sanitizedUsername, e);
+            // Don't fail the registration if user profile creation fails
+        }
 
         // Generate access token
         String accessToken = jwtUtil.generateToken(user.getUsername(), user.getRole());
@@ -107,7 +130,8 @@ public class AuthService {
                 "Bearer",
                 user.getUsername(),
                 user.getEmail(),
-                user.getRole()
+                user.getRole(),
+                user.getId()
         );
     }
 
@@ -174,7 +198,8 @@ public class AuthService {
                 "Bearer",
                 user.getUsername(),
                 user.getEmail(),
-                user.getRole()
+                user.getRole(),
+                user.getId()
         );
     }
 

@@ -124,6 +124,9 @@ public class SecurityConfig {
 
                         // Internal sync endpoint - protected by API key filter
                         .requestMatchers("/api/users/sync").permitAll()
+                        
+                        // Internal user creation endpoint - protected by API key filter
+                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
 
                         // GraphQL endpoint - requires authentication
                         .requestMatchers(HttpMethod.POST, "/graphql").authenticated()
@@ -131,7 +134,6 @@ public class SecurityConfig {
                         // Admin-only endpoints
                         .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/users").hasRole("ADMIN")
 
                         // Protected actuator endpoints
                         .requestMatchers("/actuator/**").hasRole("ADMIN")

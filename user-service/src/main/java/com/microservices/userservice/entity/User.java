@@ -28,9 +28,6 @@ public class User extends AuditableEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private String password;  // Now encrypted with BCrypt
-
     @Column(length = 100)
     private String firstName;
 

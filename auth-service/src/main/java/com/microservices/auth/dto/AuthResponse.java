@@ -13,14 +13,16 @@ public class AuthResponse {
     private String username;
     private String email;
     private String role;
+    private Long userId;
 
     public AuthResponse(String accessToken, String refreshToken, String type,
-                        String username, String email, String role) {
+                        String username, String email, String role, Long userId) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.type = type;
         this.username = username;
         this.email = email;
         this.role = role;
+        this.userId = userId;
     }
 }

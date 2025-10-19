@@ -30,7 +30,7 @@ spring:
     init:
       mode: always
       schema-locations: classpath:schema.sql
-      data-locations: classpath:data.sql
+      # data-locations: classpath:data.sql  # Disabled - admin user created via DataInitializer
 
   # H2 Console for development
   h2:
@@ -95,7 +95,7 @@ jwt:
 # Security Configuration - Relaxed for development
 app:
   security:
-    internal-api-key: ${INTERNAL_API_KEY:dev-internal-api-key}
+    internal-api-key: ${INTERNAL_API_KEY:prod_7yXJ2mQ9rT5vL8cN1pB4sD7fG0hK3lZ6xC9vB2nM5qW8eR1tY4u}
     max-requests-per-minute: 200 # More lenient
     max-graphql-depth: 15 # More lenient
     max-graphql-complexity: 2000 # More lenient

@@ -68,7 +68,9 @@ public class SecurityConfig {
                                 "/api/auth/refresh",
                                 "/api/auth/forgot-password",
                                 "/api/auth/reset-password",
+                                "/api/auth/validate",
                                 "/api/auth/health",
+                                "/actuator/prometheus",
                                 "/api/auth/actuator/health"
                         ).permitAll()
 
@@ -82,6 +84,9 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/webjars/**"
                         ).permitAll()
+
+                        // Actuator endpoints (optional: lock down as needed)
+                        .requestMatchers("/actuator/health").permitAll()
 
                         // Admin endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

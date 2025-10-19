@@ -1,5 +1,5 @@
 # Multi-stage Dockerfile for User Service
-FROM openjdk:17-jdk-slim AS builder
+FROM eclipse-temurin:17-jdk AS builder
 
 # Set working directory
 WORKDIR /app
@@ -23,7 +23,7 @@ COPY user-service/src ./user-service/src
 RUN cd user-service && mvn clean package -DskipTests
 
 # Production stage
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre
 
 # Install necessary packages
 RUN apt-get update && apt-get install -y \
