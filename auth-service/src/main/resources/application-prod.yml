@@ -104,7 +104,7 @@ spring:
 # JWT Configuration - Production Secret (MUST be set via environment)
 jwt:
   secret: ${JWT_SECRET} # REQUIRED - Must be set in production
-  access-token-expiration: 900000 # 15 minutes
+  access-token-expiration: 7200000 # 2 hours
   refresh-token-expiration: 604800000 # 7 days
 
 # Security Configuration - Strict for production

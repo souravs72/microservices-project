@@ -67,8 +67,8 @@ spring:
   mail:
     host: ${MAIL_HOST:smtp.gmail.com}
     port: ${MAIL_PORT:587}
-    username: ${MAIL_USERNAME:your_email@gmail.com}
-    password: ${MAIL_PASSWORD:your_app_password}
+    username: ${MAIL_USERNAME:souravsingh2609@gmail.com}
+    password: ${MAIL_PASSWORD:fwuuwszturwhnspw }
     properties:
       mail:
         smtp:
@@ -80,12 +80,12 @@ spring:
           timeout: 10000
           writetimeout: 10000
     default-encoding: UTF-8
-    test-connection: false # Disable mail connection test in dev to avoid startup issues
+    test-connection: true # Enable mail connection test for development
 
 # JWT Configuration - Development Secret
 jwt:
   secret: ${JWT_SECRET:dev_secret_key_XK7fJ3mP9vN2wQ8rT5yU6iO1pA4sD7fG9hJ2kL5nM8qR3tY6uI9oP2aS5dF8gH1jK4lZ7xC0vB3nM6qW9eR2tY5uI8oP1aS4dF7gH0jK3lZ6xC9vB2nM5qW8eR1tY4u==}
-  access-token-expiration: 900000 # 15 minutes
+  access-token-expiration: 7200000 # 2 hours
   refresh-token-expiration: 604800000 # 7 days
 
 # Security Configuration - Relaxed for development
@@ -99,6 +99,12 @@ app:
     password-require-lowercase: false
     password-require-numbers: false
     password-require-special-chars: false
+    internal-api-key: ${INTERNAL_API_KEY:prod_7yXJ2mQ9rT5vL8cN1pB4sD7fG0hK3lZ6xC9vB2nM5qW8eR1tY4u}
+
+# Internal API Key for service-to-service communication
+internal:
+  api:
+    key: ${INTERNAL_API_KEY:prod_7yXJ2mQ9rT5vL8cN1pB4sD7fG0hK3lZ6xC9vB2nM5qW8eR1tY4u}
 
   cors:
     allowed-origins: http://localhost:3000,http://localhost:5173,http://localhost:8080,http://localhost:8081,http://localhost:8082
@@ -109,6 +115,10 @@ app:
   # Frontend URL for email links
   frontend:
     url: ${FRONTEND_URL:http://localhost:3000}
+
+user:
+  service:
+    url: ${USER_SERVICE_URL:http://user-service:8081}
 
 # Resilience4j Configuration - Relaxed for development
 resilience4j:
@@ -176,6 +186,9 @@ management:
     health:
       show-details: always
       show-components: always
+  health:
+    mail:
+      enabled: true
   metrics:
     export:
       prometheus:
