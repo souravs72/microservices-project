@@ -1,0 +1,176 @@
+{
+  "info": {
+    "name": "Microservices API Test Suite",
+    "description": "Automated test suite configuration for running comprehensive API tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "run": {
+    "collection": "Microservices_API_Collection.json",
+    "environment": "Development_Environment.json",
+    "iterationCount": 1,
+    "delay": {
+      "item": 1000
+    },
+    "persistGlobals": true,
+    "data": [],
+    "folder": [],
+    "globals": [
+      {
+        "key": "base_url",
+        "value": "http://localhost:8080",
+        "enabled": true
+      },
+      {
+        "key": "test_mode",
+        "value": "automated",
+        "enabled": true
+      }
+    ]
+  },
+  "testScenarios": [
+    {
+      "name": "Authentication Flow",
+      "description": "Complete authentication workflow testing",
+      "requests": [
+        "User Registration",
+        "User Login",
+        "Validate Token",
+        "Refresh Token",
+        "Logout"
+      ],
+      "expectedResults": {
+        "registration": "201 Created",
+        "login": "200 OK with JWT token",
+        "validation": "200 OK with user info",
+        "refresh": "200 OK with new token",
+        "logout": "200 OK"
+      }
+    },
+    {
+      "name": "User Management Flow",
+      "description": "Complete user management workflow testing",
+      "prerequisites": [
+        "Admin login required"
+      ],
+      "requests": [
+        "Get All Users",
+        "Create User",
+        "Get User by ID",
+        "Update User",
+        "Delete User"
+      ],
+      "expectedResults": {
+        "getAll": "200 OK with user list",
+        "create": "201 Created with user data",
+        "getById": "200 OK with user details",
+        "update": "200 OK with updated user",
+        "delete": "204 No Content"
+      }
+    },
+    {
+      "name": "Notification Flow",
+      "description": "Email notification testing",
+      "requests": [
+        "Send Test Email",
+        "Get Notification History",
+        "Get Notification Statistics"
+      ],
+      "expectedResults": {
+        "sendEmail": "200 OK with success status",
+        "getHistory": "200 OK with notification list",
+        "getStats": "200 OK with statistics"
+      }
+    },
+    {
+      "name": "GraphQL Flow",
+      "description": "GraphQL API testing",
+      "prerequisites": [
+        "Valid JWT token required"
+      ],
+      "requests": [
+        "GraphQL - Get All Users",
+        "GraphQL - Get User by ID",
+        "GraphQL - Create User",
+        "GraphQL - Update User"
+      ],
+      "expectedResults": {
+        "getAll": "200 OK with GraphQL data",
+        "getById": "200 OK with user data",
+        "create": "200 OK with created user",
+        "update": "200 OK with updated user"
+      }
+    },
+    {
+      "name": "Security Flow",
+      "description": "Security and authorization testing",
+      "requests": [
+        "Access Protected Endpoint Without Token",
+        "Access Protected Endpoint with Invalid Token",
+        "Access Admin Endpoint as Regular User"
+      ],
+      "expectedResults": {
+        "noToken": "401 Unauthorized",
+        "invalidToken": "401 Unauthorized",
+        "insufficientRole": "403 Forbidden"
+      }
+    }
+  ],
+  "performanceBenchmarks": {
+    "responseTimeLimits": {
+      "authentication": 2000,
+      "userManagement": 1500,
+      "notifications": 3000,
+      "graphql": 2500,
+      "healthChecks": 500
+    },
+    "concurrentUsers": {
+      "max": 100,
+      "rampUpTime": 30,
+      "holdTime": 60
+    }
+  },
+  "reporting": {
+    "generateHtmlReport": true,
+    "includeRequestDetails": true,
+    "includeResponseDetails": true,
+    "includeTestResults": true,
+    "includePerformanceMetrics": true,
+    "outputDirectory": "./test-reports"
+  },
+  "environmentVariables": {
+    "required": [
+      "base_url",
+      "jwt_token"
+    ],
+    "optional": [
+      "refresh_token",
+      "internal_api_key",
+      "test_username",
+      "test_password"
+    ]
+  },
+  "preRunScripts": [
+    {
+      "name": "Health Check",
+      "description": "Verify all services are running before tests",
+      "script": "// Check service health before running tests"
+    },
+    {
+      "name": "Environment Validation",
+      "description": "Validate required environment variables",
+      "script": "// Validate environment configuration"
+    }
+  ],
+  "postRunScripts": [
+    {
+      "name": "Cleanup",
+      "description": "Clean up test data after test completion",
+      "script": "// Remove test users and data"
+    },
+    {
+      "name": "Report Generation",
+      "description": "Generate test reports and metrics",
+      "script": "// Generate comprehensive test reports"
+    }
+  ]
+}

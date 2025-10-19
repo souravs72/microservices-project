@@ -1,6 +1,6 @@
 # Microservices Architecture Platform
 
-A comprehensive microservices platform built with Spring Boot 3.5.6, featuring robust authentication, user management, notification services, and scalable order/inventory management.
+A comprehensive microservices platform built with Spring Boot 3.5.6 and React 19, featuring robust authentication, user management, notification services, and a modern web frontend with dynamic dashboard and user management capabilities.
 
 ## 🚀 Quick Start
 
@@ -22,15 +22,44 @@ curl http://localhost:8080/actuator/health  # API Gateway
 curl http://localhost:8081/actuator/health  # User Service
 curl http://localhost:8082/actuator/health  # Auth Service
 curl http://localhost:8085/actuator/health  # Notification Service
+
+# Start the frontend application
+./start-frontend.sh
+
+# Test admin user login (optional)
+./test-admin-login.sh
 ```
+
+**🌐 Frontend Access**: http://localhost:3000 (React application)
+
+**🔐 Admin Login**: Username: `admin`, Password: `admin123`
 
 For detailed setup instructions, see [DOCKER_STARTUP.md](DOCKER_STARTUP.md).
 
 **🔒 Security**: See [GITHUB_SECRETS.md](GITHUB_SECRETS.md) for secure credential management.
 
+**📧 Email Configuration**: See [AUTH_SERVICE_EMAIL_SETUP.md](AUTH_SERVICE_EMAIL_SETUP.md) for email functionality setup.
+
+**🔐 Admin User Setup**: See [ADMIN_USER_SETUP.md](ADMIN_USER_SETUP.md) for admin user initialization and access.
+
+**📮 API Testing**: See [postman/README.md](postman/README.md) for comprehensive Postman collections and automated testing.
+
 ## 🏗️ System Architecture
 
 ### Core Services
+
+#### **Frontend Application** (Port 3000)
+
+- **Purpose**: Modern React web application with dynamic UI
+- **Technology**: React 19 + TypeScript + Vite + Tailwind CSS
+- **Features**:
+  - User authentication (login/registration)
+  - Dynamic dashboard with real-time statistics
+  - User management with advanced filtering and search
+  - Responsive design for all device sizes
+  - JWT token-based authentication
+  - Protected routes and role-based access control
+  - Real-time data updates and live activity feeds
 
 #### **API Gateway** (Port 8080)
 
@@ -104,20 +133,31 @@ For detailed setup instructions, see [DOCKER_STARTUP.md](DOCKER_STARTUP.md).
 ## 🔄 Data Flow Architecture
 
 ```
-Client Request → API Gateway → Service Router → Target Service
-                     ↓
-              Authentication Check (Auth Service)
-                     ↓
-              Authorization & Validation
-                     ↓
-              Business Logic Processing
+React Frontend → API Gateway → Service Router → Target Service
+     ↓              ↓
+  JWT Token    Authentication Check (Auth Service)
+     ↓              ↓
+  State Update  Authorization & Validation
+     ↓              ↓
+  UI Update     Business Logic Processing
                      ↓
               Event Publishing (Kafka)
                      ↓
               Notification Processing
+                     ↓
+              Real-time Updates (Frontend)
 ```
 
 ## 🛠️ Technology Stack
+
+### **Frontend Framework**
+
+- React 19 with TypeScript
+- Vite 7 (Build tool)
+- Tailwind CSS 4 (Styling)
+- React Router DOM 7 (Routing)
+- Axios (HTTP client)
+- Lucide React (Icons)
 
 ### **Backend Framework**
 
@@ -255,6 +295,7 @@ Client Request → API Gateway → Service Router → Target Service
 
 ### ✅ **Implemented & Working**
 
+- **Frontend Application**: Modern React app with authentication, dashboard, and user management
 - **API Gateway**: Fully operational with circuit breakers and routing
 - **User Service**: GraphQL API with user management
 - **Auth Service**: JWT authentication and user registration
@@ -277,11 +318,19 @@ Client Request → API Gateway → Service Router → Target Service
 
 ## 🔗 **Quick Links**
 
+- **Frontend Application**: http://localhost:3000
 - **API Gateway**: http://localhost:8080
 - **User Service GraphQL**: http://localhost:8081/graphql
 - **Swagger UI**: http://localhost:8081/swagger-ui.html
 - **Prometheus**: http://localhost:9090
-- **Grafana**: http://localhost:3000
+- **Grafana**: http://localhost:3001
+
+## 📮 **API Testing**
+
+- **Postman Collections**: Import from `postman/Microservices_API_Collection.json`
+- **Test Scenarios**: Import from `postman/API_Testing_Scenarios.json`
+- **Environments**: Development, Docker, and Production configurations available
+- **Automated Testing**: Newman CLI integration with CI/CD pipeline
 
 ---
 

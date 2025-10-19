@@ -1,0 +1,67 @@
+{
+  "id": "development-env",
+  "name": "Development Environment",
+  "values": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "auth_service_url",
+      "value": "http://localhost:8082",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "user_service_url",
+      "value": "http://localhost:8081",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "notification_service_url",
+      "value": "http://localhost:8085",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "internal_api_key",
+      "value": "dev-internal-key-123",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "test_username",
+      "value": "admin",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "test_password",
+      "value": "admin123",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "test_email",
+      "value": "test@example.com",
+      "enabled": true,
+      "type": "default"
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}

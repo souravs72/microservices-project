@@ -1,0 +1,249 @@
+name: API Tests
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "**/*.java"
+      - "**/docker-compose.yml"
+      - "postman/**"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "**/*.java"
+      - "**/docker-compose.yml"
+      - "postman/**"
+  schedule:
+    - cron: "0 2 * * *" # Run daily at 2 AM
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to test against"
+        required: true
+        default: "development"
+        type: choice
+        options:
+          - development
+          - docker
+          - production
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [development, docker]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.12.0"
+          cache: "npm"
+          cache-dependency-path: "postman/package-lock.json"
+
+      - name: Install Newman and dependencies
+        run: |
+          cd postman
+          npm install
+
+      - name: Start microservices
+        run: |
+          # Start services based on environment
+          if [ "${{ matrix.environment }}" = "docker" ]; then
+            docker-compose up -d
+          else
+            # For development environment, services should be running locally
+            echo "Development environment - assuming services are running"
+          fi
+
+          # Wait for services to be ready
+          echo "Waiting for services to start..."
+          sleep 30
+
+          # Health check
+          curl -f http://localhost:8080/actuator/health || exit 1
+          curl -f http://localhost:8082/actuator/health || exit 1
+          curl -f http://localhost:8081/actuator/health || exit 1
+          curl -f http://localhost:8085/actuator/health || exit 1
+
+      - name: Run API tests
+        run: |
+          cd postman
+          npm run test:${{ matrix.environment }}
+        env:
+          NEWMAN_TIMEOUT: 60000
+          NEWMAN_ITERATIONS: 1
+
+      - name: Generate test reports
+        run: |
+          cd postman
+          npm run test:reports
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports-${{ matrix.environment }}
+          path: |
+            postman/test-reports/
+          retention-days: 30
+
+      - name: Comment PR with test results
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request' && always()
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            try {
+              const reportPath = path.join('postman', 'test-reports', 'json-report.json');
+              if (fs.existsSync(reportPath)) {
+                const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+                
+                const stats = report.stats;
+                const total = stats.iterations.total + stats.requests.total;
+                const failed = stats.iterations.failed + stats.requests.failed;
+                const passed = total - failed;
+                
+                const comment = `## 🧪 API Test Results (${{ matrix.environment }})
+                
+                **Summary:**
+                - ✅ Passed: ${passed}
+                - ❌ Failed: ${failed}
+                - 📊 Total: ${total}
+                
+                **Execution Time:** ${stats.run.duration}ms
+                
+                ${failed > 0 ? '⚠️ Some tests failed. Check the test reports for details.' : '🎉 All tests passed!'}
+                
+                [View detailed reports](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+                `;
+                
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+              }
+            } catch (error) {
+              console.log('Could not parse test results:', error.message);
+            }
+
+      - name: Stop microservices
+        if: always()
+        run: |
+          docker-compose down || true
+
+  performance-tests:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.12.0"
+          cache: "npm"
+          cache-dependency-path: "postman/package-lock.json"
+
+      - name: Install Newman and dependencies
+        run: |
+          cd postman
+          npm install
+
+      - name: Start microservices
+        run: |
+          docker-compose up -d
+          sleep 30
+
+          # Health check
+          curl -f http://localhost:8080/actuator/health || exit 1
+
+      - name: Run performance tests
+        run: |
+          cd postman
+          npm run test:performance
+        env:
+          NEWMAN_TIMEOUT: 120000
+          NEWMAN_ITERATIONS: 50
+
+      - name: Generate performance reports
+        run: |
+          cd postman
+          npm run test:reports
+
+      - name: Upload performance reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-reports
+          path: postman/test-reports/
+          retention-days: 90
+
+      - name: Stop microservices
+        if: always()
+        run: |
+          docker-compose down || true
+
+  security-tests:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.12.0"
+          cache: "npm"
+          cache-dependency-path: "postman/package-lock.json"
+
+      - name: Install Newman and dependencies
+        run: |
+          cd postman
+          npm install
+
+      - name: Start microservices
+        run: |
+          docker-compose up -d
+          sleep 30
+
+          # Health check
+          curl -f http://localhost:8080/actuator/health || exit 1
+
+      - name: Run security tests
+        run: |
+          cd postman
+          # Run only security-related test scenarios
+          node newman-config.js dev --filter "Security Scenarios"
+        env:
+          NEWMAN_TIMEOUT: 30000
+
+      - name: Generate security test reports
+        run: |
+          cd postman
+          npm run test:reports
+
+      - name: Upload security reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-reports
+          path: postman/test-reports/
+          retention-days: 30
+
+      - name: Stop microservices
+        if: always()
+        run: |
+          docker-compose down || true

@@ -1,0 +1,47 @@
+{
+  "name": "microservices-api-tests",
+  "version": "1.0.0",
+  "description": "Postman API testing suite for Microservices Platform",
+  "main": "newman-config.js",
+  "scripts": {
+    "test": "node newman-config.js all",
+    "test:dev": "node newman-config.js dev",
+    "test:docker": "node newman-config.js docker",
+    "test:prod": "node newman-config.js prod",
+    "test:performance": "node newman-config.js performance",
+    "test:reports": "node newman-config.js reports",
+    "test:ci": "node newman-config.js all && npm run test:reports",
+    "install:newman": "npm install -g newman newman-reporter-html newman-reporter-junit",
+    "setup": "npm run install:newman && mkdir -p test-reports",
+    "clean": "rm -rf test-reports/*",
+    "help": "node newman-config.js help"
+  },
+  "keywords": [
+    "api",
+    "testing",
+    "postman",
+    "newman",
+    "microservices",
+    "automation"
+  ],
+  "author": "Microservices Team",
+  "license": "MIT",
+  "devDependencies": {
+    "newman": "^6.0.0",
+    "newman-reporter-html": "^1.0.5",
+    "newman-reporter-junit": "^1.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/microservices-platform.git",
+    "directory": "postman"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/microservices-platform/issues"
+  },
+  "homepage": "https://github.com/your-org/microservices-platform#readme"
+}
