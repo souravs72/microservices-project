@@ -24,6 +24,23 @@ public class NotificationController {
     private final NotificationHistoryRepository historyRepository;
     private final NotificationService notificationService;
 
+    @GetMapping
+    public ResponseEntity<List<NotificationHistory>> getAllNotifications(
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String status) {
+        
+        List<NotificationHistory> notifications;
+        if (email != null) {
+            notifications = historyRepository.findByRecipientEmail(email);
+        } else if (status != null) {
+            notifications = historyRepository.findByStatus(status);
+        } else {
+            notifications = historyRepository.findAll();
+        }
+        
+        return ResponseEntity.ok(notifications);
+    }
+
     @GetMapping("/history")
     public ResponseEntity<List<NotificationHistory>> getHistory(
             @RequestParam(required = false) String email,
