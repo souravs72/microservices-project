@@ -1,433 +1,699 @@
-2025-10-16 22:42:52 [main] INFO  c.m.apigateway.ApiGatewayApplication - Starting ApiGatewayApplication using Java 21.0.8 with PID 98728 (/home/clapgrow/Desktop/spring/microservices-parent/api-gateway/target/classes started by clapgrow in /home/clapgrow/Desktop/spring/microservices-parent)
-2025-10-16 22:42:52 [main] DEBUG c.m.apigateway.ApiGatewayApplication - Running with Spring Boot v3.5.6, Spring v6.2.11
-2025-10-16 22:42:52 [main] INFO  c.m.apigateway.ApiGatewayApplication - No active profile set, falling back to 1 default profile: "default"
-2025-10-16 22:42:52 [main] INFO  c.m.apigateway.ApiGatewayApplication - Starting ApiGatewayApplication using Java 21.0.8 with PID 98918 (/home/clapgrow/Desktop/spring/microservices-parent/api-gateway/target/classes started by clapgrow in /home/clapgrow/Desktop/spring/microservices-parent)
-2025-10-16 22:42:52 [main] DEBUG c.m.apigateway.ApiGatewayApplication - Running with Spring Boot v3.5.6, Spring v6.2.11
-2025-10-16 22:42:52 [main] INFO  c.m.apigateway.ApiGatewayApplication - No active profile set, falling back to 1 default profile: "default"
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:42:54 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:42:54 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
-2025-10-16 22:42:54 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
-2025-10-16 22:42:54 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 22 ms. Found 0 Redis repository interfaces.
-2025-10-16 22:42:54 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
-2025-10-16 22:42:55 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
-2025-10-16 22:42:55 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 37 ms. Found 0 Redis repository interfaces.
-2025-10-16 22:42:55 [main] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=137a0066-534b-3d46-89d3-cdc52dd559ed
-2025-10-16 22:42:55 [main] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=137a0066-534b-3d46-89d3-cdc52dd559ed
-2025-10-16 22:42:57 [main] WARN  o.s.c.g.c.GatewayClassPathWarningAutoConfiguration - 
-
-**********************************************************
-
-The artifact spring-cloud-gateway-server is deprecated. It will be removed in the next major release. Please add spring-cloud-gateway-server-webflux dependency.
-
-**********************************************************
-
-
-2025-10-16 22:42:57 [main] WARN  o.s.c.g.c.GatewayClassPathWarningAutoConfiguration - 
-
-**********************************************************
-
-The artifact spring-cloud-gateway-server is deprecated. It will be removed in the next major release. Please add spring-cloud-gateway-server-webflux dependency.
-
-**********************************************************
-
-
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [After]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Before]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Between]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Cookie]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Header]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Host]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Method]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Path]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Query]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [ReadBody]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [RemoteAddr]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [XForwardedRemoteAddr]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Weight]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [CloudFoundryRouteService]
-2025-10-16 22:42:57 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.authFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/auth"}, produces={}, value={"/auth"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/auth"}, produces={}, value={"/auth"})]
-2025-10-16 22:42:57 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.usersFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/users"}, produces={}, value={"/users"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/users"}, produces={}, value={"/users"})]
-2025-10-16 22:42:57 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.graphqlFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/graphql"}, produces={}, value={"/graphql"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/graphql"}, produces={}, value={"/graphql"})]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [After]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Before]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Between]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Cookie]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Header]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Host]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Method]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Path]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Query]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [ReadBody]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [RemoteAddr]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [XForwardedRemoteAddr]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Weight]
-2025-10-16 22:42:57 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [CloudFoundryRouteService]
-2025-10-16 22:42:57 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.authFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/auth"}, produces={}, value={"/auth"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/auth"}, produces={}, value={"/auth"})]
-2025-10-16 22:42:57 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.usersFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/users"}, produces={}, value={"/users"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/users"}, produces={}, value={"/users"})]
-2025-10-16 22:42:57 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.graphqlFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/graphql"}, produces={}, value={"/graphql"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/graphql"}, produces={}, value={"/graphql"})]
-2025-10-16 22:42:58 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
-2025-10-16 22:42:58 [main] WARN  o.s.c.g.s.w.s.StarterDeprecatedAutoConfiguration - 
-
-**********************************************************
-
-spring-cloud-starter-gateway is deprecated. It will be removed in the next major release. Please use spring-cloud-starter-gateway-server-webflux instead.
-
-**********************************************************
-
-
-2025-10-16 22:42:58 [main] INFO  o.s.b.w.e.netty.NettyWebServer - Netty started on port 8080 (http)
-2025-10-16 22:42:58 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
-2025-10-16 22:42:58 [main] WARN  o.s.c.g.s.w.s.StarterDeprecatedAutoConfiguration - 
-
-**********************************************************
-
-spring-cloud-starter-gateway is deprecated. It will be removed in the next major release. Please use spring-cloud-starter-gateway-server-webflux instead.
-
-**********************************************************
-
-
-2025-10-16 22:42:58 [main] DEBUG o.s.c.g.filter.GatewayMetricsFilter - New routes count: 0
-2025-10-16 22:42:58 [main] INFO  c.m.apigateway.ApiGatewayApplication - Started ApiGatewayApplication in 7.495 seconds (process running for 8.265)
-2025-10-16 22:42:58 [main] WARN  o.s.b.c.p.m.PropertiesMigrationListener - 
-The use of configuration keys that have been renamed was found in the environment:
-
-Property source 'Config resource 'class path resource [application.yml]' via location 'optional:classpath:/'':
-	Key: logging.file.max-history
-		Line: 158
-		Replacement: logging.logback.rollingpolicy.max-history
-	Key: logging.file.max-size
-		Line: 157
-		Replacement: logging.logback.rollingpolicy.max-file-size
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[0]
-		Line: 30
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[0]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[1]
-		Line: 31
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[1]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[2]
-		Line: 32
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[2]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[0]
-		Line: 34
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[0]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[1]
-		Line: 35
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[1]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[2]
-		Line: 36
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[2]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[3]
-		Line: 37
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[3]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[4]
-		Line: 38
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[4]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[5]
-		Line: 39
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[5]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedheaders
-		Line: 40
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedheaders
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].exposedheaders[0]
-		Line: 42
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].exposedheaders[0]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].exposedheaders[1]
-		Line: 43
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].exposedheaders[1]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowcredentials
-		Line: 44
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowcredentials
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].maxage
-		Line: 45
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].maxage
-	Key: spring.cloud.gateway.httpclient.connect-timeout
-		Line: 18
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.connect-timeout
-	Key: spring.cloud.gateway.httpclient.pool.max-connections
-		Line: 22
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.max-connections
-	Key: spring.cloud.gateway.httpclient.pool.max-idle-time
-		Line: 23
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.max-idle-time
-	Key: spring.cloud.gateway.httpclient.pool.type
-		Line: 21
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.type
-	Key: spring.cloud.gateway.httpclient.response-timeout
-		Line: 19
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.response-timeout
-
-
-Each configuration key has been temporarily mapped to its replacement for your convenience. To silence this warning, please update your configuration to use the new keys.
-
-2025-10-16 22:43:00 [main] WARN  o.s.b.w.r.c.AnnotationConfigReactiveWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
-2025-10-16 22:43:00 [main] WARN  o.s.b.c.p.m.PropertiesMigrationListener - 
-The use of configuration keys that have been renamed was found in the environment:
-
-Property source 'Config resource 'class path resource [application.yml]' via location 'optional:classpath:/'':
-	Key: logging.file.max-history
-		Line: 158
-		Replacement: logging.logback.rollingpolicy.max-history
-	Key: logging.file.max-size
-		Line: 157
-		Replacement: logging.logback.rollingpolicy.max-file-size
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[0]
-		Line: 30
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[0]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[1]
-		Line: 31
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[1]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[2]
-		Line: 32
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[2]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[0]
-		Line: 34
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[0]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[1]
-		Line: 35
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[1]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[2]
-		Line: 36
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[2]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[3]
-		Line: 37
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[3]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[4]
-		Line: 38
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[4]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[5]
-		Line: 39
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[5]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedheaders
-		Line: 40
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedheaders
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].exposedheaders[0]
-		Line: 42
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].exposedheaders[0]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].exposedheaders[1]
-		Line: 43
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].exposedheaders[1]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowcredentials
-		Line: 44
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowcredentials
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].maxage
-		Line: 45
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].maxage
-	Key: spring.cloud.gateway.httpclient.connect-timeout
-		Line: 18
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.connect-timeout
-	Key: spring.cloud.gateway.httpclient.pool.max-connections
-		Line: 22
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.max-connections
-	Key: spring.cloud.gateway.httpclient.pool.max-idle-time
-		Line: 23
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.max-idle-time
-	Key: spring.cloud.gateway.httpclient.pool.type
-		Line: 21
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.type
-	Key: spring.cloud.gateway.httpclient.response-timeout
-		Line: 19
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.response-timeout
-
-
-Each configuration key has been temporarily mapped to its replacement for your convenience. To silence this warning, please update your configuration to use the new keys.
-
-2025-10-16 22:43:00 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2025-10-16 22:43:00 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
-
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Web server failed to start. Port 8080 was already in use.
-
-Action:
-
-Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
-
-2025-10-16 22:43:12 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.netty.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
-2025-10-16 22:43:12 [netty-shutdown] INFO  o.s.b.w.e.netty.GracefulShutdown - Graceful shutdown complete
-2025-10-16 22:44:32 [main] INFO  c.m.apigateway.ApiGatewayApplication - Starting ApiGatewayApplication using Java 21.0.8 with PID 101459 (/home/clapgrow/Desktop/spring/microservices-parent/api-gateway/target/classes started by clapgrow in /home/clapgrow/Desktop/spring/microservices-parent)
-2025-10-16 22:44:32 [main] DEBUG c.m.apigateway.ApiGatewayApplication - Running with Spring Boot v3.5.6, Spring v6.2.11
-2025-10-16 22:44:32 [main] INFO  c.m.apigateway.ApiGatewayApplication - No active profile set, falling back to 1 default profile: "default"
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
-2025-10-16 22:44:33 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
-2025-10-16 22:44:33 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
-2025-10-16 22:44:33 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
-2025-10-16 22:44:33 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 13 ms. Found 0 Redis repository interfaces.
-2025-10-16 22:44:33 [main] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=137a0066-534b-3d46-89d3-cdc52dd559ed
-2025-10-16 22:44:34 [main] WARN  o.s.c.g.c.GatewayClassPathWarningAutoConfiguration - 
-
-**********************************************************
-
-The artifact spring-cloud-gateway-server is deprecated. It will be removed in the next major release. Please add spring-cloud-gateway-server-webflux dependency.
-
-**********************************************************
-
-
-2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [After]
-2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Before]
-2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Between]
-2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Cookie]
-2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Header]
-2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Host]
-2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Method]
-2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Path]
-2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Query]
-2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [ReadBody]
-2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [RemoteAddr]
-2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [XForwardedRemoteAddr]
-2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Weight]
-2025-10-16 22:44:35 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [CloudFoundryRouteService]
-2025-10-16 22:44:35 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.authFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/auth"}, produces={}, value={"/auth"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/auth"}, produces={}, value={"/auth"})]
-2025-10-16 22:44:35 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.usersFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/users"}, produces={}, value={"/users"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/users"}, produces={}, value={"/users"})]
-2025-10-16 22:44:35 [main] WARN  o.s.w.r.r.m.a.RequestMappingHandlerMapping - Multiple @RequestMapping annotations found on public reactor.core.publisher.Mono com.microservices.apigateway.controller.FallbackController.graphqlFallback(), but only the first will be used: [@org.springframework.web.bind.annotation.GetMapping(consumes={}, headers={}, name="", params={}, path={"/graphql"}, produces={}, value={"/graphql"}), @org.springframework.web.bind.annotation.PostMapping(consumes={}, headers={}, name="", params={}, path={"/graphql"}, produces={}, value={"/graphql"})]
-2025-10-16 22:44:35 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
-2025-10-16 22:44:35 [main] WARN  o.s.c.g.s.w.s.StarterDeprecatedAutoConfiguration - 
-
-**********************************************************
-
-spring-cloud-starter-gateway is deprecated. It will be removed in the next major release. Please use spring-cloud-starter-gateway-server-webflux instead.
-
-**********************************************************
-
-
-2025-10-16 22:44:35 [main] INFO  o.s.b.w.e.netty.NettyWebServer - Netty started on port 8080 (http)
-2025-10-16 22:44:36 [main] DEBUG o.s.c.g.filter.GatewayMetricsFilter - New routes count: 0
-2025-10-16 22:44:36 [main] INFO  c.m.apigateway.ApiGatewayApplication - Started ApiGatewayApplication in 3.944 seconds (process running for 4.321)
-2025-10-16 22:44:36 [main] WARN  o.s.b.c.p.m.PropertiesMigrationListener - 
-The use of configuration keys that have been renamed was found in the environment:
-
-Property source 'Config resource 'class path resource [application.yml]' via location 'optional:classpath:/'':
-	Key: logging.file.max-history
-		Line: 158
-		Replacement: logging.logback.rollingpolicy.max-history
-	Key: logging.file.max-size
-		Line: 157
-		Replacement: logging.logback.rollingpolicy.max-file-size
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[0]
-		Line: 30
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[0]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[1]
-		Line: 31
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[1]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedorigins[2]
-		Line: 32
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedorigins[2]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[0]
-		Line: 34
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[0]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[1]
-		Line: 35
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[1]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[2]
-		Line: 36
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[2]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[3]
-		Line: 37
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[3]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[4]
-		Line: 38
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[4]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedmethods[5]
-		Line: 39
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedmethods[5]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowedheaders
-		Line: 40
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowedheaders
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].exposedheaders[0]
-		Line: 42
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].exposedheaders[0]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].exposedheaders[1]
-		Line: 43
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].exposedheaders[1]
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].allowcredentials
-		Line: 44
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].allowcredentials
-	Key: spring.cloud.gateway.globalcors.corsconfigurations[/**].maxage
-		Line: 45
-		Replacement: spring.cloud.gateway.server.webflux.globalcors.cors-configurations[/**].maxage
-	Key: spring.cloud.gateway.httpclient.connect-timeout
-		Line: 18
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.connect-timeout
-	Key: spring.cloud.gateway.httpclient.pool.max-connections
-		Line: 22
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.max-connections
-	Key: spring.cloud.gateway.httpclient.pool.max-idle-time
-		Line: 23
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.max-idle-time
-	Key: spring.cloud.gateway.httpclient.pool.type
-		Line: 21
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.pool.type
-	Key: spring.cloud.gateway.httpclient.response-timeout
-		Line: 19
-		Replacement: spring.cloud.gateway.server.webflux.httpclient.response-timeout
-
-
-Each configuration key has been temporarily mapped to its replacement for your convenience. To silence this warning, please update your configuration to use the new keys.
-
-2025-10-16 22:45:01 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.netty.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
-2025-10-16 22:45:01 [netty-shutdown] INFO  o.s.b.w.e.netty.GracefulShutdown - Graceful shutdown complete
+2025-10-17 14:04:09 [main] INFO  c.m.apigateway.ApiGatewayApplication - Starting ApiGatewayApplication using Java 21.0.8 with PID 37681 (/home/clapgrow/Desktop/spring/microservices-parent/api-gateway/target/classes started by clapgrow in /home/clapgrow/Desktop/spring/microservices-parent)
+2025-10-17 14:04:09 [main] DEBUG c.m.apigateway.ApiGatewayApplication - Running with Spring Boot v3.5.6, Spring v6.2.11
+2025-10-17 14:04:09 [main] INFO  c.m.apigateway.ApiGatewayApplication - No active profile set, falling back to 1 default profile: "default"
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-10-17 14:04:10 [main] DEBUG i.g.r.s.u.AspectJOnClasspathCondition - Aspects are not activated because AspectJ is not on the classpath.
+2025-10-17 14:04:10 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-10-17 14:04:10 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-10-17 14:04:10 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 8 ms. Found 0 Redis repository interfaces.
+2025-10-17 14:04:11 [main] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=17c9bfb4-935d-3c88-bc76-e03024e4a2e0
+2025-10-17 14:04:12 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [After]
+2025-10-17 14:04:12 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Before]
+2025-10-17 14:04:12 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Between]
+2025-10-17 14:04:12 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Cookie]
+2025-10-17 14:04:12 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Header]
+2025-10-17 14:04:12 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Host]
+2025-10-17 14:04:12 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Method]
+2025-10-17 14:04:12 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Path]
+2025-10-17 14:04:12 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Query]
+2025-10-17 14:04:12 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [ReadBody]
+2025-10-17 14:04:12 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [RemoteAddr]
+2025-10-17 14:04:12 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-10-17 14:04:12 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Weight]
+2025-10-17 14:04:12 [main] INFO  o.s.c.g.r.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-10-17 14:04:12 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-10-17 14:04:12 [main] INFO  o.s.b.w.e.netty.NettyWebServer - Netty started on port 8080 (http)
+2025-10-17 14:04:13 [main] DEBUG o.s.c.g.filter.GatewayMetricsFilter - New routes count: 0
+2025-10-17 14:04:13 [main] INFO  c.m.apigateway.ApiGatewayApplication - Started ApiGatewayApplication in 4.911 seconds (process running for 5.34)
+2025-10-17 14:36:42 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - Route matched: auth-service
+2025-10-17 14:36:42 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - Mapping [Exchange: OPTIONS http://localhost:8080/api/auth/login] to Route{id='auth-service', uri=http://auth-service:8082, order=0, predicate=Paths: [/api/auth/**], match trailing slash: true, gatewayFilters=[[[Retry routeId = 'auth-service', retries = 3, series = list[SERVER_ERROR], statuses = list[[empty]], methods = list[GET], exceptions = list[IOException, TimeoutException], backoff = [RetryGatewayFilterFactory.BackoffConfig@7e5dbe0d firstBackoff = PT0.1S, maxBackoff = PT1S, factor = 2, basedOnPreviousValue = true], jitter = [null], timeout = [null]], order = 0], [[SpringCloudCircuitBreakerResilience4JFilterFactory name = 'authServiceCircuitBreaker', fallback = forward:/fallback/auth], order = 0], [org.springframework.cloud.gateway.filter.factory.RequestRateLimiterGatewayFilterFactory$$Lambda/0x0000727930606bf8@3c5ac578, order = 0], [[AddRequestHeader X-Gateway-Service = 'api-gateway'], order = 0]], metadata={}}
+2025-10-17 14:36:42 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - [c704a952-1] Mapped to org.springframework.cloud.gateway.handler.FilteringWebHandler@571db8b4
+2025-10-17 14:36:42 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - Route matched: auth-service
+2025-10-17 14:36:42 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - Mapping [Exchange: POST http://localhost:8080/api/auth/login] to Route{id='auth-service', uri=http://auth-service:8082, order=0, predicate=Paths: [/api/auth/**], match trailing slash: true, gatewayFilters=[[[Retry routeId = 'auth-service', retries = 3, series = list[SERVER_ERROR], statuses = list[[empty]], methods = list[GET], exceptions = list[IOException, TimeoutException], backoff = [RetryGatewayFilterFactory.BackoffConfig@7e5dbe0d firstBackoff = PT0.1S, maxBackoff = PT1S, factor = 2, basedOnPreviousValue = true], jitter = [null], timeout = [null]], order = 0], [[SpringCloudCircuitBreakerResilience4JFilterFactory name = 'authServiceCircuitBreaker', fallback = forward:/fallback/auth], order = 0], [org.springframework.cloud.gateway.filter.factory.RequestRateLimiterGatewayFilterFactory$$Lambda/0x0000727930606bf8@3c5ac578, order = 0], [[AddRequestHeader X-Gateway-Service = 'api-gateway'], order = 0]], metadata={}}
+2025-10-17 14:36:42 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - [c704a952-2] Mapped to org.springframework.cloud.gateway.handler.FilteringWebHandler@571db8b4
+2025-10-17 14:36:42 [reactor-http-epoll-3] DEBUG o.s.c.g.handler.FilteringWebHandler - Sorted gatewayFilterFactories: [[GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.RemoveCachedBodyFilter@287317df}, order = -2147483648], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.AdaptCachedBodyGlobalFilter@7b95bdb0}, order = -2147482648], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.NettyWriteResponseFilter@1a8e44fe}, order = -1], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.ForwardPathFilter@71469e01}, order = 0], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.GatewayMetricsFilter@3f2ae973}, order = 0], [[Retry routeId = 'auth-service', retries = 3, series = list[SERVER_ERROR], statuses = list[[empty]], methods = list[GET], exceptions = list[IOException, TimeoutException], backoff = [RetryGatewayFilterFactory.BackoffConfig@7e5dbe0d firstBackoff = PT0.1S, maxBackoff = PT1S, factor = 2, basedOnPreviousValue = true], jitter = [null], timeout = [null]], order = 0], [[SpringCloudCircuitBreakerResilience4JFilterFactory name = 'authServiceCircuitBreaker', fallback = forward:/fallback/auth], order = 0], [org.springframework.cloud.gateway.filter.factory.RequestRateLimiterGatewayFilterFactory$$Lambda/0x0000727930606bf8@3c5ac578, order = 0], [[AddRequestHeader X-Gateway-Service = 'api-gateway'], order = 0], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.RouteToRequestUrlFilter@1fcc3461}, order = 10000], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.config.GatewayNoLoadBalancerClientAutoConfiguration$NoLoadBalancerClientFilter@1a8b22b5}, order = 10150], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.WebsocketRoutingFilter@41bbb219}, order = 2147483646], GatewayFilterAdapter{delegate=com.microservices.apigateway.config.GatewayConfig$$Lambda/0x000072793060c8f8@71f8ce0e}, [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.NettyRoutingFilter@4fd92289}, order = 2147483647], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.ForwardRoutingFilter@1987807b}, order = 2147483647]]
+2025-10-17 14:36:43 [reactor-http-epoll-3] ERROR o.s.c.g.f.ratelimit.RedisRateLimiter - Error calling rate limiter lua
+org.springframework.data.redis.RedisConnectionFailureException: Unable to connect to Redis
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.translateException(LettuceConnectionFactory.java:1866)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.getConnection(LettuceConnectionFactory.java:1797)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.getNativeConnection(LettuceConnectionFactory.java:1594)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.lambda$getConnection$0(LettuceConnectionFactory.java:1574)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.doInLock(LettuceConnectionFactory.java:1535)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.getConnection(LettuceConnectionFactory.java:1571)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getSharedReactiveConnection(LettuceConnectionFactory.java:1282)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getReactiveConnection(LettuceConnectionFactory.java:1157)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getReactiveConnection(LettuceConnectionFactory.java:121)
+	at reactor.core.publisher.MonoSupplier.call(MonoSupplier.java:67)
+	at reactor.core.publisher.FluxUsingWhen.subscribe(FluxUsingWhen.java:80)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576)
+	at reactor.core.publisher.FluxFlatMap.trySubscribeScalarMap(FluxFlatMap.java:202)
+	at reactor.core.publisher.MonoFlatMap.subscribeOrReturn(MonoFlatMap.java:53)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:63)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at io.github.resilience4j.reactor.bulkhead.operator.MonoBulkhead.subscribe(MonoBulkhead.java:37)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at io.github.resilience4j.reactor.circuitbreaker.operator.MonoCircuitBreaker.subscribe(MonoCircuitBreaker.java:38)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at reactor.core.publisher.FluxRetryWhen.subscribe(FluxRetryWhen.java:81)
+	at reactor.core.publisher.MonoRetryWhen.subscribeOrReturn(MonoRetryWhen.java:46)
+	at reactor.core.publisher.MonoFromFluxOperator.subscribe(MonoFromFluxOperator.java:75)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576)
+	at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.subscribeNext(MonoIgnoreThen.java:265)
+	at reactor.core.publisher.MonoIgnoreThen.subscribe(MonoIgnoreThen.java:51)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:165)
+	at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onNext(FluxSwitchIfEmpty.java:74)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onNext(FluxMap.java:122)
+	at reactor.core.publisher.FluxDefaultIfEmpty$DefaultIfEmptySubscriber.onNext(FluxDefaultIfEmpty.java:122)
+	at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onNext(FluxContextWrite.java:107)
+	at reactor.core.publisher.FluxMapFuseable$MapFuseableConditionalSubscriber.onNext(FluxMapFuseable.java:299)
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableConditionalSubscriber.onNext(FluxFilterFuseable.java:337)
+	at reactor.core.publisher.Operators$BaseFluxToMonoOperator.completePossiblyEmpty(Operators.java:2096)
+	at reactor.core.publisher.MonoCollect$CollectSubscriber.onComplete(MonoCollect.java:145)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144)
+	at reactor.core.publisher.FluxPeek$PeekSubscriber.onComplete(FluxPeek.java:260)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144)
+	at reactor.netty.channel.FluxReceive.onInboundComplete(FluxReceive.java:413)
+	at reactor.netty.channel.ChannelOperations.onInboundComplete(ChannelOperations.java:455)
+	at reactor.netty.http.server.HttpServerOperations.handleLastHttpContent(HttpServerOperations.java:903)
+	at reactor.netty.http.server.HttpServerOperations.onInboundNext(HttpServerOperations.java:812)
+	at reactor.netty.channel.ChannelOperationsHandler.channelRead(ChannelOperationsHandler.java:115)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at reactor.netty.http.server.HttpTrafficHandler.channelRead(HttpTrafficHandler.java:321)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:318)
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+	at io.netty.channel.epoll.AbstractEpollStreamChannel$EpollStreamUnsafe.epollInReady(AbstractEpollStreamChannel.java:799)
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:501)
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:399)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Unknown Source)
+Caused by: io.lettuce.core.RedisConnectionException: Unable to connect to redis/<unresolved>:6379
+	at io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:63)
+	at io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:41)
+	at io.lettuce.core.AbstractRedisClient.getConnection(AbstractRedisClient.java:354)
+	at io.lettuce.core.RedisClient.connect(RedisClient.java:220)
+	at org.springframework.data.redis.connection.lettuce.StandaloneConnectionProvider.lambda$getConnection$1(StandaloneConnectionProvider.java:112)
+	at java.base/java.util.Optional.orElseGet(Unknown Source)
+	at org.springframework.data.redis.connection.lettuce.StandaloneConnectionProvider.getConnection(StandaloneConnectionProvider.java:112)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.getConnection(LettuceConnectionFactory.java:1795)
+	... 75 common frames omitted
+Caused by: java.net.UnknownHostException: Failed to resolve 'redis' [A(1)] after 2 queries 
+	at io.netty.resolver.dns.DnsResolveContext.finishResolve(DnsResolveContext.java:1150)
+	at io.netty.resolver.dns.DnsResolveContext.tryToFinishResolve(DnsResolveContext.java:1097)
+	at io.netty.resolver.dns.DnsResolveContext.query(DnsResolveContext.java:455)
+	at io.netty.resolver.dns.DnsResolveContext.onResponse(DnsResolveContext.java:686)
+	at io.netty.resolver.dns.DnsResolveContext.access$500(DnsResolveContext.java:70)
+	at io.netty.resolver.dns.DnsResolveContext$2.operationComplete(DnsResolveContext.java:513)
+	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:603)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners0(DefaultPromise.java:596)
+	at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:572)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:505)
+	at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:649)
+	at io.netty.util.concurrent.DefaultPromise.setSuccess0(DefaultPromise.java:638)
+	at io.netty.util.concurrent.DefaultPromise.trySuccess(DefaultPromise.java:118)
+	at io.netty.resolver.dns.DnsQueryContext.trySuccess(DnsQueryContext.java:308)
+	at io.netty.resolver.dns.DnsQueryContext.finishSuccess(DnsQueryContext.java:299)
+	at io.netty.resolver.dns.DnsNameResolver$DnsResponseHandler.channelRead(DnsNameResolver.java:1491)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:107)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+	at io.netty.channel.epoll.EpollDatagramChannel.processPacket(EpollDatagramChannel.java:662)
+	at io.netty.channel.epoll.EpollDatagramChannel.recvmsg(EpollDatagramChannel.java:697)
+	at io.netty.channel.epoll.EpollDatagramChannel.access$300(EpollDatagramChannel.java:56)
+	at io.netty.channel.epoll.EpollDatagramChannel$EpollDatagramChannelUnsafe.epollInReady(EpollDatagramChannel.java:536)
+	... 6 common frames omitted
+Caused by: io.netty.resolver.dns.DnsErrorCauseException: Query failed with NXDOMAIN
+	at io.netty.resolver.dns.DnsResolveContext.onResponse(..)(Unknown Source)
+2025-10-17 14:36:43 [reactor-http-epoll-3] DEBUG o.s.c.g.f.ratelimit.RedisRateLimiter - response: Response{allowed=true, headers={X-RateLimit-Remaining=-1, X-RateLimit-Requested-Tokens=1, X-RateLimit-Burst-Capacity=20, X-RateLimit-Replenish-Rate=10}, tokensRemaining=-1}
+2025-10-17 14:36:43 [reactor-http-epoll-3] DEBUG o.s.c.g.f.h.o.ObservedRequestHttpHeadersFilter - Will instrument the HTTP request headers [Host:"localhost:8080", User-Agent:"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:144.0) Gecko/20100101 Firefox/144.0", Accept:"application/json, text/plain, */*", Accept-Language:"en-US,en;q=0.5", Accept-Encoding:"gzip, deflate, br, zstd", Content-Type:"application/json", Content-Length:"42", Origin:"http://localhost:5173", Referer:"http://localhost:5173/", Sec-Fetch-Dest:"empty", Sec-Fetch-Mode:"cors", Sec-Fetch-Site:"same-site", Priority:"u=0", X-Gateway-Service:"api-gateway"]
+2025-10-17 14:36:43 [reactor-http-epoll-3] DEBUG o.s.c.g.f.h.o.ObservedRequestHttpHeadersFilter - Client observation  {name=http.client.requests(null), error=null, context=name='http.client.requests', contextualName='null', error='null', lowCardinalityKeyValues=[http.method='POST', http.status_code='UNKNOWN', spring.cloud.gateway.route.id='auth-service', spring.cloud.gateway.route.uri='http://auth-service:8082'], highCardinalityKeyValues=[http.uri='http://localhost:8080/api/auth/login'], map=[class io.micrometer.core.instrument.Timer$Sample='io.micrometer.core.instrument.Timer$Sample@2120569c', class io.micrometer.core.instrument.LongTaskTimer$Sample='SampleImpl{duration(seconds)=6.0077E-4, duration(nanos)=600770.0, startTimeNanos=4095115320700}'], parentObservation={name=http.server.requests(null), error=null, context=name='http.server.requests', contextualName='null', error='null', lowCardinalityKeyValues=[exception='none', method='POST', outcome='SUCCESS', status='200', uri='UNKNOWN'], highCardinalityKeyValues=[http.url='/api/auth/login'], map=[class io.micrometer.core.instrument.Timer$Sample='io.micrometer.core.instrument.Timer$Sample@2c214bb7', class io.micrometer.core.instrument.LongTaskTimer$Sample='SampleImpl{duration(seconds)=0.454721517, duration(nanos)=4.54721517E8, startTimeNanos=4094661307774}'], parentObservation=null}} created for the request. New headers are [Host:"localhost:8080", User-Agent:"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:144.0) Gecko/20100101 Firefox/144.0", Accept:"application/json, text/plain, */*", Accept-Language:"en-US,en;q=0.5", Accept-Encoding:"gzip, deflate, br, zstd", Content-Type:"application/json", Content-Length:"42", Origin:"http://localhost:5173", Referer:"http://localhost:5173/", Sec-Fetch-Dest:"empty", Sec-Fetch-Mode:"cors", Sec-Fetch-Site:"same-site", Priority:"u=0", X-Gateway-Service:"api-gateway"]
+2025-10-17 14:36:43 [reactor-http-epoll-3] DEBUG i.g.r.c.i.CircuitBreakerStateMachine - CircuitBreaker 'authServiceCircuitBreaker' recorded an exception as failure:
+java.net.UnknownHostException: Failed to resolve 'auth-service' [A(1)] after 2 queries 
+	at io.netty.resolver.dns.DnsResolveContext.finishResolve(DnsResolveContext.java:1150)
+	at io.netty.resolver.dns.DnsResolveContext.tryToFinishResolve(DnsResolveContext.java:1097)
+	at io.netty.resolver.dns.DnsResolveContext.query(DnsResolveContext.java:455)
+	at io.netty.resolver.dns.DnsResolveContext.onResponse(DnsResolveContext.java:686)
+	at io.netty.resolver.dns.DnsResolveContext.access$500(DnsResolveContext.java:70)
+	at io.netty.resolver.dns.DnsResolveContext$2.operationComplete(DnsResolveContext.java:513)
+	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:603)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners0(DefaultPromise.java:596)
+	at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:572)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:505)
+	at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:649)
+	at io.netty.util.concurrent.DefaultPromise.setSuccess0(DefaultPromise.java:638)
+	at io.netty.util.concurrent.DefaultPromise.trySuccess(DefaultPromise.java:118)
+	at io.netty.resolver.dns.DnsQueryContext.trySuccess(DnsQueryContext.java:308)
+	at io.netty.resolver.dns.DnsQueryContext.finishSuccess(DnsQueryContext.java:299)
+	at io.netty.resolver.dns.DnsNameResolver$DnsResponseHandler.channelRead(DnsNameResolver.java:1491)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:107)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+	at io.netty.channel.epoll.EpollDatagramChannel.processPacket(EpollDatagramChannel.java:662)
+	at io.netty.channel.epoll.EpollDatagramChannel.recvmsg(EpollDatagramChannel.java:697)
+	at io.netty.channel.epoll.EpollDatagramChannel.access$300(EpollDatagramChannel.java:56)
+	at io.netty.channel.epoll.EpollDatagramChannel$EpollDatagramChannelUnsafe.epollInReady(EpollDatagramChannel.java:536)
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:501)
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:399)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Unknown Source)
+Caused by: io.netty.resolver.dns.DnsErrorCauseException: Query failed with NXDOMAIN
+	at io.netty.resolver.dns.DnsResolveContext.onResponse(..)(Unknown Source)
+2025-10-17 14:36:43 [reactor-http-epoll-3] DEBUG i.g.r.c.i.CircuitBreakerStateMachine - Event ERROR published: 2025-10-17T14:36:43.567292450+05:30[Asia/Kolkata]: CircuitBreaker 'authServiceCircuitBreaker' recorded an error: 'java.net.UnknownHostException: Failed to resolve 'auth-service' [A(1)] after 2 queries '. Elapsed time: 721 ms
+2025-10-17 14:36:50 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - Route matched: auth-service
+2025-10-17 14:36:50 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - Mapping [Exchange: OPTIONS http://localhost:8080/api/auth/login] to Route{id='auth-service', uri=http://auth-service:8082, order=0, predicate=Paths: [/api/auth/**], match trailing slash: true, gatewayFilters=[[[Retry routeId = 'auth-service', retries = 3, series = list[SERVER_ERROR], statuses = list[[empty]], methods = list[GET], exceptions = list[IOException, TimeoutException], backoff = [RetryGatewayFilterFactory.BackoffConfig@7e5dbe0d firstBackoff = PT0.1S, maxBackoff = PT1S, factor = 2, basedOnPreviousValue = true], jitter = [null], timeout = [null]], order = 0], [[SpringCloudCircuitBreakerResilience4JFilterFactory name = 'authServiceCircuitBreaker', fallback = forward:/fallback/auth], order = 0], [org.springframework.cloud.gateway.filter.factory.RequestRateLimiterGatewayFilterFactory$$Lambda/0x0000727930606bf8@3c5ac578, order = 0], [[AddRequestHeader X-Gateway-Service = 'api-gateway'], order = 0]], metadata={}}
+2025-10-17 14:36:50 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - [c704a952-3] Mapped to org.springframework.cloud.gateway.handler.FilteringWebHandler@571db8b4
+2025-10-17 14:36:50 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - Route matched: auth-service
+2025-10-17 14:36:50 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - Mapping [Exchange: POST http://localhost:8080/api/auth/login] to Route{id='auth-service', uri=http://auth-service:8082, order=0, predicate=Paths: [/api/auth/**], match trailing slash: true, gatewayFilters=[[[Retry routeId = 'auth-service', retries = 3, series = list[SERVER_ERROR], statuses = list[[empty]], methods = list[GET], exceptions = list[IOException, TimeoutException], backoff = [RetryGatewayFilterFactory.BackoffConfig@7e5dbe0d firstBackoff = PT0.1S, maxBackoff = PT1S, factor = 2, basedOnPreviousValue = true], jitter = [null], timeout = [null]], order = 0], [[SpringCloudCircuitBreakerResilience4JFilterFactory name = 'authServiceCircuitBreaker', fallback = forward:/fallback/auth], order = 0], [org.springframework.cloud.gateway.filter.factory.RequestRateLimiterGatewayFilterFactory$$Lambda/0x0000727930606bf8@3c5ac578, order = 0], [[AddRequestHeader X-Gateway-Service = 'api-gateway'], order = 0]], metadata={}}
+2025-10-17 14:36:50 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - [c704a952-4] Mapped to org.springframework.cloud.gateway.handler.FilteringWebHandler@571db8b4
+2025-10-17 14:36:50 [reactor-http-epoll-3] DEBUG o.s.c.g.handler.FilteringWebHandler - Sorted gatewayFilterFactories: [[GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.RemoveCachedBodyFilter@287317df}, order = -2147483648], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.AdaptCachedBodyGlobalFilter@7b95bdb0}, order = -2147482648], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.NettyWriteResponseFilter@1a8e44fe}, order = -1], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.ForwardPathFilter@71469e01}, order = 0], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.GatewayMetricsFilter@3f2ae973}, order = 0], [[Retry routeId = 'auth-service', retries = 3, series = list[SERVER_ERROR], statuses = list[[empty]], methods = list[GET], exceptions = list[IOException, TimeoutException], backoff = [RetryGatewayFilterFactory.BackoffConfig@7e5dbe0d firstBackoff = PT0.1S, maxBackoff = PT1S, factor = 2, basedOnPreviousValue = true], jitter = [null], timeout = [null]], order = 0], [[SpringCloudCircuitBreakerResilience4JFilterFactory name = 'authServiceCircuitBreaker', fallback = forward:/fallback/auth], order = 0], [org.springframework.cloud.gateway.filter.factory.RequestRateLimiterGatewayFilterFactory$$Lambda/0x0000727930606bf8@3c5ac578, order = 0], [[AddRequestHeader X-Gateway-Service = 'api-gateway'], order = 0], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.RouteToRequestUrlFilter@1fcc3461}, order = 10000], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.config.GatewayNoLoadBalancerClientAutoConfiguration$NoLoadBalancerClientFilter@1a8b22b5}, order = 10150], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.WebsocketRoutingFilter@41bbb219}, order = 2147483646], GatewayFilterAdapter{delegate=com.microservices.apigateway.config.GatewayConfig$$Lambda/0x000072793060c8f8@71f8ce0e}, [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.NettyRoutingFilter@4fd92289}, order = 2147483647], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.ForwardRoutingFilter@1987807b}, order = 2147483647]]
+2025-10-17 14:36:50 [reactor-http-epoll-3] ERROR o.s.c.g.f.ratelimit.RedisRateLimiter - Error calling rate limiter lua
+org.springframework.data.redis.RedisConnectionFailureException: Unable to connect to Redis
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.translateException(LettuceConnectionFactory.java:1866)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.getConnection(LettuceConnectionFactory.java:1797)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.getNativeConnection(LettuceConnectionFactory.java:1594)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.lambda$getConnection$0(LettuceConnectionFactory.java:1574)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.doInLock(LettuceConnectionFactory.java:1535)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.getConnection(LettuceConnectionFactory.java:1571)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getSharedReactiveConnection(LettuceConnectionFactory.java:1282)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getReactiveConnection(LettuceConnectionFactory.java:1157)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getReactiveConnection(LettuceConnectionFactory.java:121)
+	at reactor.core.publisher.MonoSupplier.call(MonoSupplier.java:67)
+	at reactor.core.publisher.FluxUsingWhen.subscribe(FluxUsingWhen.java:80)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576)
+	at reactor.core.publisher.FluxFlatMap.trySubscribeScalarMap(FluxFlatMap.java:202)
+	at reactor.core.publisher.MonoFlatMap.subscribeOrReturn(MonoFlatMap.java:53)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:63)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at io.github.resilience4j.reactor.bulkhead.operator.MonoBulkhead.subscribe(MonoBulkhead.java:37)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at io.github.resilience4j.reactor.circuitbreaker.operator.MonoCircuitBreaker.subscribe(MonoCircuitBreaker.java:38)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at reactor.core.publisher.FluxRetryWhen.subscribe(FluxRetryWhen.java:81)
+	at reactor.core.publisher.MonoRetryWhen.subscribeOrReturn(MonoRetryWhen.java:46)
+	at reactor.core.publisher.MonoFromFluxOperator.subscribe(MonoFromFluxOperator.java:75)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576)
+	at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.subscribeNext(MonoIgnoreThen.java:265)
+	at reactor.core.publisher.MonoIgnoreThen.subscribe(MonoIgnoreThen.java:51)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:165)
+	at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onNext(FluxSwitchIfEmpty.java:74)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onNext(FluxMap.java:122)
+	at reactor.core.publisher.FluxDefaultIfEmpty$DefaultIfEmptySubscriber.onNext(FluxDefaultIfEmpty.java:122)
+	at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onNext(FluxContextWrite.java:107)
+	at reactor.core.publisher.FluxMapFuseable$MapFuseableConditionalSubscriber.onNext(FluxMapFuseable.java:299)
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableConditionalSubscriber.onNext(FluxFilterFuseable.java:337)
+	at reactor.core.publisher.Operators$BaseFluxToMonoOperator.completePossiblyEmpty(Operators.java:2096)
+	at reactor.core.publisher.MonoCollect$CollectSubscriber.onComplete(MonoCollect.java:145)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144)
+	at reactor.core.publisher.FluxPeek$PeekSubscriber.onComplete(FluxPeek.java:260)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144)
+	at reactor.netty.channel.FluxReceive.onInboundComplete(FluxReceive.java:413)
+	at reactor.netty.channel.ChannelOperations.onInboundComplete(ChannelOperations.java:455)
+	at reactor.netty.http.server.HttpServerOperations.handleLastHttpContent(HttpServerOperations.java:903)
+	at reactor.netty.http.server.HttpServerOperations.onInboundNext(HttpServerOperations.java:812)
+	at reactor.netty.channel.ChannelOperationsHandler.channelRead(ChannelOperationsHandler.java:115)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at reactor.netty.http.server.HttpTrafficHandler.channelRead(HttpTrafficHandler.java:321)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:318)
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+	at io.netty.channel.epoll.AbstractEpollStreamChannel$EpollStreamUnsafe.epollInReady(AbstractEpollStreamChannel.java:799)
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:501)
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:399)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Unknown Source)
+Caused by: io.lettuce.core.RedisConnectionException: Unable to connect to redis/<unresolved>:6379
+	at io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:63)
+	at io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:41)
+	at io.lettuce.core.AbstractRedisClient.getConnection(AbstractRedisClient.java:354)
+	at io.lettuce.core.RedisClient.connect(RedisClient.java:220)
+	at org.springframework.data.redis.connection.lettuce.StandaloneConnectionProvider.lambda$getConnection$1(StandaloneConnectionProvider.java:112)
+	at java.base/java.util.Optional.orElseGet(Unknown Source)
+	at org.springframework.data.redis.connection.lettuce.StandaloneConnectionProvider.getConnection(StandaloneConnectionProvider.java:112)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.getConnection(LettuceConnectionFactory.java:1795)
+	... 75 common frames omitted
+Caused by: java.net.UnknownHostException: Failed to resolve 'redis' [A(1)] after 2 queries 
+	at io.netty.resolver.dns.DnsResolveContext.finishResolve(DnsResolveContext.java:1150)
+	at io.netty.resolver.dns.DnsResolveContext.tryToFinishResolve(DnsResolveContext.java:1097)
+	at io.netty.resolver.dns.DnsResolveContext.query(DnsResolveContext.java:455)
+	at io.netty.resolver.dns.DnsResolveContext.onResponse(DnsResolveContext.java:686)
+	at io.netty.resolver.dns.DnsResolveContext.access$500(DnsResolveContext.java:70)
+	at io.netty.resolver.dns.DnsResolveContext$2.operationComplete(DnsResolveContext.java:513)
+	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:603)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners0(DefaultPromise.java:596)
+	at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:572)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:505)
+	at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:649)
+	at io.netty.util.concurrent.DefaultPromise.setSuccess0(DefaultPromise.java:638)
+	at io.netty.util.concurrent.DefaultPromise.trySuccess(DefaultPromise.java:118)
+	at io.netty.resolver.dns.DnsQueryContext.trySuccess(DnsQueryContext.java:308)
+	at io.netty.resolver.dns.DnsQueryContext.finishSuccess(DnsQueryContext.java:299)
+	at io.netty.resolver.dns.DnsNameResolver$DnsResponseHandler.channelRead(DnsNameResolver.java:1491)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:107)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+	at io.netty.channel.epoll.EpollDatagramChannel.processPacket(EpollDatagramChannel.java:662)
+	at io.netty.channel.epoll.EpollDatagramChannel.recvmsg(EpollDatagramChannel.java:697)
+	at io.netty.channel.epoll.EpollDatagramChannel.access$300(EpollDatagramChannel.java:56)
+	at io.netty.channel.epoll.EpollDatagramChannel$EpollDatagramChannelUnsafe.epollInReady(EpollDatagramChannel.java:536)
+	... 6 common frames omitted
+Caused by: io.netty.resolver.dns.DnsErrorCauseException: Query failed with NXDOMAIN
+	at io.netty.resolver.dns.DnsResolveContext.onResponse(..)(Unknown Source)
+2025-10-17 14:36:50 [reactor-http-epoll-3] DEBUG o.s.c.g.f.ratelimit.RedisRateLimiter - response: Response{allowed=true, headers={X-RateLimit-Remaining=-1, X-RateLimit-Requested-Tokens=1, X-RateLimit-Burst-Capacity=20, X-RateLimit-Replenish-Rate=10}, tokensRemaining=-1}
+2025-10-17 14:36:50 [reactor-http-epoll-3] DEBUG o.s.c.g.f.h.o.ObservedRequestHttpHeadersFilter - Will instrument the HTTP request headers [Host:"localhost:8080", User-Agent:"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:144.0) Gecko/20100101 Firefox/144.0", Accept:"application/json, text/plain, */*", Accept-Language:"en-US,en;q=0.5", Accept-Encoding:"gzip, deflate, br, zstd", Content-Type:"application/json", Content-Length:"46", Origin:"http://localhost:5173", Referer:"http://localhost:5173/", Sec-Fetch-Dest:"empty", Sec-Fetch-Mode:"cors", Sec-Fetch-Site:"same-site", Priority:"u=0", Pragma:"no-cache", Cache-Control:"no-cache", X-Gateway-Service:"api-gateway"]
+2025-10-17 14:36:51 [reactor-http-epoll-3] DEBUG o.s.c.g.f.h.o.ObservedRequestHttpHeadersFilter - Client observation  {name=http.client.requests(null), error=null, context=name='http.client.requests', contextualName='null', error='null', lowCardinalityKeyValues=[http.method='POST', http.status_code='UNKNOWN', spring.cloud.gateway.route.id='auth-service', spring.cloud.gateway.route.uri='http://auth-service:8082'], highCardinalityKeyValues=[http.uri='http://localhost:8080/api/auth/login'], map=[class io.micrometer.core.instrument.Timer$Sample='io.micrometer.core.instrument.Timer$Sample@5ea73a7a', class io.micrometer.core.instrument.LongTaskTimer$Sample='SampleImpl{duration(seconds)=3.00692E-4, duration(nanos)=300692.0, startTimeNanos=4102838272837}'], parentObservation={name=http.server.requests(null), error=null, context=name='http.server.requests', contextualName='null', error='null', lowCardinalityKeyValues=[exception='none', method='POST', outcome='SUCCESS', status='200', uri='UNKNOWN'], highCardinalityKeyValues=[http.url='/api/auth/login'], map=[class io.micrometer.core.instrument.Timer$Sample='io.micrometer.core.instrument.Timer$Sample@6c809e68', class io.micrometer.core.instrument.LongTaskTimer$Sample='SampleImpl{duration(seconds)=0.356285503, duration(nanos)=3.56285503E8, startTimeNanos=4102482494777}'], parentObservation=null}} created for the request. New headers are [Host:"localhost:8080", User-Agent:"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:144.0) Gecko/20100101 Firefox/144.0", Accept:"application/json, text/plain, */*", Accept-Language:"en-US,en;q=0.5", Accept-Encoding:"gzip, deflate, br, zstd", Content-Type:"application/json", Content-Length:"46", Origin:"http://localhost:5173", Referer:"http://localhost:5173/", Sec-Fetch-Dest:"empty", Sec-Fetch-Mode:"cors", Sec-Fetch-Site:"same-site", Priority:"u=0", Pragma:"no-cache", Cache-Control:"no-cache", X-Gateway-Service:"api-gateway"]
+2025-10-17 14:36:51 [reactor-http-epoll-3] DEBUG i.g.r.c.i.CircuitBreakerStateMachine - CircuitBreaker 'authServiceCircuitBreaker' recorded an exception as failure:
+java.net.UnknownHostException: Failed to resolve 'auth-service' [A(1)] after 2 queries 
+	at io.netty.resolver.dns.DnsResolveContext.finishResolve(DnsResolveContext.java:1150)
+	at io.netty.resolver.dns.DnsResolveContext.tryToFinishResolve(DnsResolveContext.java:1097)
+	at io.netty.resolver.dns.DnsResolveContext.query(DnsResolveContext.java:455)
+	at io.netty.resolver.dns.DnsResolveContext.onResponse(DnsResolveContext.java:686)
+	at io.netty.resolver.dns.DnsResolveContext.access$500(DnsResolveContext.java:70)
+	at io.netty.resolver.dns.DnsResolveContext$2.operationComplete(DnsResolveContext.java:513)
+	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:603)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners0(DefaultPromise.java:596)
+	at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:572)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:505)
+	at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:649)
+	at io.netty.util.concurrent.DefaultPromise.setSuccess0(DefaultPromise.java:638)
+	at io.netty.util.concurrent.DefaultPromise.trySuccess(DefaultPromise.java:118)
+	at io.netty.resolver.dns.DnsQueryContext.trySuccess(DnsQueryContext.java:308)
+	at io.netty.resolver.dns.DnsQueryContext.finishSuccess(DnsQueryContext.java:299)
+	at io.netty.resolver.dns.DnsNameResolver$DnsResponseHandler.channelRead(DnsNameResolver.java:1491)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:107)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+	at io.netty.channel.epoll.EpollDatagramChannel.processPacket(EpollDatagramChannel.java:662)
+	at io.netty.channel.epoll.EpollDatagramChannel.recvmsg(EpollDatagramChannel.java:697)
+	at io.netty.channel.epoll.EpollDatagramChannel.access$300(EpollDatagramChannel.java:56)
+	at io.netty.channel.epoll.EpollDatagramChannel$EpollDatagramChannelUnsafe.epollInReady(EpollDatagramChannel.java:536)
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:501)
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:399)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Unknown Source)
+Caused by: io.netty.resolver.dns.DnsErrorCauseException: Query failed with NXDOMAIN
+	at io.netty.resolver.dns.DnsResolveContext.onResponse(..)(Unknown Source)
+2025-10-17 14:36:51 [reactor-http-epoll-3] DEBUG i.g.r.c.i.CircuitBreakerStateMachine - Event ERROR published: 2025-10-17T14:36:51.228213974+05:30[Asia/Kolkata]: CircuitBreaker 'authServiceCircuitBreaker' recorded an error: 'java.net.UnknownHostException: Failed to resolve 'auth-service' [A(1)] after 2 queries '. Elapsed time: 579 ms
+2025-10-17 14:37:06 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - Route matched: auth-service
+2025-10-17 14:37:06 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - Mapping [Exchange: OPTIONS http://localhost:8080/api/auth/login] to Route{id='auth-service', uri=http://auth-service:8082, order=0, predicate=Paths: [/api/auth/**], match trailing slash: true, gatewayFilters=[[[Retry routeId = 'auth-service', retries = 3, series = list[SERVER_ERROR], statuses = list[[empty]], methods = list[GET], exceptions = list[IOException, TimeoutException], backoff = [RetryGatewayFilterFactory.BackoffConfig@7e5dbe0d firstBackoff = PT0.1S, maxBackoff = PT1S, factor = 2, basedOnPreviousValue = true], jitter = [null], timeout = [null]], order = 0], [[SpringCloudCircuitBreakerResilience4JFilterFactory name = 'authServiceCircuitBreaker', fallback = forward:/fallback/auth], order = 0], [org.springframework.cloud.gateway.filter.factory.RequestRateLimiterGatewayFilterFactory$$Lambda/0x0000727930606bf8@3c5ac578, order = 0], [[AddRequestHeader X-Gateway-Service = 'api-gateway'], order = 0]], metadata={}}
+2025-10-17 14:37:06 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - [c704a952-5] Mapped to org.springframework.cloud.gateway.handler.FilteringWebHandler@571db8b4
+2025-10-17 14:37:06 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - Route matched: auth-service
+2025-10-17 14:37:06 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - Mapping [Exchange: POST http://localhost:8080/api/auth/login] to Route{id='auth-service', uri=http://auth-service:8082, order=0, predicate=Paths: [/api/auth/**], match trailing slash: true, gatewayFilters=[[[Retry routeId = 'auth-service', retries = 3, series = list[SERVER_ERROR], statuses = list[[empty]], methods = list[GET], exceptions = list[IOException, TimeoutException], backoff = [RetryGatewayFilterFactory.BackoffConfig@7e5dbe0d firstBackoff = PT0.1S, maxBackoff = PT1S, factor = 2, basedOnPreviousValue = true], jitter = [null], timeout = [null]], order = 0], [[SpringCloudCircuitBreakerResilience4JFilterFactory name = 'authServiceCircuitBreaker', fallback = forward:/fallback/auth], order = 0], [org.springframework.cloud.gateway.filter.factory.RequestRateLimiterGatewayFilterFactory$$Lambda/0x0000727930606bf8@3c5ac578, order = 0], [[AddRequestHeader X-Gateway-Service = 'api-gateway'], order = 0]], metadata={}}
+2025-10-17 14:37:06 [reactor-http-epoll-3] DEBUG o.s.c.g.h.RoutePredicateHandlerMapping - [c704a952-6] Mapped to org.springframework.cloud.gateway.handler.FilteringWebHandler@571db8b4
+2025-10-17 14:37:06 [reactor-http-epoll-3] DEBUG o.s.c.g.handler.FilteringWebHandler - Sorted gatewayFilterFactories: [[GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.RemoveCachedBodyFilter@287317df}, order = -2147483648], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.AdaptCachedBodyGlobalFilter@7b95bdb0}, order = -2147482648], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.NettyWriteResponseFilter@1a8e44fe}, order = -1], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.ForwardPathFilter@71469e01}, order = 0], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.GatewayMetricsFilter@3f2ae973}, order = 0], [[Retry routeId = 'auth-service', retries = 3, series = list[SERVER_ERROR], statuses = list[[empty]], methods = list[GET], exceptions = list[IOException, TimeoutException], backoff = [RetryGatewayFilterFactory.BackoffConfig@7e5dbe0d firstBackoff = PT0.1S, maxBackoff = PT1S, factor = 2, basedOnPreviousValue = true], jitter = [null], timeout = [null]], order = 0], [[SpringCloudCircuitBreakerResilience4JFilterFactory name = 'authServiceCircuitBreaker', fallback = forward:/fallback/auth], order = 0], [org.springframework.cloud.gateway.filter.factory.RequestRateLimiterGatewayFilterFactory$$Lambda/0x0000727930606bf8@3c5ac578, order = 0], [[AddRequestHeader X-Gateway-Service = 'api-gateway'], order = 0], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.RouteToRequestUrlFilter@1fcc3461}, order = 10000], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.config.GatewayNoLoadBalancerClientAutoConfiguration$NoLoadBalancerClientFilter@1a8b22b5}, order = 10150], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.WebsocketRoutingFilter@41bbb219}, order = 2147483646], GatewayFilterAdapter{delegate=com.microservices.apigateway.config.GatewayConfig$$Lambda/0x000072793060c8f8@71f8ce0e}, [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.NettyRoutingFilter@4fd92289}, order = 2147483647], [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.ForwardRoutingFilter@1987807b}, order = 2147483647]]
+2025-10-17 14:37:07 [reactor-http-epoll-3] ERROR o.s.c.g.f.ratelimit.RedisRateLimiter - Error calling rate limiter lua
+org.springframework.data.redis.RedisConnectionFailureException: Unable to connect to Redis
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.translateException(LettuceConnectionFactory.java:1866)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.getConnection(LettuceConnectionFactory.java:1797)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.getNativeConnection(LettuceConnectionFactory.java:1594)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.lambda$getConnection$0(LettuceConnectionFactory.java:1574)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.doInLock(LettuceConnectionFactory.java:1535)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.getConnection(LettuceConnectionFactory.java:1571)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getSharedReactiveConnection(LettuceConnectionFactory.java:1282)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getReactiveConnection(LettuceConnectionFactory.java:1157)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getReactiveConnection(LettuceConnectionFactory.java:121)
+	at reactor.core.publisher.MonoSupplier.call(MonoSupplier.java:67)
+	at reactor.core.publisher.FluxUsingWhen.subscribe(FluxUsingWhen.java:80)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576)
+	at reactor.core.publisher.FluxFlatMap.trySubscribeScalarMap(FluxFlatMap.java:202)
+	at reactor.core.publisher.MonoFlatMap.subscribeOrReturn(MonoFlatMap.java:53)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:63)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at io.github.resilience4j.reactor.bulkhead.operator.MonoBulkhead.subscribe(MonoBulkhead.java:37)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at io.github.resilience4j.reactor.circuitbreaker.operator.MonoCircuitBreaker.subscribe(MonoCircuitBreaker.java:38)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at reactor.core.publisher.FluxRetryWhen.subscribe(FluxRetryWhen.java:81)
+	at reactor.core.publisher.MonoRetryWhen.subscribeOrReturn(MonoRetryWhen.java:46)
+	at reactor.core.publisher.MonoFromFluxOperator.subscribe(MonoFromFluxOperator.java:75)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576)
+	at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.subscribeNext(MonoIgnoreThen.java:265)
+	at reactor.core.publisher.MonoIgnoreThen.subscribe(MonoIgnoreThen.java:51)
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:165)
+	at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onNext(FluxSwitchIfEmpty.java:74)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onNext(FluxMap.java:122)
+	at reactor.core.publisher.FluxDefaultIfEmpty$DefaultIfEmptySubscriber.onNext(FluxDefaultIfEmpty.java:122)
+	at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onNext(FluxContextWrite.java:107)
+	at reactor.core.publisher.FluxMapFuseable$MapFuseableConditionalSubscriber.onNext(FluxMapFuseable.java:299)
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableConditionalSubscriber.onNext(FluxFilterFuseable.java:337)
+	at reactor.core.publisher.Operators$BaseFluxToMonoOperator.completePossiblyEmpty(Operators.java:2096)
+	at reactor.core.publisher.MonoCollect$CollectSubscriber.onComplete(MonoCollect.java:145)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144)
+	at reactor.core.publisher.FluxPeek$PeekSubscriber.onComplete(FluxPeek.java:260)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144)
+	at reactor.netty.channel.FluxReceive.onInboundComplete(FluxReceive.java:413)
+	at reactor.netty.channel.ChannelOperations.onInboundComplete(ChannelOperations.java:455)
+	at reactor.netty.http.server.HttpServerOperations.handleLastHttpContent(HttpServerOperations.java:903)
+	at reactor.netty.http.server.HttpServerOperations.onInboundNext(HttpServerOperations.java:812)
+	at reactor.netty.channel.ChannelOperationsHandler.channelRead(ChannelOperationsHandler.java:115)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at reactor.netty.http.server.HttpTrafficHandler.channelRead(HttpTrafficHandler.java:321)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:318)
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+	at io.netty.channel.epoll.AbstractEpollStreamChannel$EpollStreamUnsafe.epollInReady(AbstractEpollStreamChannel.java:799)
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:501)
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:399)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Unknown Source)
+Caused by: io.lettuce.core.RedisConnectionException: Unable to connect to redis/<unresolved>:6379
+	at io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:63)
+	at io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:41)
+	at io.lettuce.core.AbstractRedisClient.getConnection(AbstractRedisClient.java:354)
+	at io.lettuce.core.RedisClient.connect(RedisClient.java:220)
+	at org.springframework.data.redis.connection.lettuce.StandaloneConnectionProvider.lambda$getConnection$1(StandaloneConnectionProvider.java:112)
+	at java.base/java.util.Optional.orElseGet(Unknown Source)
+	at org.springframework.data.redis.connection.lettuce.StandaloneConnectionProvider.getConnection(StandaloneConnectionProvider.java:112)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.getConnection(LettuceConnectionFactory.java:1795)
+	... 75 common frames omitted
+Caused by: java.net.UnknownHostException: Failed to resolve 'redis' [A(1)] after 2 queries 
+	at io.netty.resolver.dns.DnsResolveContext.finishResolve(DnsResolveContext.java:1150)
+	at io.netty.resolver.dns.DnsResolveContext.tryToFinishResolve(DnsResolveContext.java:1097)
+	at io.netty.resolver.dns.DnsResolveContext.query(DnsResolveContext.java:455)
+	at io.netty.resolver.dns.DnsResolveContext.onResponse(DnsResolveContext.java:686)
+	at io.netty.resolver.dns.DnsResolveContext.access$500(DnsResolveContext.java:70)
+	at io.netty.resolver.dns.DnsResolveContext$2.operationComplete(DnsResolveContext.java:513)
+	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:603)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners0(DefaultPromise.java:596)
+	at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:572)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:505)
+	at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:649)
+	at io.netty.util.concurrent.DefaultPromise.setSuccess0(DefaultPromise.java:638)
+	at io.netty.util.concurrent.DefaultPromise.trySuccess(DefaultPromise.java:118)
+	at io.netty.resolver.dns.DnsQueryContext.trySuccess(DnsQueryContext.java:308)
+	at io.netty.resolver.dns.DnsQueryContext.finishSuccess(DnsQueryContext.java:299)
+	at io.netty.resolver.dns.DnsNameResolver$DnsResponseHandler.channelRead(DnsNameResolver.java:1491)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:107)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+	at io.netty.channel.epoll.EpollDatagramChannel.processPacket(EpollDatagramChannel.java:662)
+	at io.netty.channel.epoll.EpollDatagramChannel.recvmsg(EpollDatagramChannel.java:697)
+	at io.netty.channel.epoll.EpollDatagramChannel.access$300(EpollDatagramChannel.java:56)
+	at io.netty.channel.epoll.EpollDatagramChannel$EpollDatagramChannelUnsafe.epollInReady(EpollDatagramChannel.java:536)
+	... 6 common frames omitted
+Caused by: io.netty.resolver.dns.DnsErrorCauseException: Query failed with NXDOMAIN
+	at io.netty.resolver.dns.DnsResolveContext.onResponse(..)(Unknown Source)
+2025-10-17 14:37:07 [reactor-http-epoll-3] DEBUG o.s.c.g.f.ratelimit.RedisRateLimiter - response: Response{allowed=true, headers={X-RateLimit-Remaining=-1, X-RateLimit-Requested-Tokens=1, X-RateLimit-Burst-Capacity=20, X-RateLimit-Replenish-Rate=10}, tokensRemaining=-1}
+2025-10-17 14:37:07 [reactor-http-epoll-3] DEBUG o.s.c.g.f.h.o.ObservedRequestHttpHeadersFilter - Will instrument the HTTP request headers [Host:"localhost:8080", User-Agent:"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:144.0) Gecko/20100101 Firefox/144.0", Accept:"application/json, text/plain, */*", Accept-Language:"en-US,en;q=0.5", Accept-Encoding:"gzip, deflate, br, zstd", Content-Type:"application/json", Content-Length:"42", Origin:"http://localhost:5173", Referer:"http://localhost:5173/", Sec-Fetch-Dest:"empty", Sec-Fetch-Mode:"cors", Sec-Fetch-Site:"same-site", Priority:"u=0", Pragma:"no-cache", Cache-Control:"no-cache", X-Gateway-Service:"api-gateway"]
+2025-10-17 14:37:07 [reactor-http-epoll-3] DEBUG o.s.c.g.f.h.o.ObservedRequestHttpHeadersFilter - Client observation  {name=http.client.requests(null), error=null, context=name='http.client.requests', contextualName='null', error='null', lowCardinalityKeyValues=[http.method='POST', http.status_code='UNKNOWN', spring.cloud.gateway.route.id='auth-service', spring.cloud.gateway.route.uri='http://auth-service:8082'], highCardinalityKeyValues=[http.uri='http://localhost:8080/api/auth/login'], map=[class io.micrometer.core.instrument.Timer$Sample='io.micrometer.core.instrument.Timer$Sample@7980077b', class io.micrometer.core.instrument.LongTaskTimer$Sample='SampleImpl{duration(seconds)=2.96966E-4, duration(nanos)=296966.0, startTimeNanos=4119703922348}'], parentObservation={name=http.server.requests(null), error=null, context=name='http.server.requests', contextualName='null', error='null', lowCardinalityKeyValues=[exception='none', method='POST', outcome='SUCCESS', status='200', uri='UNKNOWN'], highCardinalityKeyValues=[http.url='/api/auth/login'], map=[class io.micrometer.core.instrument.Timer$Sample='io.micrometer.core.instrument.Timer$Sample@3fee731b', class io.micrometer.core.instrument.LongTaskTimer$Sample='SampleImpl{duration(seconds)=0.96846019, duration(nanos)=9.6846019E8, startTimeNanos=4118735986764}'], parentObservation=null}} created for the request. New headers are [Host:"localhost:8080", User-Agent:"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:144.0) Gecko/20100101 Firefox/144.0", Accept:"application/json, text/plain, */*", Accept-Language:"en-US,en;q=0.5", Accept-Encoding:"gzip, deflate, br, zstd", Content-Type:"application/json", Content-Length:"42", Origin:"http://localhost:5173", Referer:"http://localhost:5173/", Sec-Fetch-Dest:"empty", Sec-Fetch-Mode:"cors", Sec-Fetch-Site:"same-site", Priority:"u=0", Pragma:"no-cache", Cache-Control:"no-cache", X-Gateway-Service:"api-gateway"]
+2025-10-17 14:37:08 [reactor-http-epoll-3] DEBUG i.g.r.c.i.CircuitBreakerStateMachine - CircuitBreaker 'authServiceCircuitBreaker' recorded an exception as failure:
+java.net.UnknownHostException: Failed to resolve 'auth-service' [A(1)] after 2 queries 
+	at io.netty.resolver.dns.DnsResolveContext.finishResolve(DnsResolveContext.java:1150)
+	at io.netty.resolver.dns.DnsResolveContext.tryToFinishResolve(DnsResolveContext.java:1097)
+	at io.netty.resolver.dns.DnsResolveContext.query(DnsResolveContext.java:455)
+	at io.netty.resolver.dns.DnsResolveContext.onResponse(DnsResolveContext.java:686)
+	at io.netty.resolver.dns.DnsResolveContext.access$500(DnsResolveContext.java:70)
+	at io.netty.resolver.dns.DnsResolveContext$2.operationComplete(DnsResolveContext.java:513)
+	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:603)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners0(DefaultPromise.java:596)
+	at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:572)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:505)
+	at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:649)
+	at io.netty.util.concurrent.DefaultPromise.setSuccess0(DefaultPromise.java:638)
+	at io.netty.util.concurrent.DefaultPromise.trySuccess(DefaultPromise.java:118)
+	at io.netty.resolver.dns.DnsQueryContext.trySuccess(DnsQueryContext.java:308)
+	at io.netty.resolver.dns.DnsQueryContext.finishSuccess(DnsQueryContext.java:299)
+	at io.netty.resolver.dns.DnsNameResolver$DnsResponseHandler.channelRead(DnsNameResolver.java:1491)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:107)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+	at io.netty.channel.epoll.EpollDatagramChannel.processPacket(EpollDatagramChannel.java:662)
+	at io.netty.channel.epoll.EpollDatagramChannel.recvmsg(EpollDatagramChannel.java:697)
+	at io.netty.channel.epoll.EpollDatagramChannel.access$300(EpollDatagramChannel.java:56)
+	at io.netty.channel.epoll.EpollDatagramChannel$EpollDatagramChannelUnsafe.epollInReady(EpollDatagramChannel.java:536)
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:501)
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:399)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Unknown Source)
+Caused by: io.netty.resolver.dns.DnsErrorCauseException: Query failed with NXDOMAIN
+	at io.netty.resolver.dns.DnsResolveContext.onResponse(..)(Unknown Source)
+2025-10-17 14:37:08 [reactor-http-epoll-3] DEBUG i.g.r.c.i.CircuitBreakerStateMachine - Event ERROR published: 2025-10-17T14:37:08.404425974+05:30[Asia/Kolkata]: CircuitBreaker 'authServiceCircuitBreaker' recorded an error: 'java.net.UnknownHostException: Failed to resolve 'auth-service' [A(1)] after 2 queries '. Elapsed time: 1504 ms
+2025-10-17 14:40:10 [reactor-http-epoll-4] ERROR c.m.a.e.GlobalErrorWebExceptionHandler - Error in gateway: 
+org.springframework.web.reactive.resource.NoResourceFoundException: 404 NOT_FOUND "No static resource api/auth/login."
+	at org.springframework.web.reactive.resource.ResourceWebHandler.lambda$handle$1(ResourceWebHandler.java:434)
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
+	*__checkpoint ⇢ HTTP POST "//api/auth/login" [ExceptionHandlingWebHandler]
+Original Stack Trace:
+		at org.springframework.web.reactive.resource.ResourceWebHandler.lambda$handle$1(ResourceWebHandler.java:434)
+		at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:45)
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4576)
+		at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onComplete(FluxSwitchIfEmpty.java:82)
+		at reactor.core.publisher.MonoFlatMap$FlatMapMain.onComplete(MonoFlatMap.java:189)
+		at reactor.core.publisher.FluxPeek$PeekSubscriber.onComplete(FluxPeek.java:260)
+		at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onComplete(FluxSwitchIfEmpty.java:85)
+		at reactor.core.publisher.Operators.complete(Operators.java:137)
+		at reactor.core.publisher.MonoEmpty.subscribe(MonoEmpty.java:46)
+		at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4576)
+		at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onComplete(FluxSwitchIfEmpty.java:82)
+		at reactor.core.publisher.MonoNext$NextSubscriber.onComplete(MonoNext.java:102)
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.onComplete(FluxConcatMapNoPrefetch.java:241)
+		at reactor.core.publisher.FluxIterable$IterableSubscription.slowPath(FluxIterable.java:357)
+		at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:294)
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.request(FluxConcatMapNoPrefetch.java:337)
+		at reactor.core.publisher.MonoNext$NextSubscriber.request(MonoNext.java:108)
+		at reactor.core.publisher.Operators$MultiSubscriptionSubscriber.set(Operators.java:2366)
+		at reactor.core.publisher.Operators$MultiSubscriptionSubscriber.onSubscribe(Operators.java:2240)
+		at reactor.core.publisher.MonoNext$NextSubscriber.onSubscribe(MonoNext.java:70)
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.onSubscribe(FluxConcatMapNoPrefetch.java:164)
+		at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:201)
+		at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83)
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4576)
+		at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.subscribeNext(MonoIgnoreThen.java:265)
+		at reactor.core.publisher.MonoIgnoreThen.subscribe(MonoIgnoreThen.java:51)
+		at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+		at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:165)
+		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79)
+		at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onNext(FluxSwitchIfEmpty.java:74)
+		at reactor.core.publisher.MonoNext$NextSubscriber.onNext(MonoNext.java:82)
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.innerNext(FluxConcatMapNoPrefetch.java:259)
+		at reactor.core.publisher.FluxConcatMap$ConcatMapInner.onNext(FluxConcatMap.java:865)
+		at reactor.core.publisher.FluxMapFuseable$MapFuseableSubscriber.onNext(FluxMapFuseable.java:129)
+		at reactor.core.publisher.Operators$ScalarSubscription.request(Operators.java:2570)
+		at reactor.core.publisher.FluxMapFuseable$MapFuseableSubscriber.request(FluxMapFuseable.java:171)
+		at reactor.core.publisher.Operators$MultiSubscriptionSubscriber.set(Operators.java:2366)
+		at reactor.core.publisher.Operators$MultiSubscriptionSubscriber.onSubscribe(Operators.java:2240)
+		at reactor.core.publisher.FluxMapFuseable$MapFuseableSubscriber.onSubscribe(FluxMapFuseable.java:96)
+		at reactor.core.publisher.MonoJust.subscribe(MonoJust.java:55)
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4576)
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.onNext(FluxConcatMapNoPrefetch.java:207)
+		at reactor.core.publisher.FluxIterable$IterableSubscription.slowPath(FluxIterable.java:335)
+		at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:294)
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.innerComplete(FluxConcatMapNoPrefetch.java:275)
+		at reactor.core.publisher.FluxConcatMap$ConcatMapInner.onComplete(FluxConcatMap.java:889)
+		at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144)
+		at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onComplete(FluxSwitchIfEmpty.java:85)
+		at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.onComplete(MonoIgnoreThen.java:210)
+		at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.subscribeNext(MonoIgnoreThen.java:239)
+		at reactor.core.publisher.MonoIgnoreThen.subscribe(MonoIgnoreThen.java:51)
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4576)
+		at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onComplete(FluxSwitchIfEmpty.java:82)
+		at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144)
+		at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144)
+		at reactor.core.publisher.MonoNext$NextSubscriber.onComplete(MonoNext.java:102)
+		at reactor.core.publisher.FluxFilterWhen$FluxFilterWhenSubscriber.drain(FluxFilterWhen.java:236)
+		at reactor.core.publisher.FluxFilterWhen$FluxFilterWhenSubscriber.request(FluxFilterWhen.java:160)
+		at reactor.core.publisher.MonoNext$NextSubscriber.request(MonoNext.java:108)
+		at reactor.core.publisher.FluxMap$MapSubscriber.request(FluxMap.java:164)
+		at reactor.core.publisher.FluxMap$MapSubscriber.request(FluxMap.java:164)
+		at reactor.core.publisher.Operators$MultiSubscriptionSubscriber.request(Operators.java:2330)
+		at reactor.core.publisher.FluxMap$MapSubscriber.request(FluxMap.java:164)
+		at reactor.core.publisher.Operators$MultiSubscriptionSubscriber.request(Operators.java:2330)
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.request(FluxConcatMapNoPrefetch.java:339)
+		at reactor.core.publisher.MonoNext$NextSubscriber.request(MonoNext.java:108)
+		at reactor.core.publisher.Operators$MultiSubscriptionSubscriber.set(Operators.java:2366)
+		at reactor.core.publisher.Operators$MultiSubscriptionSubscriber.onSubscribe(Operators.java:2240)
+		at reactor.core.publisher.MonoNext$NextSubscriber.onSubscribe(MonoNext.java:70)
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.onSubscribe(FluxConcatMapNoPrefetch.java:164)
+		at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:201)
+		at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83)
+		at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+		at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+		at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+		at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53)
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4576)
+		at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.subscribeNext(MonoIgnoreThen.java:265)
+		at reactor.core.publisher.MonoIgnoreThen.subscribe(MonoIgnoreThen.java:51)
+		at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76)
+		at reactor.core.publisher.MonoDeferContextual.subscribe(MonoDeferContextual.java:55)
+		at reactor.netty.http.server.HttpServer$HttpServerHandle.onStateChange(HttpServer.java:1324)
+		at reactor.netty.ReactorNetty$CompositeConnectionObserver.onStateChange(ReactorNetty.java:722)
+		at reactor.netty.transport.ServerTransport$ChildObserver.onStateChange(ServerTransport.java:486)
+		at reactor.netty.http.server.HttpServerOperations.handleDefaultHttpRequest(HttpServerOperations.java:870)
+		at reactor.netty.http.server.HttpServerOperations.onInboundNext(HttpServerOperations.java:796)
+		at reactor.netty.channel.ChannelOperationsHandler.channelRead(ChannelOperationsHandler.java:115)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+		at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+		at reactor.netty.http.server.HttpTrafficHandler.channelRead(HttpTrafficHandler.java:272)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+		at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+		at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436)
+		at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346)
+		at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:333)
+		at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:455)
+		at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:290)
+		at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+		at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+		at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+		at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+		at io.netty.channel.epoll.AbstractEpollStreamChannel$EpollStreamUnsafe.epollInReady(AbstractEpollStreamChannel.java:799)
+		at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:501)
+		at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:399)
+		at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+		at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+		at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+		at java.base/java.lang.Thread.run(Unknown Source)
+2025-10-17 14:56:49 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.netty.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-17 14:56:49 [netty-shutdown] INFO  o.s.b.w.e.netty.GracefulShutdown - Graceful shutdown complete
