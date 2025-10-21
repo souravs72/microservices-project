@@ -73,7 +73,8 @@ public class UserService {
                 sanitizedEmail,
                 request.getFirstName(),
                 request.getLastName(),
-                request.getPassword()
+                request.getPassword(),
+                user.getRole().toString()
             );
             log.info("Published user created event for: {}", sanitizedUsername);
         } catch (Exception e) {

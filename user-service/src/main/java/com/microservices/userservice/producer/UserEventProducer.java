@@ -22,7 +22,7 @@ public class UserEventProducer {
     @Value("${app.kafka.topic.user-events:user-events}")
     private String userEventsTopic;
 
-    public void publishUserCreated(String username, String email, String firstName, String lastName, String password) {
+    public void publishUserCreated(String username, String email, String firstName, String lastName, String password, String role) {
         try {
             Map<String, Object> payload = new HashMap<>();
             payload.put("username", username);
@@ -30,6 +30,7 @@ public class UserEventProducer {
             payload.put("firstName", firstName);
             payload.put("lastName", lastName);
             payload.put("password", password);
+            payload.put("role", role);
             payload.put("eventType", "USER_CREATED_FROM_USER_SERVICE");
             payload.put("timestamp", System.currentTimeMillis());
             payload.put("source", "user-service");

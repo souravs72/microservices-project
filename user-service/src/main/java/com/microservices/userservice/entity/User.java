@@ -1,6 +1,5 @@
 package com.microservices.userservice.entity;
 
-import com.microservices.common.entity.AuditableEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -10,12 +9,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 /**
  * User entity representing a user in the system.
- * Extends AuditableEntity for automatic audit trail tracking.
+ * Includes inline audit fields for automatic audit trail tracking.
  */
 @Entity
 @Table(name = "users", 
@@ -31,10 +33,11 @@ import java.time.LocalDateTime;
            @UniqueConstraint(name = "uk_users_email", columnNames = "email")
        })
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends AuditableEntity {
+@EntityListeners(AuditingEntityListener.class)
+public class User {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -111,6 +114,30 @@ public class User extends AuditableEntity {
 
     @Column(name = "email_verification_expires_at")
     private LocalDateTime emailVerificationExpiresAt;
+
+    // Audit fields
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Column(name = "created_by")
+    private String createdBy;
+
+    @Column(name = "updated_by")
+    private String updatedBy;
+
+    @Column(name = "created_from_ip")
+    private String createdFromIp;
+
+    @Column(name = "updated_from_ip")
+    private String updatedFromIp;
+
+    @Version
+    private Long version;
 
     /**
      * Check if the user account is locked
