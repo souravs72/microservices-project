@@ -117,6 +117,24 @@ public class GatewayConfig {
                         .uri(userServiceUrl))
 
                 // ==========================
+                // User Service - Get All Users (requires auth)
+                // ==========================
+                .route("user-service-get-all", r -> r
+                        .path("/api/users")
+                        .and()
+                        .method(HttpMethod.GET)
+                        .filters(f -> f
+                                .filter(authenticationFilter.apply(new AuthenticationFilter.Config()))
+                                .retry(config -> config
+                                        .setRetries(2)
+                                        .setBackoff(Duration.ofMillis(100), Duration.ofMillis(500), 2, true))
+                                .circuitBreaker(config -> config
+                                        .setName("userServiceCircuitBreaker")
+                                        .setFallbackUri("forward:/fallback/users"))
+                                .addRequestHeader("X-Gateway-Service", "api-gateway"))
+                        .uri(userServiceUrl))
+
+                // ==========================
                 // User Service (REST, requires auth)
                 // ==========================
                 .route("user-service-rest", r -> r

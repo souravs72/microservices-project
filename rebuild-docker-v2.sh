@@ -74,18 +74,24 @@ cleanup_containers() {
     print_success "Containers cleaned up"
 }
 
-# Function to clean Kafka volumes (fixes cluster ID mismatch issues)
+# Function to clean Kafka and Zookeeper volumes (fixes cluster ID mismatch and broker registration issues)
 cleanup_kafka_volumes() {
-    print_status "Cleaning Kafka volumes to prevent cluster ID mismatch..."
+    print_status "Cleaning Kafka and Zookeeper volumes to prevent cluster ID mismatch and broker registration issues..."
     
-    # Stop Kafka specifically if running
+    # Stop Kafka and Zookeeper specifically if running
     docker stop kafka 2>/dev/null || true
     docker rm kafka 2>/dev/null || true
+    docker stop zookeeper 2>/dev/null || true
+    docker rm zookeeper 2>/dev/null || true
     
-    # Remove Kafka volume to clear cluster metadata
+    # Remove Kafka and Zookeeper volumes to clear all metadata
     docker volume rm microservices-parent_kafka_data 2>/dev/null || true
+    docker volume rm microservices-parent_zookeeper_data 2>/dev/null || true
     
-    print_success "Kafka volumes cleaned up"
+    # Also clean up any orphaned volumes
+    docker volume prune -f 2>/dev/null || true
+    
+    print_success "Kafka and Zookeeper volumes cleaned up"
 }
 
 # Function to remove old images (optional)
@@ -103,9 +109,9 @@ cleanup_images() {
     fi
 }
 
-# Function to build and start services
+# Function to build and start services with proper order
 build_and_start() {
-    print_status "Building and starting services..."
+    print_status "Building and starting services with proper order..."
     
     # Source environment variables
     source .env
@@ -113,7 +119,35 @@ build_and_start() {
     # Try docker compose first, fallback to docker-compose
     if command -v docker > /dev/null 2>&1 && docker compose version > /dev/null 2>&1; then
         print_status "Using 'docker compose' command..."
-        docker compose up --build -d
+        
+        # First, start infrastructure services (databases, redis, zookeeper)
+        print_status "Starting infrastructure services..."
+        docker compose up -d postgres-auth postgres-user postgres-order postgres-inventory postgres-notification redis zookeeper
+        
+        # Wait for Zookeeper to be ready
+        print_status "Waiting for Zookeeper to be ready..."
+        sleep 10
+        
+        # Start Kafka after Zookeeper is ready
+        print_status "Starting Kafka..."
+        docker compose up -d kafka
+        
+        # Wait for Kafka to be ready
+        print_status "Waiting for Kafka to be ready..."
+        sleep 15
+        
+        # Start monitoring services
+        print_status "Starting monitoring services..."
+        docker compose up -d prometheus grafana
+        
+        # Start application services
+        print_status "Starting application services..."
+        docker compose up -d auth-service user-service order-service inventory-service notification-service
+        
+        # Start API Gateway and Frontend
+        print_status "Starting API Gateway and Frontend..."
+        docker compose up -d api-gateway frontend
+        
     elif command -v docker-compose > /dev/null 2>&1; then
         print_status "Using 'docker-compose' command..."
         docker-compose up --build -d
@@ -122,7 +156,7 @@ build_and_start() {
         exit 1
     fi
     
-    print_success "Services built and started"
+    print_success "All services started with proper order"
 }
 
 # Function to wait for services to be healthy

@@ -69,8 +69,9 @@ public class UserEventConsumer {
             String firstName = (String) eventData.get("firstName");
             String lastName = (String) eventData.get("lastName");
             String password = (String) eventData.get("password");
+            String roleString = (String) eventData.get("role");
 
-            log.info("Processing USER_CREATED_FROM_USER_SERVICE event for user: {}", username);
+            log.info("Processing USER_CREATED_FROM_USER_SERVICE event for user: {} with role: {}", username, roleString);
 
             // Check if user already exists in auth database
             if (userRepository.existsByUsername(username)) {
@@ -78,12 +79,21 @@ public class UserEventConsumer {
                 return;
             }
 
+            // Parse role from event data, default to USER if not provided or invalid
+            User.UserRole role;
+            try {
+                role = User.UserRole.valueOf(roleString != null ? roleString : "USER");
+            } catch (IllegalArgumentException e) {
+                log.warn("Invalid role '{}' for user {}, defaulting to USER", roleString, username);
+                role = User.UserRole.USER;
+            }
+
             // Create user in auth database
             User user = new User();
             user.setUsername(username);
             user.setEmail(email);
             user.setPassword(passwordEncoder.encode(password));
-            user.setRole(User.UserRole.USER);
+            user.setRole(role);
             user.setEnabled(true);
             user.setFailedLoginAttempts(0);
             user.setAccountLocked(false);
@@ -94,7 +104,7 @@ public class UserEventConsumer {
 
             userRepository.save(user);
             
-            log.info("Successfully created user in auth database for: {}", username);
+            log.info("Successfully created user in auth database for: {} with role: {}", username, role);
 
         } catch (Exception e) {
             log.error("Error processing user created event from user service: {}", eventData, e);
