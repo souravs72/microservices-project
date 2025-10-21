@@ -1,12 +1,12 @@
 services:
   # Database Services
   postgres-auth:
-    image: postgres:15-alpine
+    image: postgres:16.10-alpine3.22
     container_name: postgres-auth
     environment:
       POSTGRES_DB: authdb
       POSTGRES_USER: authuser
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-authpassword123}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD required}
     volumes:
       - auth_db_data:/var/lib/postgresql/data
       - ./init-scripts/auth-db-init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -21,12 +21,12 @@ services:
       retries: 5
 
   postgres-user:
-    image: postgres:15-alpine
+    image: postgres:16.10-alpine3.22
     container_name: postgres-user
     environment:
       POSTGRES_DB: userdb
       POSTGRES_USER: useruser
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-userpassword123}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD required}
     volumes:
       - user_db_data:/var/lib/postgresql/data
       - ./init-scripts/user-db-init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -40,33 +40,13 @@ services:
       timeout: 5s
       retries: 5
 
-  postgres-notification:
-    image: postgres:15-alpine
-    container_name: postgres-notification
-    environment:
-      POSTGRES_DB: notificationdb
-      POSTGRES_USER: notificationuser
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-notificationpassword123}
-    volumes:
-      - notification_db_data:/var/lib/postgresql/data
-      - ./init-scripts/notification-db-init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5434:5432"
-    networks:
-      - microservices-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U notificationuser -d notificationdb"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   postgres-order:
-    image: postgres:15-alpine
+    image: postgres:16.10-alpine3.22
     container_name: postgres-order
     environment:
       POSTGRES_DB: orderdb
       POSTGRES_USER: orderuser
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-orderpassword123}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD required}
     volumes:
       - order_db_data:/var/lib/postgresql/data
       - ./init-scripts/order-db-init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -81,12 +61,12 @@ services:
       retries: 5
 
   postgres-inventory:
-    image: postgres:15-alpine
+    image: postgres:16.10-alpine3.22
     container_name: postgres-inventory
     environment:
       POSTGRES_DB: inventorydb
       POSTGRES_USER: inventoryuser
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-inventorypassword123}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD required}
     volumes:
       - inventory_db_data:/var/lib/postgresql/data
       - ./init-scripts/inventory-db-init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -100,11 +80,31 @@ services:
       timeout: 5s
       retries: 5
 
+  postgres-notification:
+    image: postgres:16.10-alpine3.22
+    container_name: postgres-notification
+    environment:
+      POSTGRES_DB: notificationdb
+      POSTGRES_USER: notificationuser
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD required}
+    volumes:
+      - notification_db_data:/var/lib/postgresql/data
+      - ./init-scripts/notification-db-init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5434:5432"
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U notificationuser -d notificationdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   # Redis Service
   redis:
     image: redis:7-alpine
     container_name: redis
-    command: redis-server --requirepass ${REDIS_PASSWORD:-devredis123}
+    command: redis-server --requirepass ${REDIS_PASSWORD:?REDIS_PASSWORD required}
     ports:
       - "6379:6379"
     volumes:
@@ -143,6 +143,15 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      # Fix for cluster ID mismatch issues
+      KAFKA_CLUSTER_ID: "microservices-cluster-${RANDOM:-12345}"
+      KAFKA_LOG_DIRS: "/var/lib/kafka/data"
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      # Auto-cleanup settings
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_LOG_SEGMENT_BYTES: 1073741824
+      KAFKA_LOG_CLEANUP_POLICY: "delete"
     volumes:
       - kafka_data:/var/lib/kafka/data
     networks:
@@ -158,6 +167,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 60s
 
   # API Gateway
   api-gateway:
@@ -168,12 +178,13 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_PROFILES_ACTIVE=docker
       - AUTH_SERVICE_URL=http://auth-service:8082
       - USER_SERVICE_URL=http://user-service:8081
       - ORDER_SERVICE_URL=http://order-service:8083
       - INVENTORY_SERVICE_URL=http://inventory-service:8084
       - NOTIFICATION_SERVICE_URL=http://notification-service:8085
+    entrypoint: ["sh", "-lc", "exec /opt/java/openjdk/bin/java -jar app.jar"]
     depends_on:
       - auth-service
       - user-service
@@ -197,24 +208,26 @@ services:
     ports:
       - "8082:8082"
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_PROFILES_ACTIVE=docker
       - DB_URL=jdbc:postgresql://postgres-auth:5432/authdb
       - DB_USERNAME=authuser
-      - DB_PASSWORD=${DB_PASSWORD:-authpassword123}
+      - DB_PASSWORD=${DB_PASSWORD:?DB_PASSWORD required}
       - REDIS_HOST=redis
-      - REDIS_PASSWORD=${REDIS_PASSWORD:-devredis123}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:?REDIS_PASSWORD required}
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
-      - JWT_SECRET=${JWT_SECRET}
+      - MAIL_HOST=${MAIL_HOST:?MAIL_HOST required}
+      - MAIL_PORT=${MAIL_PORT:?MAIL_PORT required}
+      - KAFKA_USER_EVENTS_TOPIC=${KAFKA_USER_EVENTS_TOPIC:-user-events-dev}
+      - JWT_SECRET=${JWT_SECRET:?JWT_SECRET required}
       - JWT_ACCESS_TOKEN_EXPIRATION=7200000
-      - MAIL_HOST=${MAIL_HOST:-smtp.gmail.com}
-      - MAIL_PORT=${MAIL_PORT:-587}
-      - MAIL_USERNAME=${MAIL_USERNAME:-souravsingh2609@gmail.com}
-      - MAIL_PASSWORD=${MAIL_PASSWORD:-bhooqxmxjnwkccgb}
+      - MAIL_USERNAME=${MAIL_USERNAME:?MAIL_USERNAME required}
+      - MAIL_PASSWORD=${MAIL_PASSWORD:?MAIL_PASSWORD required}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173}
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:?ADMIN_PASSWORD required}
       - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@example.com}
       - ADMIN_ENABLED=${ADMIN_ENABLED:-true}
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY:?INTERNAL_API_KEY required}
     depends_on:
       postgres-auth:
         condition: service_healthy
@@ -239,16 +252,16 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
-      - DB_URL=jdbc:postgresql://postgres-user:5432/userdb
-      - DB_USERNAME=useruser
-      - DB_PASSWORD=${DB_PASSWORD:-userpassword123}
+      - SPRING_PROFILES_ACTIVE=docker
+      - DATABASE_URL=jdbc:postgresql://postgres-user:5432/userdb
+      - DATABASE_USERNAME=useruser
+      - DATABASE_PASSWORD=${DB_PASSWORD:?DB_PASSWORD required}
       - REDIS_HOST=redis
-      - REDIS_PASSWORD=${REDIS_PASSWORD:-devredis123}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:?REDIS_PASSWORD required}
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
       - AUTH_SERVICE_URL=http://auth-service:8082
-      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
-      - JWT_SECRET=${JWT_SECRET}
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY:?INTERNAL_API_KEY required}
+      - JWT_SECRET=${JWT_SECRET:?JWT_SECRET required}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173}
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
       - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@example.com}
@@ -281,18 +294,18 @@ services:
     ports:
       - "8083:8083"
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_PROFILES_ACTIVE=docker
       - DB_URL=jdbc:postgresql://postgres-order:5432/orderdb
       - DB_USERNAME=orderuser
-      - DB_PASSWORD=${DB_PASSWORD:-orderpassword123}
+      - DB_PASSWORD=${DB_PASSWORD:?DB_PASSWORD required}
       - REDIS_HOST=redis
-      - REDIS_PASSWORD=${REDIS_PASSWORD:-devredis123}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:?REDIS_PASSWORD required}
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
       - AUTH_SERVICE_URL=http://auth-service:8082
       - USER_SERVICE_URL=http://user-service:8081
       - INVENTORY_SERVICE_URL=http://inventory-service:8084
-      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
-      - JWT_SECRET=${JWT_SECRET}
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY:?INTERNAL_API_KEY required}
+      - JWT_SECRET=${JWT_SECRET:?JWT_SECRET required}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173,http://localhost:8080,http://localhost:8081,http://localhost:8082,http://localhost:8083}
     depends_on:
       postgres-order:
@@ -324,14 +337,14 @@ services:
     ports:
       - "8084:8084"
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_PROFILES_ACTIVE=docker
       - DB_URL=jdbc:postgresql://postgres-inventory:5432/inventorydb
       - DB_USERNAME=inventoryuser
-      - DB_PASSWORD=${DB_PASSWORD:-inventorypassword123}
+      - DB_PASSWORD=${DB_PASSWORD:?DB_PASSWORD required}
       - REDIS_HOST=redis
-      - REDIS_PASSWORD=${REDIS_PASSWORD:-devredis123}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:?REDIS_PASSWORD required}
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
-      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY:?INTERNAL_API_KEY required}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173,http://localhost:8080,http://localhost:8081,http://localhost:8082,http://localhost:8083,http://localhost:8084}
     depends_on:
       postgres-inventory:
@@ -357,18 +370,21 @@ services:
     ports:
       - "8085:8085"
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_PROFILES_ACTIVE=docker
       - DB_URL=jdbc:postgresql://postgres-notification:5432/notificationdb
       - DB_USERNAME=notificationuser
-      - DB_PASSWORD=${DB_PASSWORD:-notificationpassword123}
+      - DB_PASSWORD=${DB_PASSWORD:?DB_PASSWORD required}
       - REDIS_HOST=redis
-      - REDIS_PASSWORD=${REDIS_PASSWORD:-devredis123}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:?REDIS_PASSWORD required}
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
-      - JWT_SECRET=${JWT_SECRET}
-      - MAIL_USERNAME=${MAIL_USERNAME}
-      - MAIL_PASSWORD=${MAIL_PASSWORD}
-      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
+      - MAIL_HOST=${MAIL_HOST:?MAIL_HOST required}
+      - MAIL_PORT=${MAIL_PORT:-587}
+      - KAFKA_USER_EVENTS_TOPIC=${KAFKA_USER_EVENTS_TOPIC:-user-events-dev}
+      - KAFKA_USER_EVENTS_DLQ_TOPIC=${KAFKA_USER_EVENTS_DLQ_TOPIC:-user-events-dlq-dev}
+      - JWT_SECRET=${JWT_SECRET:?JWT_SECRET required}
+      - MAIL_USERNAME=${MAIL_USERNAME:?MAIL_USERNAME required}
+      - MAIL_PASSWORD=${MAIL_PASSWORD:?MAIL_PASSWORD required}
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY:?INTERNAL_API_KEY required}
     depends_on:
       postgres-notification:
         condition: service_healthy
@@ -412,7 +428,7 @@ services:
     ports:
       - "5173:5173"
     environment:
-      - VITE_API_BASE_URL=http://localhost:8080
+      - VITE_API_BASE_URL=
     depends_on:
       - api-gateway
     networks:
@@ -424,7 +440,7 @@ services:
     ports:
       - "3001:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin123}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:?GRAFANA_PASSWORD required}
     volumes:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
@@ -435,9 +451,9 @@ services:
 volumes:
   auth_db_data:
   user_db_data:
-  notification_db_data:
   order_db_data:
   inventory_db_data:
+  notification_db_data:
   redis_data:
   kafka_data:
   prometheus_data:

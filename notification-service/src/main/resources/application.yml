@@ -1,31 +1,14 @@
-# Base Configuration for Notification Service
-# Environment-specific configurations are in application-{profile}.yml files
-
 spring:
   application:
     name: notification-service
-
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE:dev}
+    active: dev
 
-# Server Configuration
 server:
   port: 8085
-  servlet:
-    context-path: /
 
-# Kafka Topics - Common configuration
-kafka:
-  topics:
-    user-events: user-events
-    order-events: order-events
-    order-notifications: order-events
-    user-events-dlq: user-events-dlq
-    order-events-dlq: order-events-dlq
-    order-notifications-dlq: order-events-dlq
-
-# Idempotency Configuration - Common settings
-idempotency:
-  redis:
-    key-prefix: "notification:"
-    ttl-seconds: 3600 # 1 hour
+logging:
+  level:
+    com.microservices.notificationservice: DEBUG
+    org.springframework.kafka: INFO
+    org.springframework.security: DEBUG

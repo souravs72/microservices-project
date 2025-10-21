@@ -201,17 +201,7 @@ class UserGraphQLControllerTest {
     // === Helpers ===
 
     private UserDTO createMockUser(Long id, String username, String email) {
-        return new UserDTO(
-                id,
-                username,
-                email,
-                "First",
-                "Last",
-                "+1234567890",
-                true,
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+        return new UserDTO(id, username, email, "First", "Last", "+1234567890", "Address", "Bio", "ProfilePictureUrl", "Role", LocalDateTime.now(), true, LocalDateTime.now(), LocalDateTime.now(), "CreatedBy", "LastModifiedBy");
     }
 
     private java.util.Map<String, Object> createUserInput() {

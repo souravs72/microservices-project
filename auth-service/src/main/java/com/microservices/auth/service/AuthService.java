@@ -40,6 +40,7 @@ public class AuthService {
     private final OutboxEventRepository outboxEventRepository;
     private final UserServiceClient userServiceClient;
     private final ObjectMapper objectMapper;
+    private final CircuitBreakerService circuitBreakerService;
 
     @Value("${app.security.max-failed-attempts:5}")
     private int maxFailedAttempts;
@@ -71,7 +72,7 @@ public class AuthService {
         user.setUsername(sanitizedUsername);
         user.setEmail(sanitizedEmail);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole("USER");
+        user.setRole(User.UserRole.USER);
         user.setEnabled(true);
         user.setLastLoginIp(ipAddress);
         user.setLastLoginAt(LocalDateTime.now());
@@ -100,27 +101,33 @@ public class AuthService {
         );
 
         // Publish event to outbox (will be processed by scheduler)
+        // This ensures reliable delivery via Kafka with retry mechanism
         publishUserCreatedEvent(user, request.getFirstName(), request.getLastName());
         
-        // Create user profile in User Service
+        // Also try direct sync as backup (non-blocking) with circuit breaker protection
         try {
             CreateUserProfileRequest profileRequest = new CreateUserProfileRequest(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                request.getPassword(),
+                "MANAGED_BY_AUTH_SERVICE", // Don't send password
                 request.getFirstName(),
                 request.getLastName()
             );
-            userServiceClient.createUserProfile(profileRequest, internalApiKey);
-            log.info("User profile created in User Service for user: {}", sanitizedUsername);
+            
+            boolean syncSuccess = circuitBreakerService.executeUserServiceCall(profileRequest, internalApiKey);
+            if (syncSuccess) {
+                log.info("User profile created in User Service via direct sync for user: {}", sanitizedUsername);
+            } else {
+                log.warn("Direct sync failed for user: {} - Circuit breaker may be open or service unavailable", sanitizedUsername);
+            }
         } catch (Exception e) {
-            log.error("Failed to create user profile in User Service for user: {}", sanitizedUsername, e);
-            // Don't fail the registration if user profile creation fails
+            log.warn("Direct sync failed for user: {} - Kafka event will handle sync. Error: {}", sanitizedUsername, e.getMessage());
+            // Don't fail registration - Kafka event will retry
         }
 
         // Generate access token
-        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getRole());
+        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
 
         log.info("User registered successfully: {} from IP: {}", sanitizedUsername, ipAddress);
 
@@ -130,7 +137,7 @@ public class AuthService {
                 "Bearer",
                 user.getUsername(),
                 user.getEmail(),
-                user.getRole(),
+                user.getRole().name(),
                 user.getId()
         );
     }
@@ -188,7 +195,7 @@ public class AuthService {
         );
 
         // Generate access token
-        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getRole());
+        String accessToken = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
 
         log.info("User logged in successfully: {} from IP: {}", sanitizedUsername, ipAddress);
 
@@ -198,7 +205,7 @@ public class AuthService {
                 "Bearer",
                 user.getUsername(),
                 user.getEmail(),
-                user.getRole(),
+                user.getRole().name(),
                 user.getId()
         );
     }
@@ -211,7 +218,7 @@ public class AuthService {
         User user = refreshToken.getUser();
 
         // Generate new access token
-        String newAccessToken = jwtUtil.generateToken(user.getUsername(), user.getRole());
+        String newAccessToken = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
 
         // Optionally rotate refresh token for better security
         String newRefreshToken = refreshToken.getToken();

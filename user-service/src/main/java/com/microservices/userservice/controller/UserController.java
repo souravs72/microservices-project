@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -73,6 +75,29 @@ public class UserController {
             @Valid @RequestBody UpdateUserRequest request) {
         log.debug("REST API: Updating user with id {}", id);
         UserDTO user = userService.updateUser(id, request);
+        return ResponseEntity.ok(user);
+    }
+
+    @PatchMapping("/{id}/toggle-status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDTO> toggleUserStatus(
+            @PathVariable
+            @Min(value = 1, message = "ID must be positive")
+            Long id) {
+        log.debug("REST API: Toggling user status for id {}", id);
+        UserDTO user = userService.toggleUserStatus(id);
+        return ResponseEntity.ok(user);
+    }
+
+    @PostMapping("/{id}/profile-picture")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserDTO> uploadProfilePicture(
+            @PathVariable
+            @Min(value = 1, message = "ID must be positive")
+            Long id,
+            @RequestParam("file") MultipartFile file) {
+        log.debug("REST API: Uploading profile picture for user id {}", id);
+        UserDTO user = userService.uploadProfilePicture(id, file);
         return ResponseEntity.ok(user);
     }
 

@@ -5,8 +5,8 @@ spring:
   application:
     name: user-service
 
-  profiles:
-    active: ${SPRING_PROFILES_ACTIVE:dev}
+  main:
+    allow-bean-definition-overriding: true
 
   # GraphQL Configuration - Common settings
   graphql:
@@ -25,6 +25,7 @@ server:
 # Auth Service Configuration - Common settings
 auth:
   service:
+    url: ${AUTH_SERVICE_URL:http://auth-service:8082}
     validate-endpoint: /api/auth/validate
 
 # Admin User Configuration (for profile sync)
@@ -35,6 +36,17 @@ app:
     firstName: ${ADMIN_FIRST_NAME:Admin}
     lastName: ${ADMIN_LAST_NAME:User}
     enabled: ${ADMIN_ENABLED:true}
+
+  # Enhanced Synchronization Configuration
+  reconciliation:
+    enabled: true
+    batch-size: 100
+    max-age-hours: 24
+
+# Internal API Key for service-to-service communication (standardized)
+internal:
+  api:
+    key: ${INTERNAL_API_KEY:internal-api-key-123}
 
 # SpringDoc OpenAPI Configuration - Common settings
 springdoc:

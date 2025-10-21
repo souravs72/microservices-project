@@ -1,8 +1,5 @@
 # Staging Environment Configuration for Auth Service
 spring:
-  profiles:
-    active: staging
-
   # Database Configuration - PostgreSQL for staging
   datasource:
     url: ${DB_URL:jdbc:postgresql://auth-db-staging:5432/authdb}
@@ -96,11 +93,9 @@ spring:
           writetimeout: 10000
     default-encoding: UTF-8
 
-# JWT Configuration - Staging Secret
+# JWT Configuration - Staging overrides
 jwt:
   secret: ${JWT_SECRET:staging_secret_key_XK7fJ3mP9vN2wQ8rT5yU6iO1pA4sD7fG9hJ2kL5nM8qR3tY6uI9oP2aS5dF8gH1jK4lZ7xC0vB3nM6qW9eR2tY5uI8oP1aS4dF7gH0jK3lZ6xC9vB2nM5qW8eR1tY4u==}
-  access-token-expiration: 900000 # 15 minutes
-  refresh-token-expiration: 604800000 # 7 days
 
 # Security Configuration - Balanced for staging
 app:
@@ -188,7 +183,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,prometheus,circuitbreakers,retries,bulkheads,ratelimiters,beans,env
+        include: health,info,metrics,prometheus,circuitbreakers,retries,bulkheads,ratelimiters,beans
   endpoint:
     health:
       show-details: always

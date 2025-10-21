@@ -5,9 +5,6 @@ spring:
   application:
     name: auth-service
 
-  profiles:
-    active: ${SPRING_PROFILES_ACTIVE:dev}
-
 # Server Configuration
 server:
   port: 8082
@@ -34,6 +31,23 @@ app:
     email: ${ADMIN_EMAIL:admin@example.com}
     enabled: ${ADMIN_ENABLED:true}
 
+  # Enhanced Synchronization Configuration
+  kafka:
+    topic:
+      user-events: ${KAFKA_USER_EVENTS_TOPIC:user-events}
+
+  sync:
+    max-retry-attempts: 5
+    retry-delay-seconds: 30
+
+  circuit-breaker:
+    failure-threshold: 5
+    timeout-seconds: 60
+    half-open-max-calls: 3
+
+  health:
+    user-service-timeout: 5000
+
 # Kafka Topics - Common configuration
 kafka:
   topics:
@@ -50,9 +64,9 @@ outbox:
 # Service URLs
 user:
   service:
-    url: ${USER_SERVICE_URL:http://user-service:8083}
+    url: ${USER_SERVICE_URL:http://user-service:8081}
 
-# Internal API Key for service-to-service communication
+# Internal API Key for service-to-service communication (standardized)
 internal:
   api:
-    key: ${INTERNAL_API_KEY:prod_7yXJ2mQ9rT5vL8cN1pB4sD7fG0hK3lZ6xC9vB2nM5qW8eR1tY4u}
+    key: ${INTERNAL_API_KEY:internal-api-key-123}

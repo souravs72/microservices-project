@@ -12,6 +12,7 @@ import {
   XCircle,
   ChevronLeft,
   ChevronRight,
+  X,
 } from "lucide-react";
 import { inventoryAPI, type Product } from "../services/api";
 
@@ -27,6 +28,20 @@ const Inventory: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState<string | null>(null);
   const [showLowStock, setShowLowStock] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newProduct, setNewProduct] = useState({
+    name: "",
+    description: "",
+    sku: "",
+    price: "",
+    quantityInStock: "",
+    minStockLevel: "",
+    maxStockLevel: "",
+    category: "",
+    brand: "",
+    weight: "",
+    dimensions: "",
+  });
 
   // Fetch products
   const fetchProducts = async () => {
@@ -179,6 +194,39 @@ const Inventory: React.FC = () => {
     return "In Stock";
   };
 
+  const handleCreateProduct = async (): Promise<void> => {
+    try {
+      setLoading(true);
+      const payload = {
+        name: newProduct.name,
+        description: newProduct.description,
+        sku: newProduct.sku,
+        price: parseFloat(newProduct.price),
+        quantity: parseInt(newProduct.quantityInStock),
+      };
+      await inventoryAPI.createProduct(payload);
+      setShowAddModal(false);
+      setNewProduct({
+        name: "",
+        description: "",
+        sku: "",
+        price: "",
+        quantityInStock: "",
+        minStockLevel: "",
+        maxStockLevel: "",
+        category: "",
+        brand: "",
+        weight: "",
+        dimensions: "",
+      });
+      fetchProducts();
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Failed to create product");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -208,7 +256,10 @@ const Inventory: React.FC = () => {
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </button>
-          <button className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+          >
             <Plus className="h-4 w-4 mr-2" />
             Add Product
           </button>
@@ -528,6 +579,291 @@ const Inventory: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Add Product Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex min-h-screen items-center justify-center p-4">
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity"
+              onClick={() => setShowAddModal(false)}
+            />
+
+            {/* Modal */}
+            <div className="relative w-full max-w-2xl transform overflow-hidden rounded-xl bg-white shadow-2xl transition-all duration-300 ease-out">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-slate-50 to-gray-50 px-6 py-4 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100">
+                      <Plus className="h-5 w-5 text-indigo-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        Create New Product
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        Add a new product to the inventory
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowAddModal(false)}
+                    className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Form */}
+              <div className="px-6 py-6 max-h-96 overflow-y-auto">
+                <div className="space-y-5">
+                  {/* Basic Information */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Product Name *
+                      </label>
+                      <input
+                        type="text"
+                        value={newProduct.name}
+                        onChange={(e) =>
+                          setNewProduct({ ...newProduct, name: e.target.value })
+                        }
+                        className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        placeholder="Enter product name"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        SKU *
+                      </label>
+                      <input
+                        type="text"
+                        value={newProduct.sku}
+                        onChange={(e) =>
+                          setNewProduct({ ...newProduct, sku: e.target.value })
+                        }
+                        className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        placeholder="Enter SKU"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Description
+                    </label>
+                    <textarea
+                      value={newProduct.description}
+                      onChange={(e) =>
+                        setNewProduct({
+                          ...newProduct,
+                          description: e.target.value,
+                        })
+                      }
+                      rows={3}
+                      className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      placeholder="Enter product description"
+                    />
+                  </div>
+
+                  {/* Pricing and Stock */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Price *
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={newProduct.price}
+                        onChange={(e) =>
+                          setNewProduct({
+                            ...newProduct,
+                            price: e.target.value,
+                          })
+                        }
+                        className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        placeholder="0.00"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Quantity in Stock *
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={newProduct.quantityInStock}
+                        onChange={(e) =>
+                          setNewProduct({
+                            ...newProduct,
+                            quantityInStock: e.target.value,
+                          })
+                        }
+                        className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        placeholder="0"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Min Stock Level *
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={newProduct.minStockLevel}
+                        onChange={(e) =>
+                          setNewProduct({
+                            ...newProduct,
+                            minStockLevel: e.target.value,
+                          })
+                        }
+                        className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        placeholder="0"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Optional Fields */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Category
+                      </label>
+                      <input
+                        type="text"
+                        value={newProduct.category}
+                        onChange={(e) =>
+                          setNewProduct({
+                            ...newProduct,
+                            category: e.target.value,
+                          })
+                        }
+                        className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        placeholder="Enter category"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Brand
+                      </label>
+                      <input
+                        type="text"
+                        value={newProduct.brand}
+                        onChange={(e) =>
+                          setNewProduct({
+                            ...newProduct,
+                            brand: e.target.value,
+                          })
+                        }
+                        className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        placeholder="Enter brand"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Weight (kg)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.001"
+                        min="0"
+                        value={newProduct.weight}
+                        onChange={(e) =>
+                          setNewProduct({
+                            ...newProduct,
+                            weight: e.target.value,
+                          })
+                        }
+                        className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        placeholder="0.000"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Max Stock Level
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={newProduct.maxStockLevel}
+                        onChange={(e) =>
+                          setNewProduct({
+                            ...newProduct,
+                            maxStockLevel: e.target.value,
+                          })
+                        }
+                        className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        placeholder="Optional"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Dimensions
+                    </label>
+                    <input
+                      type="text"
+                      value={newProduct.dimensions}
+                      onChange={(e) =>
+                        setNewProduct({
+                          ...newProduct,
+                          dimensions: e.target.value,
+                        })
+                      }
+                      className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      placeholder="e.g., 10x5x3 cm"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={() => setShowAddModal(false)}
+                    className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleCreateProduct}
+                    disabled={loading}
+                    className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? (
+                      <div className="flex items-center">
+                        <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                        Creating...
+                      </div>
+                    ) : (
+                      <div className="flex items-center">
+                        <Plus className="mr-2 h-4 w-4" />
+                        Create Product
+                      </div>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,13 +1,13 @@
-# Development Environment Configuration for User Service
+# Docker Environment Configuration for User Service
 spring:
-  # Database Configuration - H2 for development
+  # Database Configuration - PostgreSQL for Docker
   datasource:
-    url: jdbc:h2:mem:userdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: ${DATABASE_URL:jdbc:postgresql://postgres-user:5432/userdb}
+    driver-class-name: org.postgresql.Driver
+    username: ${DATABASE_USERNAME:useruser}
+    password: ${DATABASE_PASSWORD:userpassword123}
     hikari:
-      maximum-pool-size: 5
+      maximum-pool-size: 10
       minimum-idle: 2
       connection-timeout: 20000
       idle-timeout: 300000
@@ -17,28 +17,21 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         jdbc:
           time_zone: UTC
 
-  # SQL Initialization
-  sql:
-    init:
-      mode: always
-      schema-locations: classpath:schema.sql
-      data-locations: classpath:data.sql
-
-  # H2 Console for development
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        web-allow-others: true
+  # Flyway Configuration - Disabled for development
+  flyway:
+    # enabled: true
+    # locations: classpath:db/migration
+    # baseline-on-migrate: true
+    # validate-on-migrate: true
+    enabled: false
 
   # GraphQL Configuration - Full access for development
   graphql:
@@ -82,23 +75,28 @@ spring:
       properties:
         isolation.level: read_committed
 
+# Server Configuration
+server:
+  port: 8081
+
 # Auth Service Configuration - Development
 auth:
   service:
-    url: ${AUTH_SERVICE_URL:http://localhost:8082}
+    url: ${AUTH_SERVICE_URL:http://auth-service:8082}
     validate-endpoint: /api/auth/validate
 
 # JWT Configuration - Development Secret
 jwt:
   secret: ${JWT_SECRET:dev_secret_key_XK7fJ3mP9vN2wQ8rT5yU6iO1pA4sD7fG9hJ2kL5nM8qR3tY6uI9oP2aS5dF8gH1jK4lZ7xC0vB3nM6qW9eR2tY5uI8oP1aS4dF7gH0jK3lZ6xC9vB2nM5qW8eR1tY4u==}
 
-# Security Configuration - Relaxed for development
+internal:
+  api:
+    key: ${INTERNAL_API_KEY}
 app:
   security:
-    internal-api-key: ${INTERNAL_API_KEY:dev-internal-api-key}
-    max-requests-per-minute: 200 # More lenient
-    max-graphql-depth: 15 # More lenient
-    max-graphql-complexity: 2000 # More lenient
+    max-requests-per-minute: 200
+    max-graphql-depth: 15
+    max-graphql-complexity: 2000
 
   cors:
     allowed-origins: http://localhost:3000,http://localhost:5173,http://localhost:8080,http://localhost:8081,http://localhost:8082

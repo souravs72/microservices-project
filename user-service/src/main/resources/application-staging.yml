@@ -107,3 +107,152 @@ app:
     internal-api-key: ${INTERNAL_API_KEY:staging-internal-api-key}
     max-requests-per-minute: 150 # Moderate limits
     max-graphql-depth: 12
+    max-graphql-complexity: 1500
+
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:https://staging.yourdomain.com,http://localhost:3000,http://localhost:5173}
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS,PATCH
+    allowed-headers: "*"
+    allow-credentials: true
+
+# Resilience4j Configuration - Balanced for staging
+resilience4j:
+  circuitbreaker:
+    instances:
+      authService:
+        failure-rate-threshold: 60 # Moderate threshold
+        wait-duration-in-open-state: 20s
+        sliding-window-size: 8
+        minimum-number-of-calls: 4
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+      kafkaService:
+        failure-rate-threshold: 45
+        wait-duration-in-open-state: 15s
+        sliding-window-size: 12
+        minimum-number-of-calls: 6
+        permitted-number-of-calls-in-half-open-state: 4
+      redisService:
+        failure-rate-threshold: 35
+        wait-duration-in-open-state: 10s
+        sliding-window-size: 15
+        minimum-number-of-calls: 8
+        permitted-number-of-calls-in-half-open-state: 4
+  retry:
+    instances:
+      authService:
+        max-attempts: 3
+        wait-duration: 1s
+        retry-exceptions:
+          - java.lang.Exception
+      kafkaService:
+        max-attempts: 2
+        wait-duration: 750ms
+        retry-exceptions:
+          - java.lang.Exception
+      redisService:
+        max-attempts: 2
+        wait-duration: 300ms
+        retry-exceptions:
+          - java.lang.Exception
+  bulkhead:
+    instances:
+      userOperations:
+        max-concurrent-calls: 40 # Moderate concurrency
+        max-wait-duration: 3s
+      graphqlOperations:
+        max-concurrent-calls: 25
+        max-wait-duration: 3s
+  ratelimiter:
+    instances:
+      userCreation:
+        limit-for-period: 30 # Moderate limits
+        limit-refresh-period: 1m
+        timeout-duration: 3s
+      userUpdate:
+        limit-for-period: 75
+        limit-refresh-period: 1m
+        timeout-duration: 3s
+      graphqlQuery:
+        limit-for-period: 150
+        limit-refresh-period: 1m
+        timeout-duration: 3s
+
+# Management Configuration - Moderate exposure for staging
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,circuitbreakers,retries,bulkheads,ratelimiters,beans,env
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
+      slo:
+        http.server.requests: 50ms, 100ms, 200ms, 500ms
+
+# SpringDoc OpenAPI Configuration - Moderate access for staging
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+    try-it-out-enabled: true # Enabled for testing
+    filter: true
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+
+# Logging Configuration - Moderate verbosity for staging
+logging:
+  level:
+    root: INFO
+    com.microservices.userservice: DEBUG
+    com.microservices.userservice.security: INFO
+    org.springframework.security: INFO
+    org.springframework.kafka: INFO
+    org.springframework.graphql: INFO
+    org.apache.kafka: WARN
+    io.github.resilience4j: INFO
+    org.hibernate.SQL: INFO
+    org.springdoc: INFO
+    org.springframework.web: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{correlationId} - %msg%n"
+  file:
+    name: logs/user-service-staging.log
+  logback:
+    rollingpolicy:
+      max-file-size: 50MB
+      max-history: 14 # Keep logs for 2 weeks
+      total-size-cap: 5GB
+
+# Server Configuration
+server:
+  port: 8081
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  tomcat:
+    max-threads: 150
+    min-spare-threads: 8
+    connection-timeout: 20000
+    max-connections: 6144
+    accept-count: 100

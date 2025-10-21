@@ -15,9 +15,13 @@ interface User {
   email?: string;
   firstName?: string;
   lastName?: string;
+  phone?: string;
+  address?: string;
+  bio?: string;
   roles?: string[];
   createdAt?: string;
   isActive?: boolean;
+  profilePictureUrl?: string;
 }
 
 interface LoginCredentials {
@@ -164,7 +168,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setLoading(true);
       const response = await api.post("/api/auth/login", credentials);
 
-      const { accessToken, refreshToken, username, email, role } =
+      const { accessToken, refreshToken, username, email, role, userId } =
         response.data;
 
       // Store tokens
@@ -172,8 +176,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.setItem("refreshToken", refreshToken);
       // Build minimal user object for client state
       const userData: User = {
+        id: userId?.toString(),
         username,
         email,
+        firstName: username, // Use username as fallback for firstName
         roles: role ? [role] : [],
       };
       localStorage.setItem("user", JSON.stringify(userData));
@@ -200,6 +206,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const userData: User = {
         username,
         email,
+        firstName: username, // Use username as fallback for firstName
         roles: role ? [role] : [],
       };
       localStorage.setItem("user", JSON.stringify(userData));

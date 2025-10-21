@@ -13,6 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,6 +50,14 @@ public class UserService {
                 InputSanitizer.sanitizeText(request.getLastName()) : null);
         user.setPhone(request.getPhone() != null ?
                 InputSanitizer.sanitizePhoneNumber(request.getPhone()) : null);
+        user.setAddress(request.getAddress() != null ?
+                InputSanitizer.sanitizeText(request.getAddress()) : null);
+        user.setBio(request.getBio() != null ?
+                InputSanitizer.sanitizeText(request.getBio()) : null);
+        user.setProfilePictureUrl(request.getProfilePictureUrl() != null ?
+                InputSanitizer.sanitizeText(request.getProfilePictureUrl()) : null);
+        user.setRole(request.getRole() != null ? User.UserRole.valueOf(request.getRole()) : User.UserRole.USER);
+        user.setMemberSince(LocalDateTime.now());
         user.setActive(true);
 
         User savedUser = userRepository.save(user);
@@ -110,6 +124,11 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public boolean userExistsByUsername(String username) {
+        String sanitizedUsername = InputSanitizer.sanitizeUsername(username);
+        return userRepository.existsByUsername(sanitizedUsername);
+    }
+
     @Transactional
     public UserDTO updateUser(Long id, UpdateUserRequest request) {
         if (id == null || id <= 0) {
@@ -138,6 +157,12 @@ public class UserService {
         if (request.getPhone() != null) {
             user.setPhone(InputSanitizer.sanitizePhoneNumber(request.getPhone()));
         }
+        if (request.getAddress() != null) {
+            user.setAddress(InputSanitizer.sanitizeText(request.getAddress()));
+        }
+        if (request.getBio() != null) {
+            user.setBio(InputSanitizer.sanitizeText(request.getBio()));
+        }
 
         user.setUpdatedAt(LocalDateTime.now());
 
@@ -145,6 +170,83 @@ public class UserService {
         log.info("User updated: {} from IP: {}", user.getUsername(),
                 com.microservices.userservice.security.SecurityContext.getContext().getIpAddress());
         return convertToDTO(updatedUser);
+    }
+
+    @Transactional
+    public UserDTO toggleUserStatus(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Invalid user ID");
+        }
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        user.setActive(!user.getActive());
+        user.setUpdatedAt(LocalDateTime.now());
+
+        User updatedUser = userRepository.save(user);
+        log.info("User status toggled: {} (now {}) from IP: {}", 
+                user.getUsername(), 
+                updatedUser.getActive() ? "active" : "inactive",
+                com.microservices.userservice.security.SecurityContext.getContext().getIpAddress());
+        
+        return convertToDTO(updatedUser);
+    }
+
+    @Transactional
+    public UserDTO uploadProfilePicture(Long id, MultipartFile file) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Invalid user ID");
+        }
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        try {
+            // Validate file
+            if (file.isEmpty()) {
+                throw new IllegalArgumentException("File is empty");
+            }
+
+            if (file.getContentType() == null || !file.getContentType().startsWith("image/")) {
+                throw new IllegalArgumentException("File must be an image");
+            }
+
+            if (file.getSize() > 2 * 1024 * 1024) { // 2MB limit
+                throw new IllegalArgumentException("File size must be less than 2MB");
+            }
+
+            // Create upload directory if it doesn't exist
+            Path uploadDir = Paths.get("uploads/profile-pictures");
+            if (!Files.exists(uploadDir)) {
+                Files.createDirectories(uploadDir);
+            }
+
+            // Generate unique filename
+            String originalFilename = file.getOriginalFilename();
+            String extension = originalFilename != null ? 
+                originalFilename.substring(originalFilename.lastIndexOf(".")) : ".jpg";
+            String filename = UUID.randomUUID().toString() + extension;
+            Path filePath = uploadDir.resolve(filename);
+
+            // Save file
+            Files.copy(file.getInputStream(), filePath);
+
+            // Update user profile picture URL
+            String profilePictureUrl = "/uploads/profile-pictures/" + filename;
+            user.setProfilePictureUrl(profilePictureUrl);
+
+            User updatedUser = userRepository.save(user);
+            log.info("Profile picture uploaded for user: {} from IP: {}", 
+                user.getUsername(), 
+                com.microservices.userservice.security.SecurityContext.getContext().getIpAddress());
+
+            return convertToDTO(updatedUser);
+
+        } catch (IOException e) {
+            log.error("Failed to upload profile picture for user: {}", user.getUsername(), e);
+            throw new RuntimeException("Failed to upload profile picture", e);
+        }
     }
 
     @Transactional
@@ -162,7 +264,7 @@ public class UserService {
                 com.microservices.userservice.security.SecurityContext.getContext().getIpAddress());
     }
 
-    private UserDTO convertToDTO(User user) {
+    public UserDTO convertToDTO(User user) {
         return new UserDTO(
                 user.getId(),
                 user.getUsername(),
@@ -170,9 +272,16 @@ public class UserService {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getPhone(),
+                user.getAddress(),
+                user.getBio(),
+                user.getProfilePictureUrl(),
+                user.getRole(),
+                user.getMemberSince(),
                 user.getActive(),
                 user.getCreatedAt(),
-                user.getUpdatedAt()
+                user.getUpdatedAt(),
+                user.getCreatedBy(),
+                user.getUpdatedBy()
         );
     }
 }

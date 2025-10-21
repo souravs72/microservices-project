@@ -1,6 +1,8 @@
 package com.microservices.notificationservice.repository;
 
 import com.microservices.notificationservice.entity.NotificationHistory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,16 +19,23 @@ public interface NotificationHistoryRepository extends JpaRepository<Notificatio
 
     boolean existsByEventId(String eventId);
 
-    List<NotificationHistory> findByStatus(String status);
+    List<NotificationHistory> findByStatus(NotificationHistory.NotificationStatus status);
 
     List<NotificationHistory> findByRecipientEmail(String recipientEmail);
 
-    @Query("SELECT nh FROM NotificationHistory nh WHERE nh.status = 'FAILED' AND nh.retryCount < :maxRetries")
-    List<NotificationHistory> findFailedNotificationsForRetry(@Param("maxRetries") int maxRetries);
+    Page<NotificationHistory> findByRecipientEmailContainingIgnoreCase(String email, Pageable pageable);
+
+    Page<NotificationHistory> findByStatus(NotificationHistory.NotificationStatus status, Pageable pageable);
+
+    @Query("SELECT nh FROM NotificationHistory nh WHERE nh.status = 'FAILED' AND nh.retryCount < nh.maxRetries")
+    List<NotificationHistory> findFailedNotificationsForRetry();
 
     @Query("SELECT COUNT(nh) FROM NotificationHistory nh WHERE nh.createdAt > :since AND nh.status = 'SENT'")
     long countSentNotificationsSince(@Param("since") LocalDateTime since);
 
     @Query("SELECT COUNT(nh) FROM NotificationHistory nh WHERE nh.createdAt > :since AND nh.status = 'FAILED'")
     long countFailedNotificationsSince(@Param("since") LocalDateTime since);
+
+    @Query("SELECT COUNT(nh) FROM NotificationHistory nh WHERE nh.status = 'PENDING'")
+    long countPendingNotifications();
 }

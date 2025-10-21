@@ -3,7 +3,7 @@ version: "3.8"
 services:
   # Database Services
   postgres-auth:
-    image: postgres:15-alpine
+    image: postgres:16.10-alpine3.22
     container_name: postgres-auth-dev
     environment:
       POSTGRES_DB: authdb
@@ -17,7 +17,7 @@ services:
       - microservices-network
 
   postgres-user:
-    image: postgres:15-alpine
+    image: postgres:16.10-alpine3.22
     container_name: postgres-user-dev
     environment:
       POSTGRES_DB: userdb
@@ -31,7 +31,7 @@ services:
       - microservices-network
 
   postgres-notification:
-    image: postgres:15-alpine
+    image: postgres:16.10-alpine3.22
     container_name: postgres-notification-dev
     environment:
       POSTGRES_DB: notificationdb

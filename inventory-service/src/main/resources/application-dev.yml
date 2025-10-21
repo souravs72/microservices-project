@@ -70,7 +70,7 @@ spring:
 # Security Configuration - Relaxed for development
 app:
   security:
-    internal-api-key: ${INTERNAL_API_KEY:prod_7yXJ2mQ9rT5vL8cN1pB4sD7fG0hK3lZ6xC9vB2nM5qW8eR1tY4u}
+    internal-api-key: ${INTERNAL_API_KEY:dev-internal-api-key}
     max-requests-per-minute: 200 # More lenient
 
   cors:
@@ -196,4 +196,3 @@ kafka:
   topics:
     inventory-events: inventory-events-dev
     inventory-events-dlq: inventory-events-dlq-dev
-

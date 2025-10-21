@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   ShoppingCart,
   Search,
@@ -13,8 +13,14 @@ import {
   AlertCircle,
   ChevronLeft,
   ChevronRight,
+  X,
 } from "lucide-react";
-import { ordersAPI, type Order } from "../services/api";
+import {
+  ordersAPI,
+  inventoryAPI,
+  type Order,
+  type Product,
+} from "../services/api";
 
 const Orders: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -27,9 +33,18 @@ const Orders: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState<string | null>(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newOrder, setNewOrder] = useState({
+    userId: "",
+    shippingAddress: "",
+    billingAddress: "",
+    notes: "",
+    orderItems: [{ productId: "", quantity: "", unitPrice: "" }],
+  });
+  const [availableProducts, setAvailableProducts] = useState<Product[]>([]);
 
   // Fetch orders
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -40,17 +55,34 @@ const Orders: React.FC = () => {
       });
       setOrders(response.data.content || response.data);
       setTotalPages(response.data.totalPages || 1);
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to fetch orders");
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setError(error.response?.data?.message || "Failed to fetch orders");
       console.error("Failed to fetch orders:", err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, filterStatus]);
 
   useEffect(() => {
     fetchOrders();
-  }, [currentPage, filterStatus]);
+  }, [fetchOrders]);
+
+  // Fetch available products for order creation
+  const fetchProducts = async () => {
+    try {
+      const response = await inventoryAPI.getProducts();
+      setAvailableProducts(response.data);
+    } catch (err: unknown) {
+      console.error("Failed to fetch products:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (showAddModal) {
+      fetchProducts();
+    }
+  }, [showAddModal]);
 
   // Filter and sort orders
   const filteredOrders = orders
@@ -63,8 +95,8 @@ const Orders: React.FC = () => {
       return matchesSearch;
     })
     .sort((a, b) => {
-      let aValue: any = a[sortBy as keyof Order];
-      let bValue: any = b[sortBy as keyof Order];
+      let aValue: unknown = a[sortBy as keyof Order];
+      let bValue: unknown = b[sortBy as keyof Order];
 
       if (sortBy === "orderDate") {
         aValue = new Date(a.orderDate).getTime();
@@ -72,9 +104,13 @@ const Orders: React.FC = () => {
       }
 
       if (sortOrder === "asc") {
-        return aValue > bValue ? 1 : -1;
+        return (aValue as number | string) > (bValue as number | string)
+          ? 1
+          : -1;
       } else {
-        return aValue < bValue ? 1 : -1;
+        return (aValue as number | string) < (bValue as number | string)
+          ? 1
+          : -1;
       }
     });
 
@@ -116,8 +152,9 @@ const Orders: React.FC = () => {
           fetchOrders();
           break;
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to perform action");
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setError(error.response?.data?.message || "Failed to perform action");
     }
   };
 
@@ -168,6 +205,63 @@ const Orders: React.FC = () => {
     }
   };
 
+  const handleCreateOrder = async (): Promise<void> => {
+    try {
+      setLoading(true);
+      const payload = {
+        userId: parseInt(newOrder.userId),
+        shippingAddress: newOrder.shippingAddress || null,
+        billingAddress: newOrder.billingAddress || null,
+        notes: newOrder.notes || null,
+        orderItems: newOrder.orderItems
+          .filter((item) => item.productId && item.quantity)
+          .map((item) => ({
+            productId: parseInt(item.productId),
+            quantity: parseInt(item.quantity),
+            price: item.unitPrice ? parseFloat(item.unitPrice) : 0,
+          })),
+      };
+      await ordersAPI.create(payload);
+      setShowAddModal(false);
+      setNewOrder({
+        userId: "",
+        shippingAddress: "",
+        billingAddress: "",
+        notes: "",
+        orderItems: [{ productId: "", quantity: "", unitPrice: "" }],
+      });
+      fetchOrders();
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setError(error.response?.data?.message || "Failed to create order");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addOrderItem = () => {
+    setNewOrder({
+      ...newOrder,
+      orderItems: [
+        ...newOrder.orderItems,
+        { productId: "", quantity: "", unitPrice: "" },
+      ],
+    });
+  };
+
+  const removeOrderItem = (index: number) => {
+    setNewOrder({
+      ...newOrder,
+      orderItems: newOrder.orderItems.filter((_, i) => i !== index),
+    });
+  };
+
+  const updateOrderItem = (index: number, field: string, value: string) => {
+    const updatedItems = [...newOrder.orderItems];
+    updatedItems[index] = { ...updatedItems[index], [field]: value };
+    setNewOrder({ ...newOrder, orderItems: updatedItems });
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -197,7 +291,10 @@ const Orders: React.FC = () => {
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </button>
-          <button className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+          >
             <Plus className="h-4 w-4 mr-2" />
             New Order
           </button>
@@ -500,6 +597,249 @@ const Orders: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Add Order Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex min-h-screen items-center justify-center p-4">
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity"
+              onClick={() => setShowAddModal(false)}
+            />
+
+            {/* Modal */}
+            <div className="relative w-full max-w-4xl transform overflow-hidden rounded-xl bg-white shadow-2xl transition-all duration-300 ease-out">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-slate-50 to-gray-50 px-6 py-4 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100">
+                      <Plus className="h-5 w-5 text-indigo-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        Create New Order
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        Create a new order with products
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowAddModal(false)}
+                    className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Form */}
+              <div className="px-6 py-6 max-h-96 overflow-y-auto">
+                <div className="space-y-6">
+                  {/* Basic Information */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        User ID *
+                      </label>
+                      <input
+                        type="number"
+                        value={newOrder.userId}
+                        onChange={(e) =>
+                          setNewOrder({ ...newOrder, userId: e.target.value })
+                        }
+                        className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        placeholder="Enter user ID"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Notes
+                      </label>
+                      <input
+                        type="text"
+                        value={newOrder.notes}
+                        onChange={(e) =>
+                          setNewOrder({ ...newOrder, notes: e.target.value })
+                        }
+                        className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        placeholder="Enter order notes"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Address Information */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Shipping Address
+                      </label>
+                      <textarea
+                        value={newOrder.shippingAddress}
+                        onChange={(e) =>
+                          setNewOrder({
+                            ...newOrder,
+                            shippingAddress: e.target.value,
+                          })
+                        }
+                        rows={3}
+                        className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        placeholder="Enter shipping address"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Billing Address
+                      </label>
+                      <textarea
+                        value={newOrder.billingAddress}
+                        onChange={(e) =>
+                          setNewOrder({
+                            ...newOrder,
+                            billingAddress: e.target.value,
+                          })
+                        }
+                        rows={3}
+                        className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        placeholder="Enter billing address"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Order Items */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-md font-medium text-gray-900">
+                        Order Items
+                      </h4>
+                      <button
+                        type="button"
+                        onClick={addOrderItem}
+                        className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200"
+                      >
+                        <Plus className="h-3 w-3 mr-1" />
+                        Add Item
+                      </button>
+                    </div>
+
+                    {newOrder.orderItems.map((item, index) => (
+                      <div
+                        key={index}
+                        className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border border-gray-200 rounded-lg"
+                      >
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-gray-700">
+                            Product *
+                          </label>
+                          <select
+                            value={item.productId}
+                            onChange={(e) =>
+                              updateOrderItem(
+                                index,
+                                "productId",
+                                e.target.value
+                              )
+                            }
+                            className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            required
+                          >
+                            <option value="">Select Product</option>
+                            {availableProducts.map((product) => (
+                              <option key={product.id} value={product.id}>
+                                {product.name} - ${product.price}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-gray-700">
+                            Quantity *
+                          </label>
+                          <input
+                            type="number"
+                            min="1"
+                            value={item.quantity}
+                            onChange={(e) =>
+                              updateOrderItem(index, "quantity", e.target.value)
+                            }
+                            className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            placeholder="1"
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-gray-700">
+                            Unit Price
+                          </label>
+                          <input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            value={item.unitPrice}
+                            onChange={(e) =>
+                              updateOrderItem(
+                                index,
+                                "unitPrice",
+                                e.target.value
+                              )
+                            }
+                            className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm placeholder-gray-400 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            placeholder="0.00"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-gray-700">
+                            Actions
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => removeOrderItem(index)}
+                            className="w-full inline-flex items-center justify-center px-3 py-2.5 border border-red-300 text-sm font-medium rounded-lg text-red-700 bg-red-50 hover:bg-red-100"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={() => setShowAddModal(false)}
+                    className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleCreateOrder}
+                    disabled={loading}
+                    className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? (
+                      <div className="flex items-center">
+                        <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                        Creating...
+                      </div>
+                    ) : (
+                      <div className="flex items-center">
+                        <Plus className="mr-2 h-4 w-4" />
+                        Create Order
+                      </div>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -56,4 +56,18 @@ public class FallbackController {
                 .status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(response));
     }
+
+    @RequestMapping(value = "/notifications", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE})
+    public Mono<ResponseEntity<Map<String, Object>>> notificationsFallback() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("timestamp", LocalDateTime.now().toString());
+        response.put("status", HttpStatus.SERVICE_UNAVAILABLE.value());
+        response.put("error", "Service Unavailable");
+        response.put("message", "Notification service is currently unavailable. Please try again later.");
+        response.put("service", "notification-service");
+
+        return Mono.just(ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(response));
+    }
 }

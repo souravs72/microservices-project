@@ -8,8 +8,7 @@ import {
   X,
   Camera,
   Shield,
-  Eye,
-  EyeOff,
+  Upload,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { usersAPI } from "../services/api";
@@ -20,30 +19,59 @@ const Profile: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
-    firstName: user?.firstName || "",
-    lastName: user?.lastName || "",
-    email: user?.email || "",
-    username: user?.username || "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    username: "",
     phone: "",
     address: "",
     bio: "",
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
+    profilePictureUrl: "",
   });
+
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [profilePicturePreview, setProfilePicturePreview] = useState<
+    string | null
+  >(null);
 
   // Fetch user details
   const fetchUserDetails = async () => {
-    if (!user?.id) return;
+    console.log("fetchUserDetails called, user:", user);
+
+    // If no user ID, try to get it from the username
+    let userId = user?.id;
+    if (!userId && user?.username) {
+      console.log(
+        "No user ID found, trying to get user by username:",
+        user.username
+      );
+      try {
+        // Get user by username to find the ID
+        const response = await usersAPI.getByUsername(user.username);
+        const foundUser = response.data;
+        if (foundUser) {
+          userId = foundUser.id?.toString();
+          console.log("Found user ID:", userId);
+        }
+      } catch (err) {
+        console.error("Error finding user by username:", err);
+      }
+    }
+
+    if (!userId) {
+      console.log("No user ID available, returning early");
+      return;
+    }
 
     try {
+      console.log("Fetching user details for ID:", userId);
       setLoading(true);
-      const response = await usersAPI.getById(Number(user.id));
+      const response = await usersAPI.getById(Number(userId));
       const userData = response.data;
+      console.log("Fetched user data:", userData);
 
       setFormData((prev) => ({
         ...prev,
@@ -54,8 +82,15 @@ const Profile: React.FC = () => {
         phone: userData.phone || "",
         address: userData.address || "",
         bio: userData.bio || "",
+        profilePictureUrl: userData.profilePictureUrl || "",
       }));
+
+      if (userData.profilePictureUrl) {
+        setProfilePicturePreview(userData.profilePictureUrl);
+      }
+      console.log("Form data updated with fetched data");
     } catch (err: any) {
+      console.error("Error fetching user details:", err);
       setError(err.response?.data?.message || "Failed to fetch user details");
     } finally {
       setLoading(false);
@@ -65,6 +100,26 @@ const Profile: React.FC = () => {
   useEffect(() => {
     fetchUserDetails();
   }, [user?.id]);
+
+  // Update form data when user data changes
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+        username: user.username || "",
+        phone: user.phone || "",
+        address: user.address || "",
+        bio: user.bio || "",
+        profilePictureUrl: user.profilePictureUrl || "",
+      });
+
+      if (user.profilePictureUrl) {
+        setProfilePicturePreview(user.profilePictureUrl);
+      }
+    }
+  }, [user]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -76,61 +131,105 @@ const Profile: React.FC = () => {
     }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setProfilePicture(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfilePicturePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSave = async () => {
-    if (!user?.id) return;
+    console.log("handleSave called");
+    console.log("user:", user);
+    console.log("formData:", formData);
+
+    // If no user ID, try to get it from the username
+    let userId = user?.id;
+    if (!userId && user?.username) {
+      console.log(
+        "No user ID found, trying to get user by username:",
+        user.username
+      );
+      try {
+        // Get user by username to find the ID
+        const response = await usersAPI.getByUsername(user.username);
+        const foundUser = response.data;
+        if (foundUser) {
+          userId = foundUser.id?.toString();
+          console.log("Found user ID:", userId);
+        }
+      } catch (err) {
+        console.error("Error finding user by username:", err);
+      }
+    }
+
+    if (!userId) {
+      console.log("No user ID found");
+      setError("Unable to identify user. Please try logging in again.");
+      return;
+    }
 
     try {
       setLoading(true);
       setError(null);
       setSuccess(null);
 
-      // Validate passwords if changing
-      if (formData.newPassword) {
-        if (formData.newPassword !== formData.confirmPassword) {
-          setError("New passwords do not match");
-          return;
-        }
-        if (formData.newPassword.length < 8) {
-          setError("New password must be at least 8 characters long");
-          return;
+      // Upload profile picture if selected
+      if (profilePicture) {
+        console.log("Uploading profile picture...");
+        try {
+          const uploadResponse = await usersAPI.uploadProfilePicture(
+            Number(userId),
+            profilePicture
+          );
+          formData.profilePictureUrl = uploadResponse.data.profilePictureUrl;
+          console.log(
+            "Profile picture uploaded:",
+            uploadResponse.data.profilePictureUrl
+          );
+        } catch (uploadErr: any) {
+          console.warn("Profile picture upload failed:", uploadErr);
+          setError(
+            "Failed to upload profile picture: " +
+              (uploadErr.response?.data?.message || uploadErr.message)
+          );
+          return; // Stop execution if picture upload fails
         }
       }
 
-      // Prepare update data
-      const updateData: any = {
+      // Prepare update data - only include fields supported by the API
+      const updateData = {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-        phone: formData.phone,
-        address: formData.address,
-        bio: formData.bio,
+        phone: formData.phone || null,
+        address: formData.address || null,
+        bio: formData.bio || null,
+        profilePictureUrl: formData.profilePictureUrl || null,
       };
 
-      // Add password if provided
-      if (formData.newPassword) {
-        updateData.currentPassword = formData.currentPassword;
-        updateData.newPassword = formData.newPassword;
-      }
-
-      const response = await usersAPI.update(Number(user.id), updateData);
+      console.log("Sending update data:", updateData);
+      const response = await usersAPI.update(Number(userId), updateData);
+      console.log("Update response:", response.data);
 
       // Update local user data
       updateUser({
         ...user,
-        ...response.data,
+        firstName: response.data.firstName,
+        lastName: response.data.lastName,
+        email: response.data.email,
       });
 
       setSuccess("Profile updated successfully");
       setIsEditing(false);
-
-      // Clear password fields
-      setFormData((prev) => ({
-        ...prev,
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      }));
+      setProfilePicture(null);
     } catch (err: any) {
+      console.error("Profile update error:", err);
       setError(err.response?.data?.message || "Failed to update profile");
     } finally {
       setLoading(false);
@@ -141,18 +240,18 @@ const Profile: React.FC = () => {
     setIsEditing(false);
     setError(null);
     setSuccess(null);
-    // Reset form data
+    setProfilePicture(null);
+    setProfilePicturePreview(user?.profilePictureUrl || null);
+    // Reset form data to current user data
     setFormData({
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
       email: user?.email || "",
       username: user?.username || "",
-      phone: "",
-      address: "",
-      bio: "",
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
+      phone: user?.phone || "",
+      address: user?.address || "",
+      bio: user?.bio || "",
+      profilePictureUrl: user?.profilePictureUrl || "",
     });
   };
 
@@ -232,7 +331,7 @@ const Profile: React.FC = () => {
       {success && (
         <div className="bg-green-50 border border-green-200 rounded-md p-4">
           <div className="flex">
-            <X className="h-5 w-5 text-green-400" />
+            <Save className="h-5 w-5 text-green-400" />
             <div className="ml-3">
               <h3 className="text-sm font-medium text-green-800">Success</h3>
               <p className="text-sm text-green-700 mt-1">{success}</p>
@@ -247,16 +346,58 @@ const Profile: React.FC = () => {
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="text-center">
               <div className="relative inline-block">
-                <div className="h-24 w-24 rounded-full bg-indigo-600 flex items-center justify-center mx-auto">
-                  <span className="text-2xl font-bold text-white">
-                    {user?.firstName?.[0]}
-                    {user?.lastName?.[0]}
-                  </span>
-                </div>
+                {profilePicturePreview ? (
+                  <img
+                    src={
+                      profilePicturePreview.startsWith("http")
+                        ? profilePicturePreview
+                        : `${window.location.origin}${profilePicturePreview}`
+                    }
+                    alt="Profile"
+                    className="h-24 w-24 rounded-full object-cover mx-auto"
+                    onError={(e) => {
+                      console.log(
+                        "Image failed to load:",
+                        profilePicturePreview
+                      );
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                ) : user?.profilePictureUrl ? (
+                  <img
+                    src={
+                      user.profilePictureUrl.startsWith("http")
+                        ? user.profilePictureUrl
+                        : `${window.location.origin}${user.profilePictureUrl}`
+                    }
+                    alt="Profile"
+                    className="h-24 w-24 rounded-full object-cover mx-auto"
+                    onError={(e) => {
+                      console.log(
+                        "Image failed to load:",
+                        user.profilePictureUrl
+                      );
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                ) : (
+                  <div className="h-24 w-24 rounded-full bg-indigo-600 flex items-center justify-center mx-auto">
+                    <span className="text-2xl font-bold text-white">
+                      {user?.firstName?.[0]}
+                      {user?.lastName?.[0]}
+                    </span>
+                  </div>
+                )}
                 {isEditing && (
-                  <button className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50">
+                  <label className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 cursor-pointer">
                     <Camera className="h-4 w-4 text-gray-600" />
-                  </button>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </label>
                 )}
               </div>
               <h2 className="mt-4 text-xl font-semibold text-gray-900">
@@ -281,7 +422,6 @@ const Profile: React.FC = () => {
                 <Mail className="h-4 w-4 mr-2" />
                 <span>{user?.email}</span>
               </div>
-              {/* Last login removed as it's not in User interface */}
             </div>
           </div>
         </div>
@@ -375,6 +515,7 @@ const Profile: React.FC = () => {
                       value={formData.phone}
                       onChange={handleInputChange}
                       disabled={!isEditing}
+                      placeholder="Enter phone number"
                       className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-50 disabled:text-gray-500"
                     />
                   </div>
@@ -388,6 +529,7 @@ const Profile: React.FC = () => {
                       value={formData.address}
                       onChange={handleInputChange}
                       disabled={!isEditing}
+                      placeholder="Enter your address"
                       className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-50 disabled:text-gray-500"
                     />
                   </div>
@@ -401,7 +543,7 @@ const Profile: React.FC = () => {
                 </label>
                 <textarea
                   name="bio"
-                  rows={3}
+                  rows={4}
                   value={formData.bio}
                   onChange={handleInputChange}
                   disabled={!isEditing}
@@ -410,68 +552,75 @@ const Profile: React.FC = () => {
                 />
               </div>
 
-              {/* Password Change */}
+              {/* Profile Picture Upload */}
               {isEditing && (
                 <div>
                   <h4 className="text-md font-medium text-gray-900 mb-4">
-                    Change Password
+                    Profile Picture
                   </h4>
                   <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Current Password
-                      </label>
-                      <div className="relative">
-                        <input
-                          type={showPassword ? "text" : "password"}
-                          name="currentPassword"
-                          value={formData.currentPassword}
-                          onChange={handleInputChange}
-                          className="block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                        >
-                          {showPassword ? (
-                            <EyeOff className="h-4 w-4 text-gray-400" />
-                          ) : (
-                            <Eye className="h-4 w-4 text-gray-400" />
-                          )}
-                        </button>
+                    <div className="flex items-center space-x-4">
+                      <div className="flex-shrink-0">
+                        {profilePicturePreview ? (
+                          <img
+                            src={
+                              profilePicturePreview.startsWith("http")
+                                ? profilePicturePreview
+                                : `${window.location.origin}${profilePicturePreview}`
+                            }
+                            alt="Profile preview"
+                            className="h-16 w-16 rounded-full object-cover"
+                            onError={(e) => {
+                              console.log(
+                                "Preview image failed to load:",
+                                profilePicturePreview
+                              );
+                              e.currentTarget.style.display = "none";
+                            }}
+                          />
+                        ) : (
+                          <div className="h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center">
+                            <User className="h-8 w-8 text-gray-400" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <label className="cursor-pointer">
+                          <div className="flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            <Upload className="h-4 w-4 mr-2" />
+                            Choose Profile Picture
+                          </div>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="hidden"
+                          />
+                        </label>
+                        <p className="mt-1 text-xs text-gray-500">
+                          JPG, PNG or GIF. Max size 2MB.
+                        </p>
                       </div>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          New Password
-                        </label>
-                        <input
-                          type="password"
-                          name="newPassword"
-                          value={formData.newPassword}
-                          onChange={handleInputChange}
-                          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Confirm New Password
-                        </label>
-                        <input
-                          type="password"
-                          name="confirmPassword"
-                          value={formData.confirmPassword}
-                          onChange={handleInputChange}
-                          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Note about password changes */}
+              {isEditing && (
+                <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+                  <div className="flex">
+                    <Shield className="h-5 w-5 text-blue-400" />
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-blue-800">
+                        Password Changes
+                      </h3>
+                      <p className="text-sm text-blue-700 mt-1">
+                        To change your password, please contact your
+                        administrator or use the password reset feature on the
+                        login page.
+                      </p>
                     </div>
-                    <p className="text-xs text-gray-500">
-                      Leave password fields empty if you don't want to change
-                      your password.
-                    </p>
                   </div>
                 </div>
               )}

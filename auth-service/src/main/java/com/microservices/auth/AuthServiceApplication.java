@@ -6,10 +6,12 @@ import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServic
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 @EnableAsync
 @EnableRetry
+@EnableScheduling
 @EnableFeignClients
 @SpringBootApplication(exclude = {UserDetailsServiceAutoConfiguration.class})
 public class AuthServiceApplication {

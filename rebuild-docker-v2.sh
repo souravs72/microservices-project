@@ -74,6 +74,20 @@ cleanup_containers() {
     print_success "Containers cleaned up"
 }
 
+# Function to clean Kafka volumes (fixes cluster ID mismatch issues)
+cleanup_kafka_volumes() {
+    print_status "Cleaning Kafka volumes to prevent cluster ID mismatch..."
+    
+    # Stop Kafka specifically if running
+    docker stop kafka 2>/dev/null || true
+    docker rm kafka 2>/dev/null || true
+    
+    # Remove Kafka volume to clear cluster metadata
+    docker volume rm microservices-parent_kafka_data 2>/dev/null || true
+    
+    print_success "Kafka volumes cleaned up"
+}
+
 # Function to remove old images (optional)
 cleanup_images() {
     if [ "$1" = "--clean-images" ]; then
@@ -115,29 +129,94 @@ build_and_start() {
 wait_for_services() {
     print_status "Waiting for services to be healthy..."
     
-    # Wait for databases
-    print_status "Waiting for databases..."
-    sleep 10
+    # Wait for infrastructure services first
+    print_status "Waiting for infrastructure services (databases, Redis, Kafka)..."
+    sleep 15
     
-    # Wait for auth service
-    print_status "Waiting for auth service..."
-    timeout 60 bash -c 'until curl -s http://localhost:8082/actuator/health > /dev/null; do sleep 2; done' || {
+    # Wait for core services in dependency order
+    print_status "Waiting for Auth Service..."
+    timeout 90 bash -c 'until curl -s http://localhost:8082/actuator/health > /dev/null; do sleep 3; done' || {
         print_warning "Auth service may not be fully ready yet"
     }
     
-    # Wait for user service
-    print_status "Waiting for user service..."
-    timeout 60 bash -c 'until curl -s http://localhost:8081/actuator/health > /dev/null; do sleep 2; done' || {
+    print_status "Waiting for User Service..."
+    timeout 90 bash -c 'until curl -s http://localhost:8081/actuator/health > /dev/null; do sleep 3; done' || {
         print_warning "User service may not be fully ready yet"
     }
     
-    # Wait for API Gateway
+    print_status "Waiting for Inventory Service..."
+    timeout 90 bash -c 'until curl -s http://localhost:8084/actuator/health > /dev/null; do sleep 3; done' || {
+        print_warning "Inventory service may not be fully ready yet"
+    }
+    
+    print_status "Waiting for Order Service..."
+    timeout 90 bash -c 'until curl -s http://localhost:8083/actuator/health > /dev/null; do sleep 3; done' || {
+        print_warning "Order service may not be fully ready yet"
+    }
+    
+    print_status "Waiting for Notification Service..."
+    timeout 90 bash -c 'until curl -s http://localhost:8085/actuator/health > /dev/null; do sleep 3; done' || {
+        print_warning "Notification service may not be fully ready yet"
+    }
+    
     print_status "Waiting for API Gateway..."
-    timeout 60 bash -c 'until curl -s http://localhost:8080/actuator/health > /dev/null; do sleep 2; done' || {
+    timeout 90 bash -c 'until curl -s http://localhost:8080/actuator/health > /dev/null; do sleep 3; done' || {
         print_warning "API Gateway may not be fully ready yet"
     }
     
+    # Wait for frontend and monitoring services
+    print_status "Waiting for Frontend..."
+    timeout 60 bash -c 'until curl -s http://localhost:5173 > /dev/null; do sleep 3; done' || {
+        print_warning "Frontend may not be fully ready yet"
+    }
+    
+    print_status "Waiting for Prometheus..."
+    timeout 60 bash -c 'until curl -s http://localhost:9090 > /dev/null; do sleep 3; done' || {
+        print_warning "Prometheus may not be fully ready yet"
+    }
+    
+    print_status "Waiting for Grafana..."
+    timeout 60 bash -c 'until curl -s http://localhost:3001 > /dev/null; do sleep 3; done' || {
+        print_warning "Grafana may not be fully ready yet"
+    }
+    
     print_success "Services are ready"
+}
+
+# Function to check infrastructure services
+check_infrastructure() {
+    print_status "Checking infrastructure services..."
+    
+    # Check databases
+    print_status "Checking databases..."
+    for db_port in 5433 5434 5435 5436 5437; do
+        if docker exec $(docker ps -q --filter "publish=$db_port") pg_isready -h localhost -p 5432 > /dev/null 2>&1; then
+            print_success "✅ Database on port $db_port - Running"
+        else
+            print_warning "⚠️  Database on port $db_port - Not responding"
+        fi
+    done
+    
+    # Check Redis
+    if docker exec redis redis-cli ping > /dev/null 2>&1; then
+        print_success "✅ Redis (6379) - Running"
+    else
+        print_warning "⚠️  Redis (6379) - Not responding"
+    fi
+    
+    # Check Kafka
+    if docker exec kafka kafka-broker-api-versions --bootstrap-server localhost:9092 > /dev/null 2>&1; then
+        print_success "✅ Kafka (9092) - Running"
+    else
+        print_warning "⚠️  Kafka (9092) - Not responding"
+    fi
+    
+    # Check Zookeeper
+    if docker exec zookeeper /bin/bash -c "echo ruok | nc localhost 2181" > /dev/null 2>&1; then
+        print_success "✅ Zookeeper (2181) - Running"
+    else
+        print_warning "⚠️  Zookeeper (2181) - Not responding"
+    fi
 }
 
 # Function to show service status
@@ -153,7 +232,11 @@ show_status() {
     fi
     
     echo ""
-    print_status "Service Health Checks:"
+    print_status "Infrastructure Services:"
+    check_infrastructure
+    
+    echo ""
+    print_status "Application Services:"
     
     # Check auth service
     if curl -s http://localhost:8082/actuator/health > /dev/null 2>&1; then
@@ -176,18 +259,45 @@ show_status() {
         print_error "❌ API Gateway (8080) - Not responding"
     fi
     
-    # Check notification service
+    # Check order service
     if curl -s http://localhost:8083/actuator/health > /dev/null 2>&1; then
-        print_success "✅ Notification Service (8083) - Running"
+        print_success "✅ Order Service (8083) - Running"
     else
-        print_warning "⚠️  Notification Service (8083) - Not responding (may be optional)"
+        print_warning "⚠️  Order Service (8083) - Not responding (may be optional)"
+    fi
+    
+    # Check inventory service
+    if curl -s http://localhost:8084/actuator/health > /dev/null 2>&1; then
+        print_success "✅ Inventory Service (8084) - Running"
+    else
+        print_warning "⚠️  Inventory Service (8084) - Not responding (may be optional)"
+    fi
+    
+    # Check notification service
+    if curl -s http://localhost:8085/actuator/health > /dev/null 2>&1; then
+        print_success "✅ Notification Service (8085) - Running"
+    else
+        print_warning "⚠️  Notification Service (8085) - Not responding (may be optional)"
     fi
     
     # Check frontend
-    if curl -s http://localhost:3000 > /dev/null 2>&1; then
-        print_success "✅ Frontend (3000) - Running"
+    if curl -s http://localhost:5173 > /dev/null 2>&1; then
+        print_success "✅ Frontend (5173) - Running"
     else
-        print_warning "⚠️  Frontend (3000) - Not responding (may be optional)"
+        print_warning "⚠️  Frontend (5173) - Not responding (may be optional)"
+    fi
+    
+    # Check monitoring services
+    if curl -s http://localhost:9090 > /dev/null 2>&1; then
+        print_success "✅ Prometheus (9090) - Running"
+    else
+        print_warning "⚠️  Prometheus (9090) - Not responding (may be optional)"
+    fi
+    
+    if curl -s http://localhost:3001 > /dev/null 2>&1; then
+        print_success "✅ Grafana (3001) - Running"
+    else
+        print_warning "⚠️  Grafana (3001) - Not responding (may be optional)"
     fi
 }
 
@@ -244,6 +354,7 @@ show_help() {
     echo "  --logs           Show logs after starting"
     echo "  --test           Test JWT token validation after starting"
     echo "  --status         Show service status only"
+    echo "  --infra          Check infrastructure services only"
     echo "  --help           Show this help message"
     echo ""
     echo "Examples:"
@@ -251,6 +362,12 @@ show_help() {
     echo "  $0 --clean-images     # Rebuild with clean images"
     echo "  $0 --test            # Rebuild and test JWT validation"
     echo "  $0 --status          # Show current service status"
+    echo "  $0 --infra           # Check infrastructure services only"
+    echo ""
+    echo "Kafka Issues:"
+    echo "  If you encounter Kafka cluster ID mismatch errors, run:"
+    echo "  ./reset-kafka.sh      # Quick Kafka reset"
+    echo "  $0                    # Full rebuild (includes Kafka cleanup)"
 }
 
 # Main execution
@@ -264,6 +381,7 @@ main() {
     SHOW_LOGS=false
     RUN_TEST=false
     SHOW_STATUS_ONLY=false
+    CHECK_INFRA_ONLY=false
     
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -283,6 +401,10 @@ main() {
                 SHOW_STATUS_ONLY=true
                 shift
                 ;;
+            --infra)
+                CHECK_INFRA_ONLY=true
+                shift
+                ;;
             --help)
                 show_help
                 exit 0
@@ -300,10 +422,16 @@ main() {
         exit 0
     fi
     
+    if [ "$CHECK_INFRA_ONLY" = true ]; then
+        check_infrastructure
+        exit 0
+    fi
+    
     # Run the rebuild process
     check_docker
     check_env_file
     cleanup_containers
+    cleanup_kafka_volumes
     cleanup_images $([ "$CLEAN_IMAGES" = true ] && echo "--clean-images")
     build_and_start
     wait_for_services
@@ -321,13 +449,17 @@ main() {
     print_success "🎉 Docker rebuild and restart completed successfully!"
     echo ""
     print_status "Services are now running:"
+    print_status "  • API Gateway: http://localhost:8080"
     print_status "  • Auth Service: http://localhost:8082"
     print_status "  • User Service: http://localhost:8081"
-    print_status "  • API Gateway: http://localhost:8080"
-    print_status "  • Notification Service: http://localhost:8083"
-    print_status "  • Frontend: http://localhost:3000"
-    print_status "  • H2 Console (Auth): http://localhost:8082/h2-console"
-    print_status "  • H2 Console (User): http://localhost:8081/h2-console"
+    print_status "  • Order Service: http://localhost:8083"
+    print_status "  • Inventory Service: http://localhost:8084"
+    print_status "  • Notification Service: http://localhost:8085"
+    print_status "  • Frontend: http://localhost:5173"
+    print_status "  • Prometheus: http://localhost:9090"
+    print_status "  • Grafana: http://localhost:3001"
+    print_status "  • Kafka: localhost:9092"
+    print_status "  • Redis: localhost:6379"
     echo ""
     print_status "To view logs: docker compose logs -f (or docker-compose logs -f)"
     print_status "To stop services: docker compose down (or docker-compose down)"

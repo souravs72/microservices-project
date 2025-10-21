@@ -10,6 +10,7 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import reactor.core.publisher.Mono;
 
@@ -99,6 +100,23 @@ public class GatewayConfig {
                         .uri(authServiceUrl))
 
                 // ==========================
+                // User Service - User Creation (no auth required)
+                // ==========================
+                .route("user-service-create", r -> r
+                        .path("/api/users")
+                        .and()
+                        .method(HttpMethod.POST)
+                        .filters(f -> f
+                                .retry(config -> config
+                                        .setRetries(2)
+                                        .setBackoff(Duration.ofMillis(100), Duration.ofMillis(500), 2, true))
+                                .circuitBreaker(config -> config
+                                        .setName("userServiceCircuitBreaker")
+                                        .setFallbackUri("forward:/fallback/users"))
+                                .addRequestHeader("X-Gateway-Service", "api-gateway"))
+                        .uri(userServiceUrl))
+
+                // ==========================
                 // User Service (REST, requires auth)
                 // ==========================
                 .route("user-service-rest", r -> r
@@ -159,20 +177,23 @@ public class GatewayConfig {
                                 .addRequestHeader("X-Gateway-Service", "api-gateway"))
                         .uri(inventoryServiceUrl))
 
-                // ==========================
-                // Notification Service (uses HTTP Basic Auth)
-                // ==========================
-                .route("notification-service", r -> r
-                        .path("/api/notifications/**")
-                        .filters(f -> f
-                                .retry(config -> config
-                                        .setRetries(2)
-                                        .setBackoff(Duration.ofMillis(100), Duration.ofMillis(500), 2, true))
-                                .circuitBreaker(config -> config
-                                        .setName("notificationServiceCircuitBreaker")
-                                        .setFallbackUri("forward:/fallback/notifications"))
-                                .addRequestHeader("X-Gateway-Service", "api-gateway"))
-                        .uri(notificationServiceUrl))
+                       // ==========================
+                       // Notification Service (requires JWT auth)
+                       // ==========================
+                       .route("notification-service", r -> r
+                               .path("/api/notifications", "/api/notifications/**")
+                               .filters(f -> f
+                                       .filter(authenticationFilter.apply(new AuthenticationFilter.Config()))
+                                       .rewritePath("/api/notifications$", "/notifications")
+                                       .rewritePath("/api/notifications/(?<segment>.*)", "/notifications/${segment}")
+                                       .retry(config -> config
+                                               .setRetries(2)
+                                               .setBackoff(Duration.ofMillis(100), Duration.ofMillis(500), 2, true))
+                                       .circuitBreaker(config -> config
+                                               .setName("notificationServiceCircuitBreaker")
+                                               .setFallbackUri("forward:/fallback/notifications"))
+                                       .addRequestHeader("X-Gateway-Service", "api-gateway"))
+                               .uri(notificationServiceUrl))
 
                 .build();
     }

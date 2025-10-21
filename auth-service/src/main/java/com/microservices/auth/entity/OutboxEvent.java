@@ -46,6 +46,15 @@ public class OutboxEvent {
     private Integer retryCount = 0;
 
     @Column
+    private LocalDateTime lastRetryAt;
+
+    @Column
+    private LocalDateTime nextRetryAt;
+
+    @Column(nullable = false)
+    private Boolean failed = false;
+
+    @Column(columnDefinition = "TEXT")
     private String errorMessage;
 
     @Column(length = 50)

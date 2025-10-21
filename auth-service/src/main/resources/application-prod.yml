@@ -1,8 +1,5 @@
 # Production Environment Configuration for Auth Service
 spring:
-  profiles:
-    active: prod
-
   # Database Configuration - PostgreSQL for production
   datasource:
     url: ${DB_URL:jdbc:postgresql://auth-db:5432/authdb}
@@ -104,8 +101,6 @@ spring:
 # JWT Configuration - Production Secret (MUST be set via environment)
 jwt:
   secret: ${JWT_SECRET} # REQUIRED - Must be set in production
-  access-token-expiration: 7200000 # 2 hours
-  refresh-token-expiration: 604800000 # 7 days
 
 # Security Configuration - Strict for production
 app:
@@ -120,7 +115,7 @@ app:
     password-require-special-chars: true
 
   cors:
-    allowed-origins: ${CORS_ALLOWED_ORIGINS:https://yourdomain.com}
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:https://yourdomain.com,https://admin.yourdomain.com}
     allowed-methods: GET,POST,PUT,DELETE,OPTIONS
     allowed-headers: Authorization,Content-Type,X-Requested-With
     allow-credentials: true

@@ -25,7 +25,7 @@ public class InternalApiKeyFilter extends OncePerRequestFilter {
     private static final String INTERNAL_API_KEY_HEADER = "X-Internal-API-Key";
     private static final String SYNC_ENDPOINT = "/api/users/sync";
 
-    @Value("${app.security.internal-api-key}")
+    @Value("${internal.api.key}")
     private String internalApiKey;
 
     /**

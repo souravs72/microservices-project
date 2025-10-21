@@ -62,42 +62,65 @@ const Dashboard: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Fetch dashboard data
+  // Fetch dashboard data (only when authenticated)
   useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      setLoading(false);
+      return;
+    }
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
 
-        // Fetch real data from APIs
+        // Fetch real data from APIs with individual error handling
         const [
           usersResponse,
           ordersResponse,
           productsResponse,
           notificationsResponse,
-        ] = await Promise.all([
+        ] = await Promise.allSettled([
           usersAPI.getAll({ page: 0, size: 1 }),
           ordersAPI.getAll({ page: 0, size: 1 }),
           inventoryAPI.getProducts({ page: 0, size: 1 }),
           notificationsAPI.getAll({ page: 0, size: 1, unreadOnly: true }),
         ]);
 
-        // Calculate stats from API responses
-        const totalUsers = usersResponse.data.totalElements || 0;
-        const totalOrders = ordersResponse.data.totalElements || 0;
-        const totalProducts = productsResponse.data.totalElements || 0;
+        // Calculate stats from API responses with error handling
+        const totalUsers =
+          usersResponse.status === "fulfilled"
+            ? usersResponse.value.data.totalElements || 0
+            : 0;
+        const totalOrders =
+          ordersResponse.status === "fulfilled"
+            ? ordersResponse.value.data.totalElements || 0
+            : 0;
+        const totalProducts =
+          productsResponse.status === "fulfilled"
+            ? productsResponse.value.data.totalElements || 0
+            : 0;
         const pendingNotifications =
-          notificationsResponse.data.totalElements || 0;
+          notificationsResponse.status === "fulfilled"
+            ? notificationsResponse.value.data.totalElements || 0
+            : 0;
 
         // Calculate revenue from orders (simplified)
-        const orders = ordersResponse.data.content || [];
+        const orders =
+          ordersResponse.status === "fulfilled"
+            ? ordersResponse.value.data.content || []
+            : [];
         const totalRevenue = orders.reduce(
           (sum: number, order: any) => sum + (order.totalAmount || 0),
           0
         );
 
-        // Get low stock products
-        const lowStockResponse = await inventoryAPI.getLowStockProducts();
-        const lowStockProducts = lowStockResponse.data.length || 0;
+        // Get low stock products with error handling
+        let lowStockProducts = 0;
+        try {
+          const lowStockResponse = await inventoryAPI.getLowStockProducts();
+          lowStockProducts = lowStockResponse.data.length || 0;
+        } catch (error) {
+          console.warn("Failed to fetch low stock products:", error);
+        }
 
         setStats({
           totalUsers,
@@ -109,37 +132,81 @@ const Dashboard: React.FC = () => {
           pendingNotifications,
         });
 
-        // Generate recent activity from real data
-        const recentActivity: RecentActivity[] = [
-          {
+        // Generate recent activity from real data with better error handling
+        const recentActivity: RecentActivity[] = [];
+
+        // Add successful API calls to recent activity
+        if (usersResponse.status === "fulfilled") {
+          recentActivity.push({
             id: "1",
             type: "user",
-            message: `Total users: ${totalUsers}`,
+            message: `Successfully loaded ${totalUsers} users`,
             timestamp: new Date().toISOString(),
             status: "success",
-          },
-          {
+          });
+        } else {
+          recentActivity.push({
+            id: "1",
+            type: "user",
+            message: "Failed to load users data",
+            timestamp: new Date().toISOString(),
+            status: "error",
+          });
+        }
+
+        if (ordersResponse.status === "fulfilled") {
+          recentActivity.push({
             id: "2",
             type: "order",
-            message: `Total orders: ${totalOrders}`,
-            timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
+            message: `Successfully loaded ${totalOrders} orders`,
+            timestamp: new Date(Date.now() - 1000 * 60 * 2).toISOString(),
             status: "success",
-          },
-          {
+          });
+        } else {
+          recentActivity.push({
+            id: "2",
+            type: "order",
+            message: "Failed to load orders data",
+            timestamp: new Date(Date.now() - 1000 * 60 * 2).toISOString(),
+            status: "error",
+          });
+        }
+
+        if (notificationsResponse.status === "fulfilled") {
+          recentActivity.push({
             id: "3",
             type: "notification",
             message: `${pendingNotifications} pending notifications`,
-            timestamp: new Date(Date.now() - 1000 * 60 * 10).toISOString(),
+            timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
             status: pendingNotifications > 0 ? "warning" : "success",
-          },
-          {
+          });
+        } else {
+          recentActivity.push({
+            id: "3",
+            type: "notification",
+            message: "Failed to load notifications (401 Unauthorized)",
+            timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
+            status: "error",
+          });
+        }
+
+        if (productsResponse.status === "fulfilled") {
+          recentActivity.push({
             id: "4",
             type: "order",
             message: `${lowStockProducts} products with low stock`,
-            timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+            timestamp: new Date(Date.now() - 1000 * 60 * 8).toISOString(),
             status: lowStockProducts > 0 ? "warning" : "success",
-          },
-        ];
+          });
+        } else {
+          recentActivity.push({
+            id: "4",
+            type: "order",
+            message: "Failed to load products data",
+            timestamp: new Date(Date.now() - 1000 * 60 * 8).toISOString(),
+            status: "error",
+          });
+        }
 
         setRecentActivity(recentActivity);
       } catch (error) {
@@ -240,7 +307,7 @@ const Dashboard: React.FC = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
-              Welcome back, {user?.firstName}!
+              Welcome back, {user?.firstName || user?.username || "User"}!
             </h1>
             <p className="text-gray-600 mt-1">
               Here's what's happening with your microservices today.

@@ -22,6 +22,10 @@ public class CreateUserRequest {
     private String firstName;
     private String lastName;
     private String phone;
+    private String address;
+    private String bio;
+    private String profilePictureUrl;
+    private String role = "USER";
 }
 
 

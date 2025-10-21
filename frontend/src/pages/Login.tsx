@@ -1,34 +1,34 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { Eye, EyeOff, Mail, Lock, LogIn } from 'lucide-react';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { Eye, EyeOff, Mail, Lock, LogIn } from "lucide-react";
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState({
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
   const { login } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     // Clear error when user starts typing
-    if (error) setError('');
+    if (error) setError("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       await login(formData);
@@ -52,7 +52,7 @@ const Login: React.FC = () => {
             Sign in to your account
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Or{' '}
+            Or{" "}
             <Link
               to="/register"
               className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
@@ -100,7 +100,7 @@ const Login: React.FC = () => {
                 <input
                   id="password"
                   name="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   required
                   className="appearance-none rounded-lg relative block w-full pl-10 pr-12 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   placeholder="Password"
@@ -136,18 +136,21 @@ const Login: React.FC = () => {
                 onChange={(e) => setRememberMe(e.target.checked)}
                 disabled={loading}
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+              <label
+                htmlFor="remember-me"
+                className="ml-2 block text-sm text-gray-900"
+              >
                 Remember me
               </label>
             </div>
 
             <div className="text-sm">
-              <a
-                href="#"
+              <Link
+                to="/forgot-password"
                 className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
               >
                 Forgot your password?
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -156,9 +159,7 @@ const Login: React.FC = () => {
             <div className="rounded-md bg-red-50 p-4">
               <div className="flex">
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-red-800">
-                    {error}
-                  </h3>
+                  <h3 className="text-sm font-medium text-red-800">{error}</h3>
                 </div>
               </div>
             </div>
@@ -188,10 +189,16 @@ const Login: React.FC = () => {
 
         {/* Demo Credentials */}
         <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-          <h3 className="text-sm font-medium text-blue-800 mb-2">Demo Credentials:</h3>
+          <h3 className="text-sm font-medium text-blue-800 mb-2">
+            Demo Credentials:
+          </h3>
           <div className="text-xs text-blue-700 space-y-1">
-            <p><strong>Admin:</strong> admin / admin123</p>
-            <p><strong>User:</strong> user / user123</p>
+            <p>
+              <strong>Admin:</strong> admin / admin123
+            </p>
+            <p>
+              <strong>User:</strong> user / user123
+            </p>
           </div>
         </div>
       </div>
@@ -200,4 +207,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-

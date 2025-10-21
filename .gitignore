@@ -293,5 +293,4 @@ Thumbs.db
 # Application specific
 application-local.yml
 application-local.properties
-.env
 logs/

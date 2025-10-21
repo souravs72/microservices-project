@@ -1,6 +1,7 @@
 import axios from "axios";
 
 // API Configuration
+// Prefer relative base to leverage Nginx proxy (/api -> api-gateway:8080) in Docker
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 
 // Create axios instance with default config
@@ -52,9 +53,16 @@ export interface User {
   firstName: string;
   lastName: string;
   phone?: string | null;
+  address?: string | null;
+  bio?: string | null;
+  profilePictureUrl?: string | null;
+  role?: string;
+  memberSince?: string;
   active: boolean;
   createdAt: string;
   updatedAt: string;
+  createdBy?: string;
+  lastModifiedBy?: string;
 }
 
 export interface Order {
@@ -123,6 +131,12 @@ export const authAPI = {
     api.post("/api/auth/refresh", { refreshToken }),
 
   logout: () => api.post("/api/auth/logout"),
+
+  forgotPassword: (email: string) =>
+    api.post("/api/auth/forgot-password", { email }),
+
+  resetPassword: (token: string, newPassword: string) =>
+    api.post("/api/auth/reset-password", { token, newPassword }),
 };
 
 // Users API
@@ -132,6 +146,10 @@ export const usersAPI = {
 
   getById: (id: number) => api.get(`/api/users/${id}`),
 
+  getByUsername: (username: string) =>
+    api.get(`/api/users/username/${username}`),
+
+  // Create user via user-service (admin-driven provisioning)
   create: (userData: Partial<User>) => api.post("/api/users", userData),
 
   update: (id: number, userData: Partial<User>) =>
@@ -140,6 +158,16 @@ export const usersAPI = {
   delete: (id: number) => api.delete(`/api/users/${id}`),
 
   toggleStatus: (id: number) => api.patch(`/api/users/${id}/toggle-status`),
+
+  uploadProfilePicture: (id: number, file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    return api.post(`/api/users/${id}/profile-picture`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
 };
 
 // Orders API
@@ -204,42 +232,19 @@ export const inventoryAPI = {
   getLowStockProducts: () => api.get("/api/inventory/products/low-stock"),
 };
 
-// Notifications API (uses HTTP Basic Auth)
-const notificationsApi = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "",
-  timeout: 10000,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-// Add HTTP Basic Auth for notifications
-notificationsApi.interceptors.request.use(
-  (config) => {
-    // Use admin credentials for notifications service
-    const credentials = btoa("admin:admin123");
-    config.headers.Authorization = `Basic ${credentials}`;
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
 export const notificationsAPI = {
   getAll: (params?: { page?: number; size?: number; unreadOnly?: boolean }) =>
-    notificationsApi.get("/api/notifications", { params }),
+    api.get("/api/notifications", { params }),
 
-  getById: (id: number) => notificationsApi.get(`/api/notifications/${id}`),
+  getById: (id: number) => api.get(`/api/notifications/${id}`),
 
-  markAsRead: (id: number) =>
-    notificationsApi.patch(`/api/notifications/${id}/read`),
+  markAsRead: (id: number) => api.patch(`/api/notifications/${id}/read`, null),
 
-  markAllAsRead: () => notificationsApi.patch("/api/notifications/read-all"),
+  markAllAsRead: () => api.patch("/api/notifications/read-all", null),
 
-  delete: (id: number) => notificationsApi.delete(`/api/notifications/${id}`),
+  delete: (id: number) => api.delete(`/api/notifications/${id}`),
 
-  getUnreadCount: () => notificationsApi.get("/api/notifications/unread-count"),
+  getUnreadCount: () => api.get("/api/notifications/unread-count"),
 };
 
 // Dashboard API

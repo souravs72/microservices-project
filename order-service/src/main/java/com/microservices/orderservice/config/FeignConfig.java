@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FeignConfig {
     
-    @Value("${app.security.internal-api-key}")
+    @Value("${internal.api.key}")
     private String internalApiKey;
     
     @Bean

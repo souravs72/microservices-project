@@ -68,6 +68,12 @@ public class UserEventConsumer {
 
             log.info("Processing USER_CREATED event for user: {}", username);
 
+            // Check if user already exists (idempotency)
+            if (userService.userExistsByUsername(username)) {
+                log.info("User {} already exists in User Service, skipping creation", username);
+                return;
+            }
+
             // Create user profile
             CreateUserRequest createUserRequest = new CreateUserRequest();
             createUserRequest.setUsername(username);

@@ -78,6 +78,18 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Flyway for database migrations -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>11.14.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+            <version>11.14.1</version>
+        </dependency>
+
         <!-- H2 Database (dev/test only) -->
         <dependency>
             <groupId>com.h2database</groupId>
@@ -156,6 +168,26 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- Maven Resources Plugin to ensure migration files are included -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <resources>
+                        <resource>
+                            <directory>src/main/resources</directory>
+                            <includes>
+                                <include>**/*.sql</include>
+                                <include>**/*.properties</include>
+                                <include>**/*.yml</include>
+                                <include>**/*.yaml</include>
+                            </includes>
+                        </resource>
+                    </resources>
+                </configuration>
             </plugin>
 		</plugins>
 	</build>

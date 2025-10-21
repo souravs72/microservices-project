@@ -17,17 +17,17 @@ RUN mvn -f pom.xml clean package -pl api-gateway -am -DskipTests
 # ===============================
 # Stage 2: Runtime
 # ===============================
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Create non-root user for better security
-RUN addgroup -S spring && adduser -S spring -G spring
+# Create non-root user for better security (Debian/Ubuntu base)
+RUN groupadd --system spring && useradd --system --gid spring spring
 
 # Copy built JAR from builder image
 COPY --from=builder /app/api-gateway/target/*.jar app.jar
 
-# Change ownership to non-root user
-RUN chown spring:spring app.jar
+# Prepare logs directory and set ownership
+RUN mkdir -p /app/logs && chown -R spring:spring /app
 USER spring:spring
 
 # Health check endpoint (adjust if needed)
@@ -38,4 +38,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
 EXPOSE 8080
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -22,7 +22,7 @@ public class UserCreatedEventPublisher {
     @Value("${user.service.url:http://localhost:8081}")
     private String userServiceUrl;
 
-    @Value("${app.security.internal-api-key:change-me}")
+    @Value("${internal.api.key}")
     private String internalApiKey;
 
     public void publishUserCreated(String username, String email, String firstName, String lastName) {

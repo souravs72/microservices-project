@@ -1,186 +1,153 @@
 package com.microservices.notificationservice.service;
 
-import com.microservices.notificationservice.dto.OrderNotificationEvent;
 import com.microservices.notificationservice.dto.UserCreatedEvent;
 import com.microservices.notificationservice.entity.NotificationHistory;
 import com.microservices.notificationservice.repository.NotificationHistoryRepository;
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.Timer;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class NotificationService {
 
+    private final JavaMailSender mailSender;
     private final NotificationHistoryRepository historyRepository;
-    private final EmailService emailService;
-    private final IdempotencyService idempotencyService;
-    private final Counter notificationProcessedCounter;
-    private final Counter notificationSuccessCounter;
-    private final Counter notificationFailureCounter;
-    private final Timer notificationProcessingTimer;
+    private final Configuration freemarkerConfig;
 
-    public NotificationService(NotificationHistoryRepository historyRepository,
-                              EmailService emailService,
-                              IdempotencyService idempotencyService,
-                              @Qualifier("notificationProcessedCounter") Counter notificationProcessedCounter,
-                              @Qualifier("notificationSuccessCounter") Counter notificationSuccessCounter,
-                              @Qualifier("notificationFailureCounter") Counter notificationFailureCounter,
-                              @Qualifier("notificationProcessingTimer") Timer notificationProcessingTimer) {
-        this.historyRepository = historyRepository;
-        this.emailService = emailService;
-        this.idempotencyService = idempotencyService;
-        this.notificationProcessedCounter = notificationProcessedCounter;
-        this.notificationSuccessCounter = notificationSuccessCounter;
-        this.notificationFailureCounter = notificationFailureCounter;
-        this.notificationProcessingTimer = notificationProcessingTimer;
-    }
+    @Value("${spring.mail.username}")
+    private String fromEmail;
 
     @Transactional
-    public CompletableFuture<Void> processUserCreatedEvent(UserCreatedEvent event, String eventId) {
-        Timer.Sample sample = Timer.start();
-        notificationProcessedCounter.increment();
-        
+    public CompletableFuture<Void> processUserCreatedEvent(UserCreatedEvent userEvent, String eventId) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                log.info("Processing user created event for user: {}", userEvent.getUsername());
+
+                // Check if we've already processed this event
+                if (historyRepository.existsByEventId(eventId)) {
+                    log.warn("Event {} already processed, skipping", eventId);
+                    return;
+                }
+
+                // Create notification history record
+                NotificationHistory notification = NotificationHistory.builder()
+                    .eventId(eventId)
+                    .eventType(userEvent.getEventType())
+                    .recipientEmail(userEvent.getEmail())
+                    .recipientName(userEvent.getFirstName() + " " + userEvent.getLastName())
+                    .subject("Welcome to Microservices Platform!")
+                    .status(NotificationHistory.NotificationStatus.PENDING)
+                    .retryCount(0)
+                    .maxRetries(3)
+                    .build();
+
+                historyRepository.save(notification);
+
+                // Send welcome email
+                sendWelcomeEmail(userEvent, notification);
+
+            } catch (Exception e) {
+                log.error("Error processing user created event: {}", eventId, e);
+                throw new RuntimeException("Failed to process user created event", e);
+            }
+        });
+    }
+
+    private void sendWelcomeEmail(UserCreatedEvent userEvent, NotificationHistory notification) {
         try {
-            // Check idempotency
-            if (idempotencyService.isProcessed(eventId)) {
-                log.info("Event already processed (idempotent): {}", eventId);
-                return CompletableFuture.completedFuture(null);
-            }
+            log.info("Sending welcome email to: {}", userEvent.getEmail());
 
-            // Check database idempotency as backup
-            if (historyRepository.existsByEventId(eventId)) {
-                log.info("Notification already exists in database: {}", eventId);
-                idempotencyService.markAsProcessed(eventId);
-                return CompletableFuture.completedFuture(null);
-            }
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            NotificationHistory history = new NotificationHistory();
-            history.setEventId(eventId);
-            history.setEventType(event.getEventType());
-            history.setNotificationType("EMAIL");
-            history.setRecipientEmail(event.getEmail());
-            history.setRecipientName(buildFullName(event));
-            history.setSubject("Welcome to Our Platform!");
-            history.setBody(buildWelcomeEmailBody(event));
-            history.setStatus("PENDING");
-            history.setCorrelationId(MDC.get("correlationId"));
+            helper.setFrom(fromEmail);
+            helper.setTo(userEvent.getEmail());
+            helper.setSubject("Welcome to Microservices Platform!");
 
-            // Save initial record
-            historyRepository.save(history);
+            // Prepare template data
+            Map<String, Object> templateData = new HashMap<>();
+            templateData.put("firstName", userEvent.getFirstName());
+            templateData.put("lastName", userEvent.getLastName());
+            templateData.put("username", userEvent.getUsername());
+            templateData.put("email", userEvent.getEmail());
+            templateData.put("currentYear", LocalDateTime.now().getYear());
 
-            // Send email asynchronously
-            return emailService.sendWelcomeEmail(event)
-                    .thenRun(() -> {
-                        try {
-                            // Update history on success
-                            history.setStatus("SENT");
-                            history.setSentAt(LocalDateTime.now());
-                            historyRepository.save(history);
-                            
-                            // Mark as processed in Redis
-                            idempotencyService.markAsProcessed(eventId);
-                            
-                            notificationSuccessCounter.increment();
-                            log.info("Welcome email sent successfully to: {}", event.getEmail());
-                        } catch (Exception e) {
-                            log.error("Error updating notification history for success: {}", eventId, e);
-                        }
-                    })
-                    .exceptionally(throwable -> {
-                        try {
-                            // Update history on failure
-                            history.setStatus("FAILED");
-                            history.setErrorMessage(throwable.getMessage());
-                            history.setRetryCount(history.getRetryCount() + 1);
-                            historyRepository.save(history);
-                            
-                            // Mark as failed in Redis
-                            idempotencyService.markAsFailed(eventId);
-                            
-                            notificationFailureCounter.increment();
-                            log.error("Failed to send welcome email to: {}", event.getEmail(), throwable);
-                        } catch (Exception e) {
-                            log.error("Error updating notification history for failure: {}", eventId, e);
-                        }
-                        return null;
-                    });
+            // Generate HTML content using FreeMarker template
+            String htmlContent = generateEmailContent("welcome-email.html", templateData);
+            helper.setText(htmlContent, true);
 
+            // Send email
+            mailSender.send(message);
+
+            // Update notification status
+            notification.setStatus(NotificationHistory.NotificationStatus.SENT);
+            notification.setSentAt(LocalDateTime.now());
+            notification.setContent(htmlContent);
+            historyRepository.save(notification);
+
+            log.info("Welcome email sent successfully to: {}", userEvent.getEmail());
+
+        } catch (MessagingException e) {
+            log.error("Failed to send welcome email to: {}", userEvent.getEmail(), e);
+            handleEmailFailure(notification, e.getMessage());
         } catch (Exception e) {
-            notificationFailureCounter.increment();
-            log.error("Error processing user created event: {}", eventId, e);
-            return CompletableFuture.failedFuture(e);
-        } finally {
-            sample.stop(notificationProcessingTimer);
+            log.error("Unexpected error sending welcome email to: {}", userEvent.getEmail(), e);
+            handleEmailFailure(notification, e.getMessage());
         }
     }
 
-    @Transactional
-    public void processOrderNotification(OrderNotificationEvent event, String eventId) {
-        // Check idempotency
-        if (idempotencyService.isProcessed(eventId)) {
-            log.info("Event already processed (idempotent): {}", eventId);
-            return;
+    private String generateEmailContent(String templateName, Map<String, Object> data) {
+        try {
+            Template template = freemarkerConfig.getTemplate(templateName);
+            StringWriter writer = new StringWriter();
+            template.process(data, writer);
+            return writer.toString();
+        } catch (Exception e) {
+            log.error("Error generating email content from template: {}", templateName, e);
+            // Fallback to simple HTML
+            return generateFallbackEmailContent(data);
         }
-
-        if (historyRepository.existsByEventId(eventId)) {
-            log.info("Notification already exists in database: {}", eventId);
-            idempotencyService.markAsProcessed(eventId);
-            return;
-        }
-
-        NotificationHistory history = new NotificationHistory();
-        history.setEventId(eventId);
-        history.setEventType("ORDER_" + event.getStatus());
-        history.setNotificationType("EMAIL");
-        history.setRecipientEmail("user@example.com");  // In real scenario, fetch from user service
-        history.setSubject("Order Update: " + event.getStatus());
-        history.setBody(event.getMessage());
-        history.setStatus("SENT");
-        history.setSentAt(LocalDateTime.now());
-        history.setCorrelationId(MDC.get("correlationId"));
-
-        historyRepository.save(history);
-        idempotencyService.markAsProcessed(eventId);
-
-        log.info("Order notification processed: {} - {}", event.getOrderId(), event.getStatus());
     }
 
-    private String buildFullName(UserCreatedEvent event) {
-        StringBuilder name = new StringBuilder();
-        if (event.getFirstName() != null && !event.getFirstName().isEmpty()) {
-            name.append(event.getFirstName());
-        }
-        if (event.getLastName() != null && !event.getLastName().isEmpty()) {
-            if (name.length() > 0) {
-                name.append(" ");
-            }
-            name.append(event.getLastName());
-        }
-        if (name.length() == 0) {
-            return event.getUsername();
-        }
-        return name.toString();
+    private String generateFallbackEmailContent(Map<String, Object> data) {
+        return String.format("""
+            <html>
+            <body>
+                <h2>Welcome to Microservices Platform!</h2>
+                <p>Hello %s %s,</p>
+                <p>Welcome to our microservices platform! Your account has been successfully created.</p>
+                <p>Username: %s</p>
+                <p>Email: %s</p>
+                <p>Best regards,<br>The Microservices Team</p>
+            </body>
+            </html>
+            """, 
+            data.get("firstName"), 
+            data.get("lastName"), 
+            data.get("username"), 
+            data.get("email"));
     }
 
-    private String buildWelcomeEmailBody(UserCreatedEvent event) {
-        String name = buildFullName(event);
-        return String.format(
-                "Hello %s,\n\n" +
-                        "Welcome to our platform! Your account has been successfully created.\n" +
-                        "Username: %s\n\n" +
-                        "You can now access all features of our service.\n\n" +
-                        "Best regards,\n" +
-                        "The Team",
-                name,
-                event.getUsername()
-        );
+    private void handleEmailFailure(NotificationHistory notification, String errorMessage) {
+        notification.setStatus(NotificationHistory.NotificationStatus.FAILED);
+        notification.setErrorMessage(errorMessage);
+        notification.setRetryCount(notification.getRetryCount() + 1);
+        historyRepository.save(notification);
     }
 }

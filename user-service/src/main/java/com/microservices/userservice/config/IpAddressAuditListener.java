@@ -1,6 +1,6 @@
 package com.microservices.userservice.config;
 
-import com.microservices.userservice.entity.base.AuditableEntity;
+import com.microservices.common.entity.AuditableEntity;
 import com.microservices.userservice.security.SecurityContext;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -16,16 +16,17 @@ public class IpAddressAuditListener {
     public void setCreatedFromIp(AuditableEntity entity) {
         String ip = getCurrentIp();
         if (ip != null) {
-            entity.setCreatedFromIp(ip);
-            entity.setModifiedFromIp(ip); // initialize both on create
+            // Note: Common AuditableEntity doesn't have IP fields
+            // This listener is kept for compatibility but won't set IP fields
         }
     }
 
     @PreUpdate
-    public void setModifiedFromIp(AuditableEntity entity) {
+    public void setUpdatedFromIp(AuditableEntity entity) {
         String ip = getCurrentIp();
         if (ip != null) {
-            entity.setModifiedFromIp(ip);
+            // Note: Common AuditableEntity doesn't have IP fields
+            // This listener is kept for compatibility but won't set IP fields
         }
     }
 }
