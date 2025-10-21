@@ -46,7 +46,21 @@ const AllUsers: React.FC = () => {
         size: 10,
         search: searchTerm || undefined,
       });
-      setUsers(response.data.content || response.data);
+
+      // Handle both paginated response and simple array response
+      let usersData;
+      if (Array.isArray(response.data)) {
+        // Simple array response (current backend format)
+        usersData = response.data;
+      } else if (response.data.content) {
+        // Paginated response format
+        usersData = response.data.content;
+      } else {
+        // Fallback to the entire response data
+        usersData = response.data;
+      }
+
+      setUsers(usersData || []);
     } catch (err) {
       const e = err as { response?: { data?: { message?: string } } };
       setError(e.response?.data?.message || "Failed to fetch users");
