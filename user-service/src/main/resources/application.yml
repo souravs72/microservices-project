@@ -43,6 +43,11 @@ app:
     batch-size: 100
     max-age-hours: 24
 
+  # Kafka Configuration
+  kafka:
+    topic:
+      user-events: ${KAFKA_USER_EVENTS_TOPIC:user-events}
+
 # Internal API Key for service-to-service communication (standardized)
 internal:
   api:

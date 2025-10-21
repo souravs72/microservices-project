@@ -6,6 +6,7 @@ import com.microservices.userservice.dto.UserDTO;
 import com.microservices.userservice.entity.User;
 import com.microservices.userservice.exception.ResourceNotFoundException;
 import com.microservices.userservice.exception.UserAlreadyExistsException;
+import com.microservices.userservice.producer.UserEventProducer;
 import com.microservices.userservice.repository.UserRepository;
 import com.microservices.userservice.util.InputSanitizer;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserService {
     private final UserRepository userRepository;
+    private final UserEventProducer userEventProducer;
 
     @Transactional
     public UserDTO createUser(CreateUserRequest request) {
@@ -63,6 +65,22 @@ public class UserService {
         User savedUser = userRepository.save(user);
         log.info("User created: {} from IP: {}", sanitizedUsername,
                 com.microservices.userservice.security.SecurityContext.getContext().getIpAddress());
+        
+        // Publish event to notify Auth Service
+        try {
+            userEventProducer.publishUserCreated(
+                sanitizedUsername,
+                sanitizedEmail,
+                request.getFirstName(),
+                request.getLastName(),
+                request.getPassword()
+            );
+            log.info("Published user created event for: {}", sanitizedUsername);
+        } catch (Exception e) {
+            log.error("Failed to publish user created event for: {} - Error: {}", sanitizedUsername, e.getMessage());
+            // Don't fail user creation if event publishing fails
+        }
+        
         return convertToDTO(savedUser);
     }
 

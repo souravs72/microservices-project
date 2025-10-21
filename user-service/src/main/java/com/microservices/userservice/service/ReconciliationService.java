@@ -144,8 +144,8 @@ public class ReconciliationService {
             needsUpdate = true;
         }
 
-        if (user.getModifiedBy() == null) {
-            user.setModifiedBy("system");
+        if (user.getUpdatedBy() == null) {
+            user.setUpdatedBy("system");
             needsUpdate = true;
         }
 
@@ -157,7 +157,7 @@ public class ReconciliationService {
 
         if (needsUpdate) {
             user.setUpdatedAt(LocalDateTime.now());
-            user.setModifiedBy("reconciliation-service");
+            user.setUpdatedBy("reconciliation-service");
             userRepository.save(user);
             log.info("Reconciled user: {}", user.getUsername());
         }

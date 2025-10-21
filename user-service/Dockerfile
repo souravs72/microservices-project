@@ -10,16 +10,20 @@ RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
 # Copy parent pom.xml first
 COPY pom.xml .
 
+# Copy common module pom.xml and source
+COPY common/pom.xml ./common/
+COPY common/src ./common/src
+
 # Copy user-service pom.xml
 COPY user-service/pom.xml ./user-service/
 
-# Download dependencies for user-service
-RUN cd user-service && mvn dependency:go-offline -B
+# Build common module first (standalone)
+RUN cd common && mvn clean install -DskipTests
 
 # Copy source code
 COPY user-service/src ./user-service/src
 
-# Build the application
+# Build the application (skip dependency resolution since we built common locally)
 RUN cd user-service && mvn clean package -DskipTests
 
 # Production stage

@@ -3,6 +3,7 @@ package com.microservices.userservice.controller;
 import com.microservices.userservice.dto.CreateUserRequest;
 import com.microservices.userservice.dto.UpdateUserRequest;
 import com.microservices.userservice.dto.UserDTO;
+import com.microservices.userservice.entity.User;
 import com.microservices.userservice.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,7 +202,7 @@ class UserGraphQLControllerTest {
     // === Helpers ===
 
     private UserDTO createMockUser(Long id, String username, String email) {
-        return new UserDTO(id, username, email, "First", "Last", "+1234567890", "Address", "Bio", "ProfilePictureUrl", "Role", LocalDateTime.now(), true, LocalDateTime.now(), LocalDateTime.now(), "CreatedBy", "LastModifiedBy");
+        return new UserDTO(id, username, email, "First", "Last", "+1234567890", "Address", "Bio", "ProfilePictureUrl", User.UserRole.USER, LocalDateTime.now(), true, LocalDateTime.now(), LocalDateTime.now(), "CreatedBy", "UpdatedBy");
     }
 
     private java.util.Map<String, Object> createUserInput() {
