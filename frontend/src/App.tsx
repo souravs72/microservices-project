@@ -16,8 +16,11 @@ import Orders from "./pages/Orders";
 import Inventory from "./pages/Inventory";
 import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
+import Moderation from "./pages/Moderation";
+import Support from "./pages/Support";
 import Layout from "./components/Layout";
 import LoadingSpinner from "./components/LoadingSpinner";
+import RoleGuard from "./components/RoleGuard";
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
@@ -106,9 +109,11 @@ function App() {
               path="/users"
               element={
                 <ProtectedRoute>
-                  <Layout>
-                    <AllUsers />
-                  </Layout>
+                  <RoleGuard requiredRole="ADMIN">
+                    <Layout>
+                      <AllUsers />
+                    </Layout>
+                  </RoleGuard>
                 </ProtectedRoute>
               }
             />
@@ -149,6 +154,30 @@ function App() {
                   <Layout>
                     <Profile />
                   </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/moderation"
+              element={
+                <ProtectedRoute>
+                  <RoleGuard requiredRole="MODERATOR">
+                    <Layout>
+                      <Moderation />
+                    </Layout>
+                  </RoleGuard>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/support"
+              element={
+                <ProtectedRoute>
+                  <RoleGuard requiredRole="SUPPORT">
+                    <Layout>
+                      <Support />
+                    </Layout>
+                  </RoleGuard>
                 </ProtectedRoute>
               }
             />

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+// Role imports are used in navigation filtering
 import {
   LayoutDashboard,
   Users,
@@ -13,6 +14,8 @@ import {
   Search,
   ShoppingCart,
   Package,
+  CheckCircle,
+  HelpCircle,
 } from "lucide-react";
 
 interface LayoutProps {
@@ -25,13 +28,46 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
 
-  const navigation = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-    { name: "Users", href: "/users", icon: Users },
-    { name: "Orders", href: "/orders", icon: ShoppingCart },
-    { name: "Inventory", href: "/inventory", icon: Package },
-    { name: "Notifications", href: "/notifications", icon: Bell },
+  const allNavigation = [
+    {
+      name: "Dashboard",
+      href: "/dashboard",
+      icon: LayoutDashboard,
+      roles: ["ADMIN", "MODERATOR", "SUPPORT", "USER"],
+    },
+    { name: "Users", href: "/users", icon: Users, roles: ["ADMIN"] },
+    {
+      name: "Orders",
+      href: "/orders",
+      icon: ShoppingCart,
+      roles: ["ADMIN", "MODERATOR", "SUPPORT", "USER"],
+    },
+    {
+      name: "Inventory",
+      href: "/inventory",
+      icon: Package,
+      roles: ["ADMIN", "MODERATOR", "USER"],
+    },
+    {
+      name: "Notifications",
+      href: "/notifications",
+      icon: Bell,
+      roles: ["ADMIN", "MODERATOR", "SUPPORT", "USER"],
+    },
+    {
+      name: "Moderation",
+      href: "/moderation",
+      icon: CheckCircle,
+      roles: ["MODERATOR"],
+    },
+    { name: "Support", href: "/support", icon: HelpCircle, roles: ["SUPPORT"] },
   ];
+
+  // Filter navigation based on user role
+  const navigation = allNavigation.filter((item) => {
+    if (!user || !user.roles) return false;
+    return item.roles.some((role) => user.roles?.includes(role));
+  });
 
   const handleLogout = () => {
     logout();
