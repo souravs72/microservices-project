@@ -132,7 +132,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/graphql").authenticated()
 
                         // Admin-only endpoints
-                        .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("ADMIN")
 
                         // Protected actuator endpoints
