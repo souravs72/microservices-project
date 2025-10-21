@@ -54,7 +54,20 @@ const Inventory: React.FC = () => {
         status: filterStatus !== "all" ? filterStatus : undefined,
         search: searchTerm || undefined,
       });
-      setProducts(response.data.content || response.data);
+      // Handle both paginated response and simple array response
+      let productsData;
+      if (Array.isArray(response.data)) {
+        // Simple array response (current backend format)
+        productsData = response.data;
+      } else if (response.data.content) {
+        // Paginated response format
+        productsData = response.data.content;
+      } else {
+        // Fallback to the entire response data
+        productsData = response.data;
+      }
+
+      setProducts(productsData || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to fetch products");

@@ -53,7 +53,20 @@ const Orders: React.FC = () => {
         size: 10,
         status: filterStatus !== "all" ? filterStatus : undefined,
       });
-      setOrders(response.data.content || response.data);
+      // Handle both paginated response and simple array response
+      let ordersData;
+      if (Array.isArray(response.data)) {
+        // Simple array response (current backend format)
+        ordersData = response.data;
+      } else if (response.data.content) {
+        // Paginated response format
+        ordersData = response.data.content;
+      } else {
+        // Fallback to the entire response data
+        ordersData = response.data;
+      }
+
+      setOrders(ordersData || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };

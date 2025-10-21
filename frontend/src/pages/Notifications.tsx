@@ -40,7 +40,20 @@ const Notifications: React.FC = () => {
         size: 10,
         unreadOnly: filterStatus === "unread",
       });
-      setNotifications(response.data.content || response.data);
+      // Handle both paginated response and simple array response
+      let notificationsData;
+      if (Array.isArray(response.data)) {
+        // Simple array response (current backend format)
+        notificationsData = response.data;
+      } else if (response.data.content) {
+        // Paginated response format
+        notificationsData = response.data.content;
+      } else {
+        // Fallback to the entire response data
+        notificationsData = response.data;
+      }
+
+      setNotifications(notificationsData || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to fetch notifications");
