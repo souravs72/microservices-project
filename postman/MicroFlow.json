@@ -156,7 +156,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"{{admin_password}}\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/login",
@@ -173,7 +173,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+                  "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"{{admin_password}}\"\n}"
                 },
                 "url": {
                   "raw": "{{base_url}}/api/auth/login",
@@ -424,7 +424,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@example.com\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"password\": \"Password123!\"\n}"
+              "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@example.com\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"password\": \"{{test_password}}\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/users",

@@ -353,6 +353,9 @@ show_help() {
     echo "  --clean-images    Also remove old Docker images"
     echo "  --logs           Show logs after starting"
     echo "  --test           Test JWT token validation after starting"
+    echo "  --comprehensive  Run comprehensive service tests"
+    echo "  --monitor        Check monitoring and observability"
+    echo "  --swagger        Open Swagger documentation"
     echo "  --status         Show service status only"
     echo "  --infra          Check infrastructure services only"
     echo "  --help           Show this help message"
@@ -361,6 +364,9 @@ show_help() {
     echo "  $0                    # Rebuild and restart all services"
     echo "  $0 --clean-images     # Rebuild with clean images"
     echo "  $0 --test            # Rebuild and test JWT validation"
+    echo "  $0 --comprehensive   # Run comprehensive tests"
+    echo "  $0 --monitor         # Check monitoring"
+    echo "  $0 --swagger         # Open Swagger docs"
     echo "  $0 --status          # Show current service status"
     echo "  $0 --infra           # Check infrastructure services only"
     echo ""
@@ -368,6 +374,154 @@ show_help() {
     echo "  If you encounter Kafka cluster ID mismatch errors, run:"
     echo "  ./reset-kafka.sh      # Quick Kafka reset"
     echo "  $0                    # Full rebuild (includes Kafka cleanup)"
+}
+
+# Function to run comprehensive service tests
+run_comprehensive_tests() {
+    print_status "Running comprehensive service tests..."
+    
+    # Test 1: Service Health Checks
+    print_status "1. Testing service health endpoints..."
+    local services=("api-gateway:8080" "auth-service:8082" "user-service:8081" "order-service:8083" "inventory-service:8084" "notification-service:8085")
+    local failed_services=()
+    
+    for service in "${services[@]}"; do
+        local name=$(echo $service | cut -d: -f1)
+        local port=$(echo $service | cut -d: -f2)
+        if curl -s "http://localhost:$port/actuator/health" > /dev/null 2>&1; then
+            print_success "✅ $name health check passed"
+        else
+            print_error "❌ $name health check failed"
+            failed_services+=("$name")
+        fi
+    done
+    
+    # Test 2: Authentication Flow
+    print_status "2. Testing authentication flow..."
+    local login_response=$(curl -s -X POST http://localhost:8082/api/auth/login \
+        -H "Content-Type: application/json" \
+        -d '{"username": "admin", "password": "'${ADMIN_PASSWORD:-admin123}'"}')
+    
+    if echo "$login_response" | grep -q "accessToken"; then
+        print_success "✅ Authentication flow working"
+        local token=$(echo "$login_response" | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4)
+        
+        # Test 3: Protected Endpoint Access
+        print_status "3. Testing protected endpoint access..."
+        local protected_response=$(curl -s -H "Authorization: Bearer $token" http://localhost:8081/api/users)
+        if echo "$protected_response" | grep -q "username"; then
+            print_success "✅ Protected endpoint access working"
+        else
+            print_error "❌ Protected endpoint access failed"
+        fi
+    else
+        print_error "❌ Authentication flow failed"
+    fi
+    
+    # Test 4: User Creation
+    print_status "4. Testing user creation..."
+    local test_user="testuser$(date +%s)"
+    local create_response=$(curl -s -X POST http://localhost:8081/api/users \
+        -H "Content-Type: application/json" \
+        -d '{"username": "'$test_user'", "email": "'$test_user'@example.com", "password": "TestPassword123!", "firstName": "Test", "lastName": "User", "role": "USER"}')
+    
+    if echo "$create_response" | grep -q "username"; then
+        print_success "✅ User creation working"
+    else
+        print_error "❌ User creation failed"
+    fi
+    
+    # Summary
+    if [ ${#failed_services[@]} -eq 0 ]; then
+        print_success "🎉 All comprehensive tests passed!"
+    else
+        print_warning "⚠️  Some tests failed. Failed services: ${failed_services[*]}"
+    fi
+}
+
+# Function to check monitoring and observability
+check_monitoring() {
+    print_status "Checking monitoring and observability..."
+    
+    # Check Prometheus
+    print_status "1. Checking Prometheus..."
+    if curl -s http://localhost:9091/-/healthy > /dev/null 2>&1; then
+        print_success "✅ Prometheus is running"
+        local metrics_count=$(curl -s http://localhost:9091/api/v1/label/__name__/values | grep -o '"[^"]*"' | wc -l)
+        print_status "   Metrics available: $metrics_count"
+    else
+        print_error "❌ Prometheus is not accessible"
+    fi
+    
+    # Check Grafana
+    print_status "2. Checking Grafana..."
+    if curl -s http://localhost:9090/api/health > /dev/null 2>&1; then
+        print_success "✅ Grafana is running"
+        local datasources=$(curl -s http://localhost:9090/api/datasources -u admin:${GRAFANA_PASSWORD:?GRAFANA_PASSWORD required} 2>/dev/null | grep -o '"name"' | wc -l)
+        print_status "   Configured datasources: $datasources"
+    else
+        print_error "❌ Grafana is not accessible"
+    fi
+    
+    # Check service metrics
+    print_status "3. Checking service metrics..."
+    local services=("api-gateway:8080" "auth-service:8082" "user-service:8081")
+    for service in "${services[@]}"; do
+        local name=$(echo $service | cut -d: -f1)
+        local port=$(echo $service | cut -d: -f2)
+        if curl -s "http://localhost:$port/actuator/prometheus" > /dev/null 2>&1; then
+            print_success "✅ $name metrics endpoint accessible"
+        else
+            print_warning "⚠️  $name metrics endpoint not accessible"
+        fi
+    done
+}
+
+# Function to open Swagger documentation
+open_swagger_docs() {
+    print_status "Opening Swagger documentation..."
+    
+    echo ""
+    echo "📚 Available Swagger Documentation:"
+    echo ""
+    echo "1. Notification Service (Working):"
+    echo "   📖 Swagger UI: http://localhost:8085/swagger-ui/index.html"
+    echo "   📋 OpenAPI: http://localhost:8085/v3/api-docs"
+    echo ""
+    echo "2. User Service (Auth Required):"
+    echo "   📖 Swagger UI: http://localhost:8081/swagger-ui/index.html"
+    echo "   📋 OpenAPI: http://localhost:8081/v3/api-docs"
+    echo ""
+    echo "3. Auth Service (Auth Required):"
+    echo "   📖 Swagger UI: http://localhost:8082/swagger-ui/index.html"
+    echo "   📋 OpenAPI: http://localhost:8082/v3/api-docs"
+    echo ""
+    echo "4. Order Service (Auth Required):"
+    echo "   📖 Swagger UI: http://localhost:8083/swagger-ui/index.html"
+    echo "   📋 OpenAPI: http://localhost:8083/v3/api-docs"
+    echo ""
+    echo "5. Inventory Service (Auth Required):"
+    echo "   📖 Swagger UI: http://localhost:8084/swagger-ui/index.html"
+    echo "   📋 OpenAPI: http://localhost:8084/v3/api-docs"
+    echo ""
+    echo "6. API Gateway (Auth Required):"
+    echo "   📖 Swagger UI: http://localhost:8080/swagger-ui/index.html"
+    echo "   📋 OpenAPI: http://localhost:8080/v3/api-docs"
+    echo ""
+    echo "🔐 For authenticated services, get JWT token:"
+    echo "   curl -X POST http://localhost:8082/api/auth/login \\"
+    echo "     -H 'Content-Type: application/json' \\"
+    echo "     -d '{\"username\":\"admin\",\"password\":\"'${ADMIN_PASSWORD:-admin123}'\"}'"
+    echo ""
+    
+    # Try to open the first working service
+    if command -v xdg-open > /dev/null; then
+        xdg-open http://localhost:8085/swagger-ui/index.html 2>/dev/null &
+    elif command -v open > /dev/null; then
+        open http://localhost:8085/swagger-ui/index.html 2>/dev/null &
+    else
+        print_status "Please open: http://localhost:8085/swagger-ui/index.html"
+    fi
 }
 
 # Main execution
@@ -380,6 +534,9 @@ main() {
     CLEAN_IMAGES=false
     SHOW_LOGS=false
     RUN_TEST=false
+    RUN_COMPREHENSIVE=false
+    RUN_MONITOR=false
+    RUN_SWAGGER=false
     SHOW_STATUS_ONLY=false
     CHECK_INFRA_ONLY=false
     
@@ -395,6 +552,18 @@ main() {
                 ;;
             --test)
                 RUN_TEST=true
+                shift
+                ;;
+            --comprehensive)
+                RUN_COMPREHENSIVE=true
+                shift
+                ;;
+            --monitor)
+                RUN_MONITOR=true
+                shift
+                ;;
+            --swagger)
+                RUN_SWAGGER=true
                 shift
                 ;;
             --status)
@@ -439,6 +608,18 @@ main() {
     
     if [ "$RUN_TEST" = true ]; then
         test_jwt_validation
+    fi
+    
+    if [ "$RUN_COMPREHENSIVE" = true ]; then
+        run_comprehensive_tests
+    fi
+    
+    if [ "$RUN_MONITOR" = true ]; then
+        check_monitoring
+    fi
+    
+    if [ "$RUN_SWAGGER" = true ]; then
+        open_swagger_docs
     fi
     
     if [ "$SHOW_LOGS" = true ]; then
