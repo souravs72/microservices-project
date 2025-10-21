@@ -91,7 +91,7 @@ jwt:
 
 internal:
   api:
-    key: ${INTERNAL_API_KEY:internal-api-key-123}
+    key: ${INTERNAL_API_KEY:?INTERNAL_API_KEY required}
 app:
   security:
     max-requests-per-minute: 200

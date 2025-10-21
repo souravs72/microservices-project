@@ -98,7 +98,7 @@ make_timed_request() {
 register_user() {
     local email=$1
     local name=$2
-    local password="TestPassword123!"
+    local password="${TEST_USER_PASSWORD:-TestPassword123!}"
     
     local register_data="{\"email\":\"$email\",\"password\":\"$password\",\"firstName\":\"$name\",\"lastName\":\"$name\"}"
     local response=$(make_timed_request "POST" "$AUTH_SERVICE/api/auth/register" "$register_data" "-H 'Content-Type: application/json'")
@@ -118,7 +118,7 @@ register_user() {
 # Function to login user
 login_user() {
     local email=$1
-    local password="TestPassword123!"
+    local password="${TEST_USER_PASSWORD:-TestPassword123!}"
     
     local login_data="{\"email\":\"$email\",\"password\":\"$password\"}"
     local response=$(make_timed_request "POST" "$AUTH_SERVICE/api/auth/login" "$login_data" "-H 'Content-Type: application/json'")

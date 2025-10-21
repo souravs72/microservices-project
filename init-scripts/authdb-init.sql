@@ -96,7 +96,7 @@ CREATE INDEX IF NOT EXISTS idx_outbox_processed ON outbox_events(processed);
 CREATE INDEX IF NOT EXISTS idx_outbox_event_type ON outbox_events(event_type);
 CREATE INDEX IF NOT EXISTS idx_outbox_created_at ON outbox_events(created_at);
 
--- Create admin user (password: admin123)
+-- Create admin user (password: [Set in ADMIN_PASSWORD environment variable])
 INSERT INTO auth_users (username, email, password, role, enabled)
 VALUES ('admin', 'admin@example.com', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYC6FYT3aN6', 'ADMIN', true)
     ON CONFLICT (username) DO NOTHING;

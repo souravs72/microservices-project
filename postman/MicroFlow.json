@@ -105,7 +105,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"Password123!\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}"
+              "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"{{test_password}}\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/register",
@@ -122,7 +122,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"Password123!\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}"
+                  "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"{{test_password}}\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}"
                 },
                 "url": {
                   "raw": "{{base_url}}/api/auth/register",
@@ -273,7 +273,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"token\": \"reset_token_from_email\",\n  \"newPassword\": \"NewPassword123!\"\n}"
+              "raw": "{\n  \"token\": \"reset_token_from_email\",\n  \"newPassword\": \"{{test_password}}\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/reset-password",
@@ -494,7 +494,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"synceduser\",\n  \"email\": \"synceduser@example.com\",\n  \"firstName\": \"Synced\",\n  \"lastName\": \"User\",\n  \"password\": \"Password123!\"\n}"
+              "raw": "{\n  \"username\": \"synceduser\",\n  \"email\": \"synceduser@example.com\",\n  \"firstName\": \"Synced\",\n  \"lastName\": \"User\",\n  \"password\": \"{{test_password}}\"\n}"
             },
             "url": {
               "raw": "{{user_service_url}}/api/users/sync",
@@ -523,7 +523,7 @@
                 },
                 {
                   "key": "password",
-                  "value": "admin123",
+                  "value": "{{admin_password}}",
                   "type": "string"
                 }
               ]
@@ -563,7 +563,7 @@
                 },
                 {
                   "key": "password",
-                  "value": "admin123",
+                  "value": "{{admin_password}}",
                   "type": "string"
                 }
               ]
@@ -591,7 +591,7 @@
                 },
                 {
                   "key": "password",
-                  "value": "admin123",
+                  "value": "{{admin_password}}",
                   "type": "string"
                 }
               ]
@@ -619,7 +619,7 @@
                 },
                 {
                   "key": "password",
-                  "value": "admin123",
+                  "value": "{{admin_password}}",
                   "type": "string"
                 }
               ]
@@ -788,7 +788,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"query\": \"mutation CreateUser($input: CreateUserRequest!) { createUser(input: $input) { id username email firstName lastName roles createdAt updatedAt isActive } }\",\n  \"variables\": {\n    \"input\": {\n      \"username\": \"newuser\",\n      \"email\": \"newuser@example.com\",\n      \"firstName\": \"John\",\n      \"lastName\": \"Doe\",\n      \"password\": \"Password123!\"\n    }\n  }\n}"
+              "raw": "{\n  \"query\": \"mutation CreateUser($input: CreateUserRequest!) { createUser(input: $input) { id username email firstName lastName roles createdAt updatedAt isActive } }\",\n  \"variables\": {\n    \"input\": {\n      \"username\": \"newuser\",\n      \"email\": \"newuser@example.com\",\n      \"firstName\": \"John\",\n      \"lastName\": \"Doe\",\n      \"password\": \"{{test_password}}\"\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{base_url}}/graphql",

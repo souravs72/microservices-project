@@ -47,7 +47,7 @@ Content-Type: {{contentType}}
 {
   "username": "sourav72",
   "email": "singh.sourav2609@gmail.com",
-  "password": "root@1234"
+  "password": "{{test_password}}"
 }
 
 ###
@@ -103,7 +103,7 @@ Content-Type: {{contentType}}
 
 {
   "username": "admin",
-  "password": "admin123"
+  "password": "{{admin_password}}"
 }
 
 > {%

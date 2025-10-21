@@ -118,7 +118,7 @@ curl http://localhost:8080/actuator/health
 ### 2. Basic Authentication
 
 - **Usage**: Notification Service endpoints
-- **Credentials**: `admin/admin123` (development)
+- **Credentials**: `admin/[Set in ADMIN_PASSWORD environment variable]` (development)
 - **Header**: Automatically handled by Postman
 
 ### 3. Internal API Key
@@ -257,7 +257,7 @@ POST /api/auth/register
 POST /api/auth/login
 {
   "username": "admin",
-  "password": "admin123"
+  "password": "[Set in ADMIN_PASSWORD environment variable]"
 }
 ```
 

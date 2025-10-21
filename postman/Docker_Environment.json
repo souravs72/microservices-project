@@ -51,8 +51,14 @@
       "type": "default"
     },
     {
-      "key": "test_password",
+      "key": "admin_password",
       "value": "admin123",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "test_password",
+      "value": "TestPassword123!",
       "enabled": true,
       "type": "secret"
     },

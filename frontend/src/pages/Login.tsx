@@ -194,10 +194,10 @@ const Login: React.FC = () => {
           </h3>
           <div className="text-xs text-blue-700 space-y-1">
             <p>
-              <strong>Admin:</strong> admin / admin123
+              <strong>Admin:</strong> admin / [Set in ADMIN_PASSWORD environment variable]
             </p>
             <p>
-              <strong>User:</strong> user / user123
+              <strong>User:</strong> user / [Set in USER_PASSWORD environment variable]
             </p>
           </div>
         </div>

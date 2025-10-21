@@ -41,7 +41,7 @@ echo ""
 echo -e "${GREEN}1. Notification Service - FULLY WORKING${NC}"
 echo "   📖 Swagger UI: http://localhost:8085/swagger-ui/index.html"
 echo "   📋 OpenAPI: http://localhost:8085/v3/api-docs"
-echo "   🔐 Auth: Basic (admin:admin123)"
+echo "   🔐 Auth: Basic (admin:${GRAFANA_PASSWORD:-admin123})"
 echo ""
 
 # User Service (Auth Required)
@@ -72,13 +72,13 @@ echo "   ${BLUE}xdg-open http://localhost:8085/swagger-ui/index.html${NC}"
 echo ""
 
 echo "2. Test Notification Service API:"
-echo "   ${BLUE}curl -u admin:admin123 http://localhost:8085/api/notifications/stats${NC}"
+echo "   ${BLUE}curl -u admin:${GRAFANA_PASSWORD:-admin123} http://localhost:8085/api/notifications/stats${NC}"
 echo ""
 
 echo "3. Get JWT Token from Auth Service (for User Service):"
 echo "   ${BLUE}curl -X POST http://localhost:8082/api/auth/login \\${NC}"
 echo "   ${BLUE}  -H 'Content-Type: application/json' \\${NC}"
-echo "   ${BLUE}  -d '{\"username\":\"admin\",\"password\":\"admin123\"}'${NC}"
+echo "   ${BLUE}  -d '{\"username\":\"admin\",\"password\":\"${ADMIN_PASSWORD:-admin123}\"}'${NC}"
 echo ""
 
 echo "4. Check service health:"
@@ -106,13 +106,13 @@ case $choice in
         ;;
     2)
         echo "Testing Notification Service API..."
-        curl -u admin:admin123 http://localhost:8085/api/notifications/stats
+        curl -u admin:${GRAFANA_PASSWORD:-admin123} http://localhost:8085/api/notifications/stats
         ;;
     3)
         echo "Getting JWT Token..."
         curl -X POST http://localhost:8082/api/auth/login \
           -H 'Content-Type: application/json' \
-          -d '{"username":"admin","password":"admin123"}'
+          -d '{"username":"admin","password":"'${ADMIN_PASSWORD:-admin123}'"}'
         ;;
     4)
         echo "Checking all service health..."

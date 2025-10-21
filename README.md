@@ -87,7 +87,7 @@ curl http://localhost:8080/actuator/health
 
 ### Default Admin User
 - **Username:** admin
-- **Password:** admin123
+- **Password:** [Set in ADMIN_PASSWORD environment variable]
 - **Email:** admin@example.com
 
 ### Creating Admin Users
@@ -98,7 +98,7 @@ curl -X POST http://localhost:8081/api/users \
   -d '{
     "username": "admin",
     "email": "admin@example.com",
-    "password": "admin123",
+    "password": "[YOUR_ADMIN_PASSWORD]",
     "firstName": "Admin",
     "lastName": "User",
     "role": "ADMIN"
@@ -119,7 +119,7 @@ Key variables in `.env`:
 ### Service URLs
 - **API Gateway:** http://localhost:8080
 - **Frontend:** http://localhost:5173
-- **Grafana:** http://localhost:9090 (admin/admin123)
+- **Grafana:** http://localhost:9090 ([Set in GRAFANA_PASSWORD environment variable])
 - **Prometheus:** http://localhost:9091
 
 ## 📚 Additional Documentation

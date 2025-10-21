@@ -131,7 +131,7 @@ check_grafana() {
         print_success "Grafana is accessible"
         
         # Check if datasources are configured
-        local datasources=$(curl -s "$GRAFANA/api/datasources" -u admin:admin123)
+        local datasources=$(curl -s "$GRAFANA/api/datasources" -u admin:${GRAFANA_PASSWORD:?GRAFANA_PASSWORD required})
         local datasource_count=$(echo "$datasources" | grep -o '"name"' | wc -l)
         
         print_metric "Configured datasources: $datasource_count"

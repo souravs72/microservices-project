@@ -308,7 +308,7 @@ test_jwt_validation() {
     # Login to get a token
     LOGIN_RESPONSE=$(curl -s -X POST http://localhost:8082/api/auth/login \
         -H "Content-Type: application/json" \
-        -d '{"username": "admin", "password": "admin123"}')
+        -d '{"username": "admin", "password": "'${ADMIN_PASSWORD:-admin123}'"}')
     
     if echo "$LOGIN_RESPONSE" | grep -q "accessToken"; then
         print_success "✅ Login successful"

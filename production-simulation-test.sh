@@ -52,10 +52,10 @@ NOTIFICATION_SERVICE="http://localhost:8085"
 
 # Test data
 ADMIN_EMAIL="admin@example.com"
-ADMIN_PASSWORD="admin123"
+ADMIN_PASSWORD="${ADMIN_PASSWORD:-admin123}"
 TEST_USER_EMAIL="testuser$(date +%s)@example.com"
 TEST_USER_USERNAME="testuser$(date +%s)"
-TEST_USER_PASSWORD="TestPassword123!"
+TEST_USER_PASSWORD="${TEST_USER_PASSWORD:-TestPassword123!}"
 TEST_USER_FIRST_NAME="John"
 TEST_USER_LAST_NAME="Doe"
 

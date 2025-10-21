@@ -97,7 +97,7 @@ POST {{graphqlEndpoint}}
 Content-Type: {{contentType}}
 
 {
-  "query": "mutation { createUser(input: { username: \"graphql_user_001\" email: \"graphqluser001@example.com\" password: \"password123\" firstName: \"GraphQL\" lastName: \"User\" phone: \"+1-555-8001\" }) { id username email firstName lastName phone active createdAt } }"
+  "query": "mutation { createUser(input: { username: \"graphql_user_001\" email: \"graphqluser001@example.com\" password: \"{{test_password}}\" firstName: \"GraphQL\" lastName: \"User\" phone: \"+1-555-8001\" }) { id username email firstName lastName phone active createdAt } }"
 }
 
 ### Create new user with variables
@@ -123,7 +123,7 @@ POST {{graphqlEndpoint}}
 Content-Type: {{contentType}}
 
 {
-  "query": "mutation { createUser(input: { username: \"minimal_graphql\" email: \"minimal@example.com\" password: \"password123\" }) { id username email active } }"
+  "query": "mutation { createUser(input: { username: \"minimal_graphql\" email: \"minimal@example.com\" password: \"{{test_password}}\" }) { id username email active } }"
 }
 
 ### Create user - Duplicate Username (should fail)
@@ -131,7 +131,7 @@ POST {{graphqlEndpoint}}
 Content-Type: {{contentType}}
 
 {
-  "query": "mutation { createUser(input: { username: \"john_doe\" email: \"duplicate@example.com\" password: \"password123\" }) { id username email } }"
+  "query": "mutation { createUser(input: { username: \"john_doe\" email: \"duplicate@example.com\" password: \"{{test_password}}\" }) { id username email } }"
 }
 
 ### Create user - Duplicate Email (should fail)
@@ -139,7 +139,7 @@ POST {{graphqlEndpoint}}
 Content-Type: {{contentType}}
 
 {
-  "query": "mutation { createUser(input: { username: \"unique_user\" email: \"john.doe@example.com\" password: \"password123\" }) { id username email } }"
+  "query": "mutation { createUser(input: { username: \"unique_user\" email: \"john.doe@example.com\" password: \"{{test_password}}\" }) { id username email } }"
 }
 
 ### Create user - Invalid Email Format (should fail)
@@ -147,7 +147,7 @@ POST {{graphqlEndpoint}}
 Content-Type: {{contentType}}
 
 {
-  "query": "mutation { createUser(input: { username: \"invalid_email\" email: \"not-an-email\" password: \"password123\" }) { id username email } }"
+  "query": "mutation { createUser(input: { username: \"invalid_email\" email: \"not-an-email\" password: \"{{test_password}}\" }) { id username email } }"
 }
 
 ### ============================================
@@ -383,7 +383,7 @@ POST {{graphqlEndpoint}}
 Content-Type: {{contentType}}
 
 {
-  "query": "mutation { user1: createUser(input: { username: \"batch_user_1\" email: \"batch1@example.com\" password: \"password123\" firstName: \"Batch\" lastName: \"One\" }) { id username email } user2: createUser(input: { username: \"batch_user_2\" email: \"batch2@example.com\" password: \"password123\" firstName: \"Batch\" lastName: \"Two\" }) { id username email } user3: createUser(input: { username: \"batch_user_3\" email: \"batch3@example.com\" password: \"password123\" firstName: \"Batch\" lastName: \"Three\" }) { id username email } }"
+  "query": "mutation { user1: createUser(input: { username: \"batch_user_1\" email: \"batch1@example.com\" password: \"{{test_password}}\" firstName: \"Batch\" lastName: \"One\" }) { id username email } user2: createUser(input: { username: \"batch_user_2\" email: \"batch2@example.com\" password: \"{{test_password}}\" firstName: \"Batch\" lastName: \"Two\" }) { id username email } user3: createUser(input: { username: \"batch_user_3\" email: \"batch3@example.com\" password: \"{{test_password}}\" firstName: \"Batch\" lastName: \"Three\" }) { id username email } }"
 }
 
 ### Query multiple users by different criteria

@@ -27,7 +27,7 @@ app:
   # Admin User Configuration
   admin:
     username: ${ADMIN_USERNAME:admin}
-    password: ${ADMIN_PASSWORD:admin123}
+    password: ${ADMIN_PASSWORD:?ADMIN_PASSWORD required}
     email: ${ADMIN_EMAIL:admin@example.com}
     enabled: ${ADMIN_ENABLED:true}
 
@@ -69,4 +69,4 @@ user:
 # Internal API Key for service-to-service communication (standardized)
 internal:
   api:
-    key: ${INTERNAL_API_KEY:internal-api-key-123}
+    key: ${INTERNAL_API_KEY:?INTERNAL_API_KEY required}

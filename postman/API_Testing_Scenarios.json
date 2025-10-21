@@ -63,7 +63,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"{{random_username}}\",\n  \"email\": \"{{random_email}}\",\n  \"password\": \"Password123!\",\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\"\n}"
+              "raw": "{\n  \"username\": \"{{random_username}}\",\n  \"email\": \"{{random_email}}\",\n  \"password\": \"{{test_password}}\",\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/register",
@@ -110,7 +110,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"admin\",\n  \"email\": \"duplicate@example.com\",\n  \"password\": \"Password123!\",\n  \"firstName\": \"Duplicate\",\n  \"lastName\": \"User\"\n}"
+              "raw": "{\n  \"username\": \"admin\",\n  \"email\": \"duplicate@example.com\",\n  \"password\": \"{{test_password}}\",\n  \"firstName\": \"Duplicate\",\n  \"lastName\": \"User\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/register",
@@ -150,7 +150,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"{{random_username}}\",\n  \"email\": \"invalid-email-format\",\n  \"password\": \"Password123!\",\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\"\n}"
+              "raw": "{\n  \"username\": \"{{random_username}}\",\n  \"email\": \"invalid-email-format\",\n  \"password\": \"{{test_password}}\",\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/register",
@@ -237,7 +237,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"{{random_username}}\",\n  \"email\": \"{{random_email}}\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"password\": \"Password123!\"\n}"
+              "raw": "{\n  \"username\": \"{{random_username}}\",\n  \"email\": \"{{random_email}}\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"password\": \"{{test_password}}\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/users",
@@ -470,7 +470,7 @@
                 },
                 {
                   "key": "password",
-                  "value": "admin123",
+                  "value": "{{admin_password}}",
                   "type": "string"
                 }
               ]
@@ -525,7 +525,7 @@
                 },
                 {
                   "key": "password",
-                  "value": "admin123",
+                  "value": "{{admin_password}}",
                   "type": "string"
                 }
               ]
@@ -682,7 +682,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"perfuser{{random_id}}\",\n  \"email\": \"perfuser{{random_id}}@example.com\",\n  \"firstName\": \"Performance\",\n  \"lastName\": \"Test\",\n  \"password\": \"Password123!\"\n}"
+              "raw": "{\n  \"username\": \"perfuser{{random_id}}\",\n  \"email\": \"perfuser{{random_id}}@example.com\",\n  \"firstName\": \"Performance\",\n  \"lastName\": \"Test\",\n  \"password\": \"{{test_password}}\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/users",
