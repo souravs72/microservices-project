@@ -294,3 +294,10 @@ Thumbs.db
 application-local.yml
 application-local.properties
 logs/
+# Comprehensive log patterns for all services
+**/logs/
+**/*.log
+**/target/logs/
+**/build/logs/
+**/dist/logs/
+**/out/logs/
