@@ -22,12 +22,12 @@
     </properties>
 
     <dependencies>
-        <!-- Common Module -->
-        <dependency>
-            <groupId>com.microservices</groupId>
-            <artifactId>common</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+    <!-- Common Module -->
+    <!-- <dependency>
+        <groupId>com.microservices</groupId>
+        <artifactId>common</artifactId>
+        <version>1.0.0</version>
+    </dependency> -->
 
         <!-- Spring Boot Web -->
         <dependency>

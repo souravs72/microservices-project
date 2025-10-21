@@ -17,16 +17,16 @@ COPY common/src ./common/src
 # Copy user-service pom.xml
 COPY user-service/pom.xml ./user-service/
 
-# Build common module first (standalone)
+# Build common module standalone
 RUN cd common && mvn clean install -DskipTests
 
 # Copy source code
 COPY user-service/src ./user-service/src
 
-# Build the application (skip dependency resolution since we built common locally)
-RUN cd user-service && mvn clean package -DskipTests
+# Build the application with local common module
+RUN cd user-service && mvn clean package -DskipTests -Dmaven.repo.local=/root/.m2/repository
 
-# Production stage
+# Runtime stage
 FROM eclipse-temurin:17-jre
 
 # Install necessary packages
@@ -34,30 +34,27 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Create app user for security
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+# Create user
+RUN groupadd -r spring && useradd -r -g spring spring
 
 # Set working directory
 WORKDIR /app
 
-# Copy the built JAR from builder stage
-COPY --from=builder /app/user-service/target/user-service-*.jar app.jar
+# Copy jar file
+COPY --from=builder /app/user-service/target/*.jar app.jar
 
-# Create logs directory
-RUN mkdir -p /app/logs && chown -R appuser:appuser /app
+# Create logs directory and set permissions
+RUN mkdir -p /app/logs && chown -R spring:spring /app
 
 # Switch to non-root user
-USER appuser
+USER spring:spring
 
 # Expose port
 EXPOSE 8081
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:8081/actuator/health || exit 1
-
-# JVM options for production
-ENV JAVA_OPTS="-Xms512m -Xmx1024m -XX:+UseG1GC -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:8081/actuator/health || exit 1
 
 # Run the application
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
